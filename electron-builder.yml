@@ -16,6 +16,7 @@ asarUnpack:
   # Native modules must be unpacked for proper loading
   - "**/*.node"
   - "**/node_modules/electron-store/**"
+  - "**/node_modules/minecraft-launcher-core/**"
 
 extraMetadata:
   main: dist/main/index.js

@@ -17,7 +17,7 @@ export default defineConfig({
                     build: {
                         outDir: 'dist/main',
                         rollupOptions: {
-                            external: ['electron', 'electron-store', 'electron-updater'],
+                            external: ['electron', 'electron-store', 'electron-updater', 'minecraft-launcher-core'],
                         },
                     },
                 },
@@ -37,7 +37,7 @@ export default defineConfig({
                             fileName: 'preload',
                         },
                         rollupOptions: {
-                            external: ['electron', 'electron-store', 'electron-updater'],
+                            external: ['electron', 'electron-store', 'electron-updater', 'minecraft-launcher-core'],
                         },
                     },
                 },

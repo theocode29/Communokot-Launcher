@@ -1,7 +1,7 @@
 {
   "name": "communokot-launcher",
   "productName": "Communokot Launcher",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "module",
   "description": "Launcher Minecraft pour le serveur Communokot",
   "main": "dist/main/index.js",
@@ -15,7 +15,8 @@
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
     "dist:all": "npm run build && electron-builder --mac --win",
-    "publish": "npm run build && electron-builder build --publish always"
+    "clean": "find . -name '._*' -delete 2>/dev/null; find . -name '.DS_Store' -delete 2>/dev/null || true",
+    "publish": "npm run build && npm run clean && electron-builder build --publish always"
   },
   "dependencies": {
     "axios": "^1.6.7",

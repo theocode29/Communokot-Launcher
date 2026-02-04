@@ -26,6 +26,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Clean up macOS metadata files that can corrupt ASAR packaging
+      - name: Clean build artifacts (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          find . -name '._*' -delete 2>/dev/null || true
+          find . -name '.DS_Store' -delete 2>/dev/null || true
+          xattr -cr . 2>/dev/null || true
+
       - name: Build and Publish
         run: npm run publish
         env:
