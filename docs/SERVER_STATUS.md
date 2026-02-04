@@ -69,7 +69,7 @@ The Communokot Launcher retrieves server status information from the **freemcser
 ┌──────────────────────────────────────────────────────────────────┐
 │                       RENDERER PROCESS                            │
 │  ┌─────────────────┐      ┌─────────────────┐                    │
-│  │  public/preload.js │──────▶│  window.electron │                    │
+│  │ public/preload.cjs│──────▶│  window.electron │                    │
 │  │  getServerStatus()│      │  .getServerStatus()│                    │
 │  └─────────────────┘      └─────────────────┘                    │
 │                                    │                              │
@@ -98,14 +98,17 @@ The Communokot Launcher retrieves server status information from the **freemcser
 If the status indicator is offline but the API returns 200 OK:
 
 1.  **Check Terminal Logs**: Look for `[ServerStatus] API Axios error` or `API unknown error`.
-2.  **Verify Preload**: Ensure `dist/renderer/preload.js` exists and is pure CommonJS (starts with `const { contextBridge... } = require('electron')`).
+2.  **Verify Preload**: Ensure `dist/renderer/preload.cjs` exists and is pure CommonJS.
 3.  **Check Renderer Logs**: Open the app DevTools (Cmd+Option+I), go to Console, and look for:
     -   `[App] Server status received: ...` (Good)
     -   `[App] window.electron is undefined` (Bad - Preload failed)
 
 ### Preload Script
 
-The preload script is located at `public/preload.js`. It is **NOT** bundled by Vite to ensure it remains valid CommonJS for Electron. It is copied directly to `dist/renderer/preload.js` during the build.
+The preload script is located at `public/preload.cjs`.
+- It is **NOT** bundled by Vite.
+- It uses the `.cjs` extension to force Electron to treat it as CommonJS (since `package.json` sets `"type": "module"`).
+- It is copied directly to `dist/renderer/preload.cjs` during the build.
 
 ### CSP (Content-Security-Policy)
 
