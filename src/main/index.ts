@@ -20,26 +20,14 @@ const isDev = !app.isPackaged;
 // Must be set before app.whenReady()
 // ============================================
 
-// Bypass Chromium's GPU blacklist - essential for WebGL/BlueMap compatibility
+// Enable hardware acceleration (safe for all platforms)
+app.commandLine.appendSwitch('enable-accelerated-2d-canvas');
+
+// Enable WebGL (essential for BlueMap)
 app.commandLine.appendSwitch('ignore-gpu-blacklist');
 
-// Enable GPU rasterization for smoother 2D rendering
-app.commandLine.appendSwitch('enable-gpu-rasterization');
-
-// Enable zero-copy for better GPU memory efficiency
-app.commandLine.appendSwitch('enable-zero-copy');
-
-// Enable WebGL draft extensions for advanced rendering features
-app.commandLine.appendSwitch('enable-webgl-draft-extensions');
-
-// Force high-performance GPU on laptops with dual graphics (NVIDIA Optimus / AMD Switchable)
+// Use high-performance GPU on laptops with dual graphics
 app.commandLine.appendSwitch('force_high_performance_gpu');
-
-// Enable hardware acceleration for video decode
-app.commandLine.appendSwitch('enable-accelerated-video-decode');
-
-// Disable frame rate limit for smoother animations (Chromium may cap at 60fps otherwise)
-app.commandLine.appendSwitch('disable-frame-rate-limit');
 
 function createWindow(): void {
     mainWindow = new BrowserWindow({

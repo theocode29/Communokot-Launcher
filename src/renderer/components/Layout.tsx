@@ -14,16 +14,16 @@ export default function Layout({ children, activeTab, onTabChange, version }: La
         <div className="relative w-screen h-screen overflow-hidden bg-deep">
             {/* --- Background Layer --- */}
             <div className="absolute inset-0 z-0">
-                {/* Main Wallpaper */}
+                {/* Main Wallpaper - use CSS background for performance */}
                 <div
-                    className="absolute inset-0 bg-cover bg-center transition-all duration-700"
-                    style={{ backgroundImage: 'url(/background_01.jpg)' }}
+                    className="absolute inset-0 bg-cover bg-center will-change-transform"
+                    style={{ backgroundImage: 'url(/icon.png)', backgroundColor: '#0D0D0D' }}
                 >
-                    <div className="absolute inset-0 bg-deep/60" /> {/* Darkening */}
+                    <div className="absolute inset-0 bg-deep/80" /> {/* Darkening */}
                 </div>
 
-                {/* Ambient Glow (Brand) */}
-                <div className="absolute -bottom-1/2 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-brand-primary/10 blur-[150px] rounded-full pointer-events-none" />
+                {/* Ambient Glow (Brand) - optimized: smaller blur, smaller element */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60vw] h-[40vh] bg-brand-primary/5 blur-[80px] rounded-full pointer-events-none will-change-transform" />
             </div>
 
             {/* --- Effects Layer --- */}

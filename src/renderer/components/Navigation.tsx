@@ -40,8 +40,8 @@ const Navigation = memo(function Navigation({ activeTab, onTabChange }: Navigati
                                 {isActive && (
                                     <motion.div
                                         layoutId="activeTabBg"
-                                        className="absolute inset-0 bg-white/5 rounded-xl border border-white/5"
-                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        className="absolute inset-0 bg-white/5 rounded-xl border border-white/5 will-change-transform"
+                                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
                                     />
                                 )}
 
@@ -59,7 +59,8 @@ const Navigation = memo(function Navigation({ activeTab, onTabChange }: Navigati
                                 {isActive && (
                                     <motion.div
                                         layoutId="activeTabGlow"
-                                        className="absolute bottom-0 w-8 h-1 bg-brand-primary rounded-t-full shadow-[0_0_10px_rgba(251,191,36,0.5)]"
+                                        className="absolute bottom-0 w-8 h-1 bg-brand-primary rounded-t-full will-change-transform"
+                                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
                                     />
                                 )}
                             </button>

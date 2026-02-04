@@ -53,6 +53,12 @@ div {
   height: 100vh;
   width: 100vw;
   position: relative;
+
+  /* GPU Acceleration hints */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* 3. Cinematic Atmosphere */
