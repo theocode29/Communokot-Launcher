@@ -35,8 +35,8 @@ win:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
-  installerIcon: public/icon.png
-  uninstallerIcon: public/icon.png
+  installerIcon: public/icon.ico
+  uninstallerIcon: public/icon.ico
   differentialPackage: true
 
 mac:
