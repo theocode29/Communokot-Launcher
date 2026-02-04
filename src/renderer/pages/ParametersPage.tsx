@@ -1,8 +1,9 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import type { UserConfig } from '../types';
-import { Settings, Cpu, AlertTriangle, Check } from 'lucide-react';
+import { Settings, Cpu, AlertTriangle, Check, HelpCircle } from 'lucide-react';
+import InstallationHelpModal from '../components/InstallationHelpModal';
 
 interface ParametersPageProps {
     config: UserConfig;
@@ -12,6 +13,7 @@ interface ParametersPageProps {
 const RAM_OPTIONS = [2, 4, 6, 8, 12, 16];
 
 const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: ParametersPageProps) {
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
 
     // Helper for visual RAM selector
     const renderRamOption = (gb: number) => {
@@ -44,20 +46,32 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
             <div className="max-w-3xl mx-auto">
                 {/* Header */}
                 <motion.div
-                    className="mb-12 flex items-end gap-6 border-b border-white/10 pb-8"
+                    className="mb-12 flex items-end justify-between border-b border-white/10 pb-8"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <div className="p-4 bg-surface border border-white/10 rounded-2xl">
-                        <Settings size={32} className="text-white" />
+                    <div className="flex items-end gap-6">
+                        <div className="p-4 bg-surface border border-white/10 rounded-2xl">
+                            <Settings size={32} className="text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-4xl font-black tracking-tighter text-white">PARAMÈTRES</h1>
+                            <p className="text-text-muted uppercase tracking-widest text-xs mt-2">
+                                Configuration système
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 className="text-4xl font-black tracking-tighter text-white">PARAMÈTRES</h1>
-                        <p className="text-text-muted uppercase tracking-widest text-xs mt-2">
-                            Configuration système
-                        </p>
-                    </div>
+
+                    <button
+                        onClick={() => setIsHelpOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-bold text-white transition-colors"
+                    >
+                        <HelpCircle size={18} className="text-brand-primary" />
+                        <span>AIDE INSTALLATION</span>
+                    </button>
                 </motion.div>
+
+                <InstallationHelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
 
                 <div className="space-y-12">
                     {/* Section: Account */}

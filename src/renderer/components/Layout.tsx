@@ -17,9 +17,9 @@ export default function Layout({ children, activeTab, onTabChange, version }: La
                 {/* Main Wallpaper - use CSS background for performance */}
                 <div
                     className="absolute inset-0 bg-cover bg-center will-change-transform"
-                    style={{ backgroundImage: 'url(/icon.png)', backgroundColor: '#0D0D0D' }}
+                    style={{ backgroundImage: 'url(/background_01.jpg)' }}
                 >
-                    <div className="absolute inset-0 bg-deep/80" /> {/* Darkening */}
+                    <div className="absolute inset-0 bg-deep/70" /> {/* Darkening */}
                 </div>
 
                 {/* Ambient Glow (Brand) - optimized: smaller blur, smaller element */}

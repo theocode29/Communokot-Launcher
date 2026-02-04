@@ -11,6 +11,7 @@ const HomePage = lazy(() => import('./pages/HomePage.tsx'));
 const MapPage = lazy(() => import('./pages/MapPage.tsx'));
 const UpdatesPage = lazy(() => import('./pages/UpdatesPage.tsx'));
 const ParametersPage = lazy(() => import('./pages/ParametersPage.tsx'));
+const UpdateNotification = lazy(() => import('./components/UpdateNotification.tsx'));
 
 // Loading fallback
 const PageLoader = () => (
@@ -125,6 +126,7 @@ export default function App() {
     return (
         <Layout activeTab={activeTab} onTabChange={setActiveTab} version={appVersion}>
             <Suspense fallback={<PageLoader />}>
+                <UpdateNotification />
                 <AnimatePresence mode="wait">
                     {configLoaded && (
                         <motion.div

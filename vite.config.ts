@@ -22,6 +22,26 @@ export default defineConfig({
                     },
                 },
             },
+            {
+                entry: 'src/main/preload.ts',
+                onstart(args) {
+                    args.reload();
+                },
+                vite: {
+                    build: {
+                        outDir: 'dist/main',
+                        emptyOutDir: false, // Don't empty as we are building into same dir as main
+                        lib: {
+                            entry: 'src/main/preload.ts',
+                            formats: ['cjs'],
+                            fileName: 'preload',
+                        },
+                        rollupOptions: {
+                            external: ['electron', 'electron-store', 'electron-updater'],
+                        },
+                    },
+                },
+            },
         ]),
         renderer(),
     ],

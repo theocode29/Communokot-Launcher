@@ -65,6 +65,7 @@ export interface ElectronAPI {
     }) => Promise<LaunchResult>;
     getVersion: () => Promise<string>;
     getPlatform: () => Promise<string>;
+    on: (channel: string, func: (...args: any[]) => void) => () => void;
 }
 
 declare global {

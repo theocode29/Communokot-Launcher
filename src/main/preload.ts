@@ -31,6 +31,9 @@ export interface ElectronAPI {
     // App info
     getVersion: () => Promise<string>;
     getPlatform: () => Promise<string>;
+
+    // Events
+    on: (channel: string, func: (...args: unknown[]) => void) => () => void;
 }
 
 // Expose protected methods to renderer
@@ -59,6 +62,15 @@ const electronAPI: ElectronAPI = {
     // App info
     getVersion: () => ipcRenderer.invoke('app:version'),
     getPlatform: () => ipcRenderer.invoke('app:platform'),
+
+    // Events
+    on: (channel, func) => {
+        const subscription = (_: unknown, ...args: unknown[]) => func(...args);
+        ipcRenderer.on(channel, subscription);
+        return () => {
+            ipcRenderer.removeListener(channel, subscription);
+        };
+    },
 };
 
 contextBridge.exposeInMainWorld('electron', electronAPI);

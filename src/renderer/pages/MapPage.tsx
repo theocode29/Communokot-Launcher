@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Map as MapIcon, Info } from 'lucide-react';
+import { Info, Loader2 } from 'lucide-react';
 import { BLUEMAP } from '../constants';
 
 /**
@@ -19,6 +19,8 @@ import { BLUEMAP } from '../constants';
 const DEFAULT_HASH = '#world:-70:22:-22:200:0:0:0:0:perspective';
 
 const MapPage = memo(function MapPage() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [isHovered, setIsHovered] = useState(false);
     const mapUrl = `${BLUEMAP.baseUrl}/${DEFAULT_HASH}`;
 
     return (
@@ -33,49 +35,75 @@ const MapPage = memo(function MapPage() {
                 <div className="absolute w-[120%] h-[120%] -top-[10%] -left-[10%]">
                     <iframe
                         src={mapUrl}
-                        className="w-full h-full border-0"
+                        className={`w-full h-full border-0 transition-opacity duration-1000 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
                         title="BlueMap"
                         style={{ pointerEvents: 'auto' }}
+                        onLoad={() => setIsLoading(false)}
                     />
                 </div>
+
+                {/* Loading State */}
+                {isLoading && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-deep z-0">
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-brand-primary/20 blur-xl rounded-full animate-pulse" />
+                            <Loader2 className="w-12 h-12 text-brand-primary animate-spin relative z-10" />
+                        </div>
+                        <motion.span
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 text-sm font-mono text-brand-primary/80 uppercase tracking-widest"
+                        >
+                            Initialisation du Satellite...
+                        </motion.span>
+                    </div>
+                )}
+
+                {/* Vignette Overlay */}
+                <div className="absolute inset-0 pointer-events-none z-10 shadow-[inset_0_0_150px_rgba(0,0,0,0.6)] mix-blend-multiply" />
 
                 {/* Gradient Fade at bottom to blend with dock */}
                 <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-deep/80 to-transparent pointer-events-none z-10" />
             </div>
 
-            {/* Info HUD - Top Left */}
+            {/* Controls Help - Top Left */}
             <motion.div
-                className="absolute top-8 left-8 max-w-xs z-20 pointer-events-auto"
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                className="absolute top-6 left-6 z-20 pointer-events-auto"
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
             >
-                <div className="bg-deep/80 backdrop-blur border border-white/10 p-4 rounded-xl shadow-xl">
-                    <div className="flex items-center gap-2 mb-2 text-brand-primary">
-                        <MapIcon size={16} />
-                        <span className="text-xs font-bold uppercase tracking-widest">Carte du Monde</span>
+                <motion.div
+                    className="flex items-center bg-surface/60 backdrop-blur-xl border border-white-10 rounded-full shadow-lg overflow-hidden group hover:border-brand-primary/30 hover:shadow-[0_0_15px_rgba(251,191,36,0.15)] transition-colors duration-300"
+                    onHoverStart={() => setIsHovered(true)}
+                    onHoverEnd={() => setIsHovered(false)}
+                    initial={{ width: 44 }}
+                    animate={{ width: isHovered ? 'auto' : 44 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                    <div className="flex-shrink-0 w-11 h-11 flex items-center justify-center text-text-muted group-hover:text-brand-primary transition-colors duration-300">
+                        <Info size={20} />
                     </div>
-                    <p className="text-xs text-text-muted leading-relaxed">
-                        Navigation en temps réel.
-                    </p>
-                </div>
-            </motion.div>
 
-            {/* Controls Help - Bottom Right */}
-            <motion.div
-                className="absolute bottom-24 right-8 z-20 pointer-events-auto"
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.4 }}
-            >
-                <div className="bg-deep/80 backdrop-blur border border-white/10 p-3 rounded-xl shadow-xl">
-                    <div className="flex items-center gap-2 text-white/60">
-                        <Info size={14} />
-                        <span className="text-[10px] font-mono uppercase tracking-wider">
-                            Molette: Zoom • Clic+Glisser: Déplacer
-                        </span>
-                    </div>
-                </div>
+                    <motion.div
+                        className="whitespace-nowrap overflow-hidden pr-5"
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{
+                            opacity: isHovered ? 1 : 0,
+                            width: isHovered ? 'auto' : 0
+                        }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <div className="flex flex-col gap-0.5 leading-none">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-text-muted/80">
+                                Contrôles
+                            </span>
+                            <span className="text-xs font-medium text-text-main">
+                                Molette: Zoom • Glisser: Déplacer
+                            </span>
+                        </div>
+                    </motion.div>
+                </motion.div>
             </motion.div>
         </div>
     );
