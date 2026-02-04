@@ -29,7 +29,7 @@ win:
       arch:
         - x64
   verifyUpdateCodeSignature: false
-  icon: public/icon.png
+  icon: public/icon.ico
   artifactName: ${productName}-${version}-Setup.${ext}
 
 nsis:
