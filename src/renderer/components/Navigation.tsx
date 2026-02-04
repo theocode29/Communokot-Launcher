@@ -1,78 +1,90 @@
 import { memo, useCallback } from 'react';
-import { TABS } from '../constants';
 import type { TabId } from '../types';
+import { motion, LayoutGroup } from 'framer-motion';
+import { Home, Map, Newspaper, Settings, Power } from 'lucide-react';
+// If Lucide is not available, I'll use text or SVGs. I installed it in the previous step.
 
 interface NavigationProps {
     activeTab: TabId;
     onTabChange: (tab: TabId) => void;
 }
 
+const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
+    { id: 'home', label: 'ACCUEIL', icon: Home },
+    { id: 'map', label: 'CARTE', icon: Map },
+    { id: 'updates', label: 'ACTUALITÉS', icon: Newspaper },
+    { id: 'settings', label: 'PARAMÈTRES', icon: Settings },
+];
+
 const Navigation = memo(function Navigation({ activeTab, onTabChange }: NavigationProps) {
     const handleQuit = useCallback(() => {
-        if (window.electron) {
-            window.electron.quit();
-        }
+        window.electron?.quit();
     }, []);
 
-    // Get the active tab's color
-    const activeColor = TABS.find(t => t.id === activeTab)?.color || '#C4F623';
-
     return (
-        <nav
-            className="drag-region relative z-50 flex items-center justify-between px-6 py-4 glass border-b"
-            style={{ borderColor: `${activeColor}40` }}
-        >
-            {/* Tabs */}
-            <div className="no-drag flex items-center gap-8">
-                {TABS.map((tab) => {
-                    const isActive = activeTab === tab.id;
-
-                    return (
-                        <button
-                            key={tab.id}
-                            onClick={() => onTabChange(tab.id)}
-                            className={`
-                relative flex items-center gap-2 px-1 py-2 
-                text-sm font-medium tracking-wide uppercase
-                transition-all duration-200 no-select
-                ${isActive ? '' : 'opacity-60 hover:opacity-100'}
-              `}
-                            style={{ color: isActive ? tab.color : 'inherit' }}
-                        >
-                            <span
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4 pointer-events-none flex justify-center">
+            <nav className="pointer-events-auto flex items-center gap-2 p-2 bg-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl ring-1 ring-black/50">
+                <LayoutGroup>
+                    {TABS.map((tab) => {
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => onTabChange(tab.id)}
                                 className={`
-                  text-xs font-mono
-                  ${isActive ? '' : 'opacity-50'}
-                `}
-                                style={{ color: isActive ? tab.color : 'inherit' }}
+                                    relative group flex flex-col items-center justify-center
+                                    h-16 w-24 rounded-xl transition-all duration-300
+                                    ${isActive ? 'text-brand-primary' : 'text-text-muted hover:text-white hover:bg-white/5'}
+                                `}
                             >
-                                {tab.number}
-                            </span>
-                            <span className={isActive ? 'tab-underline active' : ''}>
-                                {tab.label}
-                            </span>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeTabBg"
+                                        className="absolute inset-0 bg-white/5 rounded-xl border border-white/5"
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                    />
+                                )}
 
-                            {/* Active indicator dot */}
-                            {isActive && (
-                                <span
-                                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
-                                    style={{ backgroundColor: tab.color }}
-                                />
-                            )}
-                        </button>
-                    );
-                })}
-            </div>
+                                <span className="relative z-10 mb-1">
+                                    <tab.icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                                </span>
+                                <span className={`
+                                    relative z-10 text-[10px] font-bold tracking-widest uppercase
+                                    transition-opacity duration-300
+                                    ${isActive ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}
+                                `}>
+                                    {tab.label}
+                                </span>
 
-            {/* Quit button */}
-            <button
-                onClick={handleQuit}
-                className="no-drag px-4 py-2 text-sm font-medium tracking-wider uppercase 
-                   text-text-secondary hover:text-white transition-colors no-select"
-            >
-                QUIT
-            </button>
-        </nav>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeTabGlow"
+                                        className="absolute bottom-0 w-8 h-1 bg-brand-primary rounded-t-full shadow-[0_0_10px_rgba(251,191,36,0.5)]"
+                                    />
+                                )}
+                            </button>
+                        );
+                    })}
+
+                    <div className="w-px h-10 bg-white/10 mx-2" />
+
+                    <button
+                        onClick={handleQuit}
+                        className="
+                            relative group flex flex-col items-center justify-center
+                            h-16 w-20 rounded-xl transition-colors
+                            text-text-muted hover:text-error hover:bg-error/10
+                        "
+                        title="Quitter"
+                    >
+                        <Power size={24} />
+                        <span className="text-[10px] font-bold tracking-widest uppercase mt-1 opacity-60 group-hover:opacity-100">
+                            QUIT
+                        </span>
+                    </button>
+                </LayoutGroup>
+            </nav>
+        </div>
     );
 });
 

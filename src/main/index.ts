@@ -15,6 +15,32 @@ let mainWindow: BrowserWindow | null = null;
 
 const isDev = !app.isPackaged;
 
+// ============================================
+// GPU & Performance Optimization Switches
+// Must be set before app.whenReady()
+// ============================================
+
+// Bypass Chromium's GPU blacklist - essential for WebGL/BlueMap compatibility
+app.commandLine.appendSwitch('ignore-gpu-blacklist');
+
+// Enable GPU rasterization for smoother 2D rendering
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+
+// Enable zero-copy for better GPU memory efficiency
+app.commandLine.appendSwitch('enable-zero-copy');
+
+// Enable WebGL draft extensions for advanced rendering features
+app.commandLine.appendSwitch('enable-webgl-draft-extensions');
+
+// Force high-performance GPU on laptops with dual graphics (NVIDIA Optimus / AMD Switchable)
+app.commandLine.appendSwitch('force_high_performance_gpu');
+
+// Enable hardware acceleration for video decode
+app.commandLine.appendSwitch('enable-accelerated-video-decode');
+
+// Disable frame rate limit for smoother animations (Chromium may cap at 60fps otherwise)
+app.commandLine.appendSwitch('disable-frame-rate-limit');
+
 function createWindow(): void {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -29,6 +55,7 @@ function createWindow(): void {
             nodeIntegration: false,
             contextIsolation: true,
             sandbox: false,
+            webviewTag: true, // Enable webview for BlueMap control
         },
         icon: join(__dirname, '../../public/icon.png'),
     });

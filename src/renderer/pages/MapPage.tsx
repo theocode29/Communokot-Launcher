@@ -1,81 +1,81 @@
-import { useState, useMemo, memo } from 'react';
+import { memo } from 'react';
 import { motion } from 'framer-motion';
-import BlueMapViewer from '../components/BlueMapViewer';
+import { Map as MapIcon, Info } from 'lucide-react';
 import { BLUEMAP } from '../constants';
 
-type MapMode = '2d' | '3d';
+/**
+ * MapPage - BlueMap Integration
+ * 
+ * BlueMap has its own controls for navigation:
+ * - Mouse drag: Pan the map
+ * - Scroll wheel: Zoom in/out
+ * - Right-click drag: Rotate view
+ * - Shift+click: First person mode
+ * 
+ * The native BlueMap sidebar/UI is cropped out using the "virtual window" technique.
+ */
+
+// Default view centered on the base
+const DEFAULT_HASH = '#world:-70:22:-22:200:0:0:0:0:perspective';
 
 const MapPage = memo(function MapPage() {
-    const [mode, setMode] = useState<MapMode>('3d');
-
-    // Build the full URL based on mode
-    const mapUrl = useMemo(() => {
-        const hash = mode === '3d' ? BLUEMAP.default3D : BLUEMAP.default2D;
-        return `${BLUEMAP.baseUrl}/${hash}`;
-    }, [mode]);
+    const mapUrl = `${BLUEMAP.baseUrl}/${DEFAULT_HASH}`;
 
     return (
-        <div className="h-full flex flex-col">
-            {/* Header */}
-            <motion.div
-                className="glass px-6 py-4 flex items-center justify-between border-b border-white/10"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-            >
-                <div>
-                    <h2 className="text-lg font-bold tracking-wide">CARTE DU MONDE</h2>
-                    <p className="text-xs text-text-secondary">Exploration 3D du monde Communokot</p>
+        <div className="relative w-full h-full bg-deep overflow-hidden">
+            {/* Map Iframe with Virtual Window Cropping */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                {/* 
+                    Virtual Window Strategy:
+                    Scale the iframe to 120% to push the BlueMap UI elements off-screen.
+                    This gives a clean, immersive map view.
+                */}
+                <div className="absolute w-[120%] h-[120%] -top-[10%] -left-[10%]">
+                    <iframe
+                        src={mapUrl}
+                        className="w-full h-full border-0"
+                        title="BlueMap"
+                        style={{ pointerEvents: 'auto' }}
+                    />
                 </div>
 
-                {/* Mode toggle */}
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setMode('3d')}
-                        className={`
-              px-4 py-2 text-sm font-medium rounded-sm border transition-all
-              ${mode === '3d'
-                                ? 'bg-tab-map text-white border-tab-map'
-                                : 'bg-transparent text-text-secondary border-white/20 hover:border-white/40'
-                            }
-            `}
-                    >
-                        <span className="flex items-center gap-2">
-                            <span
-                                className={`w-2 h-2 rounded-full ${mode === '3d' ? 'bg-white' : 'bg-text-muted'}`}
-                            />
-                            MODE 3D
-                        </span>
-                    </button>
+                {/* Gradient Fade at bottom to blend with dock */}
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-deep/80 to-transparent pointer-events-none z-10" />
+            </div>
 
-                    <button
-                        onClick={() => setMode('2d')}
-                        className={`
-              px-4 py-2 text-sm font-medium rounded-sm border transition-all
-              ${mode === '2d'
-                                ? 'bg-amber-500 text-black border-amber-500'
-                                : 'bg-transparent text-text-secondary border-white/20 hover:border-white/40'
-                            }
-            `}
-                    >
-                        <span className="flex items-center gap-2">
-                            <span
-                                className={`w-2 h-2 rounded-full ${mode === '2d' ? 'bg-black' : 'bg-text-muted'}`}
-                            />
-                            MODE 2D
-                        </span>
-                    </button>
+            {/* Info HUD - Top Left */}
+            <motion.div
+                className="absolute top-8 left-8 max-w-xs z-20 pointer-events-auto"
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+            >
+                <div className="bg-deep/80 backdrop-blur border border-white/10 p-4 rounded-xl shadow-xl">
+                    <div className="flex items-center gap-2 mb-2 text-brand-primary">
+                        <MapIcon size={16} />
+                        <span className="text-xs font-bold uppercase tracking-widest">Carte du Monde</span>
+                    </div>
+                    <p className="text-xs text-text-muted leading-relaxed">
+                        Navigation en temps réel.
+                    </p>
                 </div>
             </motion.div>
 
-            {/* Map viewer */}
+            {/* Controls Help - Bottom Right */}
             <motion.div
-                className="flex-1"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
+                className="absolute bottom-24 right-8 z-20 pointer-events-auto"
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
             >
-                <BlueMapViewer url={mapUrl} />
+                <div className="bg-deep/80 backdrop-blur border border-white/10 p-3 rounded-xl shadow-xl">
+                    <div className="flex items-center gap-2 text-white/60">
+                        <Info size={14} />
+                        <span className="text-[10px] font-mono uppercase tracking-wider">
+                            Molette: Zoom • Clic+Glisser: Déplacer
+                        </span>
+                    </div>
+                </div>
             </motion.div>
         </div>
     );

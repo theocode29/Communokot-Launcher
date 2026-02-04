@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import type { ServerStatus } from '../types';
+import { Users } from 'lucide-react';
 
 interface ServerStatusBadgeProps {
     status: ServerStatus;
@@ -13,32 +14,40 @@ const ServerStatusBadge = memo(function ServerStatusBadge({
     const { online, players } = status;
 
     return (
-        <div
-            className={`
-        inline-flex items-center gap-2 px-3 py-1.5 
-        rounded-sm glass text-sm font-medium
-        ${className}
-      `}
-        >
-            {/* Status dot */}
-            <span
-                className={`
-          w-2 h-2 rounded-full
-          ${online ? 'bg-status-online animate-pulse-slow' : 'bg-status-offline'}
-        `}
-            />
+        <div className={`
+            flex items-center gap-4 px-4 py-2 rounded-full
+            bg-surface/50 backdrop-blur-md border border-white/10 shadow-lg
+            ${className}
+        `}>
+            {/* Online/Offline Text & Icon */}
+            <div className="flex items-center gap-2">
+                {online ? (
+                    <div className="relative">
+                        <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                    </div>
+                ) : (
+                    <div className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+                )}
 
-            {/* Status text */}
-            <span className={online ? 'text-status-online' : 'text-status-offline'}>
-                {online ? 'EN LIGNE' : 'HORS LIGNE'}
-            </span>
-
-            {/* Player count */}
-            {online && players && (
-                <span className="text-text-secondary ml-1">
-                    {players.online}/{players.max}
+                <span className={`text-xs font-bold tracking-widest uppercase ${online ? 'text-green-400' : 'text-red-400'}`}>
+                    {online ? 'SERVEUR EN LIGNE' : 'SERVEUR HORS LIGNE'}
                 </span>
-            )}
+            </div>
+
+            {/* Separator */}
+            <div className="w-px h-4 bg-white/10" />
+
+            {/* Player Count */}
+            <div className="flex items-center gap-2">
+                <Users size={14} className={online ? 'text-text-muted' : 'text-white/20'} />
+                <span className={`text-xs font-mono font-bold ${online ? 'text-white' : 'text-white/30'}`}>
+                    {online && players ? (
+                        <>{players.online} <span className="text-text-muted">/</span> {players.max}</>
+                    ) : (
+                        '- / -'
+                    )}
+                </span>
+            </div>
         </div>
     );
 });

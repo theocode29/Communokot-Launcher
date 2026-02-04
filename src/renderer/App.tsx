@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import Navigation from './components/Navigation';
+import { AnimatePresence, motion } from 'framer-motion';
+// import Navigation from './components/Navigation'; // Now handled by Layout
+import Layout from './components/Layout';
+// import ServerStatusBadge from './components/ServerStatus'; // TODO: Re-integrate inside pages or top bar if needed. Layout has a simple status now.
 import type { TabId, UserConfig, ServerStatus } from './types';
 import { STATUS_POLL_INTERVAL } from './constants';
 
@@ -12,7 +15,7 @@ const ParametersPage = lazy(() => import('./pages/ParametersPage.tsx'));
 // Loading fallback
 const PageLoader = () => (
     <div className="flex items-center justify-center h-full">
-        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-white/20 border-t-brand-primary rounded-full animate-spin" />
     </div>
 );
 
@@ -55,10 +58,8 @@ export default function App() {
         try {
             if (window.electron) {
                 const status = await window.electron.getServerStatus();
-                console.log('[App] Server status received:', status);
                 setServerStatus(status);
             } else {
-                console.warn('[App] window.electron is undefined - preload failed');
                 setServerStatus({ online: false });
             }
         } catch (error) {
@@ -119,32 +120,26 @@ export default function App() {
         }
     };
 
+    const configLoaded = config !== null;
+
     return (
-        <div className="h-screen flex flex-col bg-surface text-text-primary overflow-hidden">
-            {/* Background image */}
-            <div
-                className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage: 'url(/background_01.jpg)',
-                    filter: 'brightness(0.7)',
-                }}
-            />
-
-            {/* Content overlay */}
-            <div className="relative z-10 flex flex-col h-full">
-                {/* Navigation */}
-                <Navigation
-                    activeTab={activeTab}
-                    onTabChange={setActiveTab}
-                />
-
-                {/* Page content */}
-                <main className="flex-1 overflow-hidden">
-                    <Suspense fallback={<PageLoader />}>
-                        {renderPage()}
-                    </Suspense>
-                </main>
-            </div>
-        </div>
+        <Layout activeTab={activeTab} onTabChange={setActiveTab} version={appVersion}>
+            <Suspense fallback={<PageLoader />}>
+                <AnimatePresence mode="wait">
+                    {configLoaded && (
+                        <motion.div
+                            key={activeTab}
+                            className="w-full h-full"
+                            initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
+                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                            exit={{ opacity: 0, y: -10, filter: 'blur(5px)' }}
+                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                            {renderPage()}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </Suspense>
+        </Layout>
     );
 }

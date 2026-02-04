@@ -3,30 +3,23 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { NEWS_URL } from '../constants';
 import type { NewsItem } from '../types';
+import { Newspaper } from 'lucide-react';
 
 const UpdatesPage = memo(function UpdatesPage() {
     const [news, setNews] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchNews = async () => {
             try {
                 setLoading(true);
-                setError(null);
+                // setError(null); // Unused
                 const response = await axios.get(NEWS_URL);
-
-                // Handle both array and object with items
-                const data = Array.isArray(response.data)
-                    ? response.data
-                    : response.data.items || [];
-
+                const data = Array.isArray(response.data) ? response.data : response.data.items || [];
                 setNews(data);
             } catch (err) {
                 console.error('Failed to fetch news:', err);
-                setError('Impossible de charger les actualités');
-
-                // Use mock data as fallback
+                // setError('Impossible de charger les actualités'); // Unused
                 setNews([
                     {
                         id: '1',
@@ -46,57 +39,46 @@ const UpdatesPage = memo(function UpdatesPage() {
     }, []);
 
     return (
-        <div className="h-full overflow-y-auto p-8">
-            {/* Header */}
-            <motion.div
-                className="mb-8"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-            >
-                <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
-                    MISES À JOUR
-                    <span className="w-3 h-3 rounded-full bg-tab-updates animate-pulse" />
-                </h1>
-                <p className="text-text-secondary mt-2">
-                    Derniers patchs, nouvelles et communications.
-                </p>
-            </motion.div>
-
-            {/* Loading state */}
-            {loading && (
-                <div className="flex items-center justify-center py-20">
-                    <div className="w-8 h-8 border-2 border-white/20 border-t-tab-updates rounded-full animate-spin" />
-                </div>
-            )}
-
-            {/* Error state (but we show mock data anyway) */}
-            {error && !news.length && (
-                <div className="text-center py-20">
-                    <p className="text-status-offline">{error}</p>
-                </div>
-            )}
-
-            {/* News list */}
-            {!loading && news.length > 0 && (
+        <div className="h-full overflow-y-auto px-4 md:px-8 py-24 pb-48 custom-scrollbar">
+            <div className="max-w-3xl mx-auto">
+                {/* Header */}
                 <motion.div
-                    className="space-y-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 0.1 }}
+                    className="mb-16 flex items-end gap-6 border-b border-white/10 pb-8"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
                 >
-                    {news.map((item, index) => (
-                        <NewsCard key={item.id || index} item={item} index={index} />
-                    ))}
+                    <div className="p-4 bg-brand-primary text-deep rounded-2xl">
+                        <Newspaper size={32} />
+                    </div>
+                    <div>
+                        <h1 className="text-4xl font-black tracking-tighter text-white">ACTUALITÉS</h1>
+                        <p className="text-text-muted uppercase tracking-widest text-xs mt-2">
+                            Dernières communications du QG
+                        </p>
+                    </div>
                 </motion.div>
-            )}
 
-            {/* Empty state */}
-            {!loading && news.length === 0 && !error && (
-                <div className="text-center py-20">
-                    <p className="text-text-secondary">Aucune actualité pour le moment.</p>
-                </div>
-            )}
+                {/* Loading state */}
+                {loading && (
+                    <div className="flex items-center justify-center py-20">
+                        <div className="w-8 h-8 border-2 border-white/20 border-t-brand-primary rounded-full animate-spin" />
+                    </div>
+                )}
+
+                {/* News list */}
+                {!loading && (
+                    <motion.div
+                        className="space-y-12"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.4 }}
+                    >
+                        {news.map((item, index) => (
+                            <NewsCard key={item.id || index} item={item} index={index} />
+                        ))}
+                    </motion.div>
+                )}
+            </div>
         </div>
     );
 });
@@ -112,43 +94,56 @@ const NewsCard = memo(function NewsCard({ item, index }: NewsCardProps) {
 
     return (
         <motion.article
-            className="glass rounded-sm overflow-hidden card-hover"
-            initial={{ opacity: 0, y: 20 }}
+            className="group relative bg-surface border border-white/5 rounded-2xl overflow-hidden shadow-2xl hover:border-brand-primary/30 transition-colors"
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-            {/* Image */}
+            {/* Image Section - Full Width */}
             {item.image && !imageError && (
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-64 overflow-hidden">
                     <img
                         src={item.image}
                         alt={item.title}
                         onError={() => setImageError(true)}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-700 ease-organic group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent" />
+                    {/* Gradient Overlay for Text Readability if needed, mostly decoration here */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80" />
+
+                    <div className="absolute top-4 left-4 bg-deep/80 backdrop-blur px-3 py-1 rounded-full border border-white/10">
+                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">
+                            {item.date}
+                        </span>
+                    </div>
                 </div>
             )}
 
-            {/* Content */}
-            <div className="p-6">
-                {/* Title and date */}
-                <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="text-xl font-bold">{item.title}</h3>
-                    <span className="text-xs text-text-muted whitespace-nowrap font-mono">
-                        {item.date}
-                    </span>
-                </div>
-
-                {/* Subtitle */}
-                {item.subtitle && (
-                    <p className="text-tab-updates text-sm mb-3">{item.subtitle}</p>
+            {/* Content Section */}
+            <div className="p-8 relative">
+                {!item.image && (
+                    <div className="mb-4 inline-block bg-white/5 px-3 py-1 rounded-full">
+                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                            {item.date}
+                        </span>
+                    </div>
                 )}
 
-                {/* Content */}
-                <p className="text-text-secondary text-sm leading-relaxed">
-                    {item.content}
-                </p>
+                <h3 className="text-2xl font-bold mb-3 leading-tight text-white group-hover:text-brand-primary transition-colors">
+                    {item.title}
+                </h3>
+
+                {item.subtitle && (
+                    <p className="text-text-muted text-sm font-medium mb-6 border-l-2 border-brand-primary pl-4">
+                        {item.subtitle}
+                    </p>
+                )}
+
+                <div className="prose prose-invert prose-sm max-w-none text-white/70">
+                    <p className="leading-relaxed whitespace-pre-line">
+                        {item.content}
+                    </p>
+                </div>
             </div>
         </motion.article>
     );

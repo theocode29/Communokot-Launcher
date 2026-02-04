@@ -18,7 +18,7 @@ export const BLUEMAP = {
 } as const;
 
 // News API
-export const NEWS_URL = 'https://raw.githubusercontent.com/theocode29/Communokot-Launcher/main/launcher-news/updates.json';
+export const NEWS_URL = 'https://raw.githubusercontent.com/theocode29/Communokot-Launcher/main/launcher-news/main/updates.json';
 
 // Tab Configuration
 export const TABS: TabConfig[] = [

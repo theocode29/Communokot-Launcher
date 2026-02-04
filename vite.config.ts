@@ -35,6 +35,19 @@ export default defineConfig({
     build: {
         outDir: 'dist/renderer',
         emptyOutDir: true,
+        // Optimize chunking for better caching and faster initial load
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    // Core React - cached separately, rarely changes
+                    'react-vendor': ['react', 'react-dom'],
+                    // Animation library - heavy, load separately
+                    'animation': ['framer-motion'],
+                    // UI utilities - icons and toasts
+                    'ui': ['lucide-react', 'sonner', 'clsx', 'tailwind-merge'],
+                },
+            },
+        },
     },
     server: {
         port: 5173,

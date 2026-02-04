@@ -10,6 +10,13 @@ files:
   - dist/**/*
   - package.json
 
+# ASAR Optimization
+asar: true
+asarUnpack:
+  # Native modules must be unpacked for proper loading
+  - "**/*.node"
+  - "**/node_modules/electron-store/**"
+
 extraMetadata:
   main: dist/main/index.js
 

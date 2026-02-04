@@ -110,6 +110,9 @@ The preload script is located at `public/preload.cjs`.
 - It uses the `.cjs` extension to force Electron to treat it as CommonJS (since `package.json` sets `"type": "module"`).
 - It is copied directly to `dist/renderer/preload.cjs` during the build.
 
-### CSP (Content-Security-Policy)
-
-The `index.html` must allow connections to `https://api.freemcserver.net`.
+### Visual Representation
+The status is displayed via the `ServerStatusBadge` component, which uses the "CommunoCode" design system:
+-   **Font**: JetBrains Mono (Technical/Terminal look).
+-   **Offline**: Dark Red (`#7f1d1d`) text.
+-   **Online**: White text with a glowing indicator.
+-   **Layout**: Top-right corner of the Home Page.
