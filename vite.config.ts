@@ -22,24 +22,6 @@ export default defineConfig({
                     },
                 },
             },
-            {
-                entry: 'src/main/preload.ts',
-                onstart(args) {
-                    args.reload();
-                },
-                vite: {
-                    build: {
-                        outDir: 'dist/main',
-                        rollupOptions: {
-                            external: ['electron'],
-                            output: {
-                                format: 'cjs',
-                                entryFileNames: '[name].cjs',
-                            },
-                        },
-                    },
-                },
-            },
         ]),
         renderer(),
     ],

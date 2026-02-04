@@ -55,13 +55,14 @@ export default function App() {
         try {
             if (window.electron) {
                 const status = await window.electron.getServerStatus();
+                console.log('[App] Server status received:', status);
                 setServerStatus(status);
             } else {
-                // Mock status for browser development
-                setServerStatus({ online: true, players: { online: 5, max: 20 } });
+                console.warn('[App] window.electron is undefined - preload failed');
+                setServerStatus({ online: false });
             }
         } catch (error) {
-            console.error('Failed to check server status:', error);
+            console.error('[App] Failed to check server status:', error);
             setServerStatus({ online: false });
         }
     }, []);
