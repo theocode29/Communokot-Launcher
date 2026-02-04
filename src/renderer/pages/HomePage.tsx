@@ -48,13 +48,13 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
                 >
                     {/* Shadow/Glow behind title */}
                     <h1
-                        className="absolute inset-0 blur-2xl opacity-50 text-brand-primary pointer-events-none select-none text-8xl md:text-9xl font-black tracking-tighter leading-[0.85]"
+                        className="absolute inset-0 blur-2xl opacity-50 text-brand-primary pointer-events-none select-none text-7xl md:text-8xl font-black tracking-tighter"
                     >
-                        COMMUNO<br />KOT
+                        COMMUNOKOT
                     </h1>
 
-                    <h1 className="text-8xl md:text-9xl font-black tracking-tighter text-white drop-shadow-2xl leading-[0.85] z-10 relative">
-                        COMMUNO<br />KOT
+                    <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white drop-shadow-2xl z-10 relative">
+                        COMMUNOKOT
                     </h1>
 
                     {/* Server Status Capsule - Integrated directly below title */}

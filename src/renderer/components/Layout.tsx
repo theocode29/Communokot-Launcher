@@ -2,6 +2,9 @@ import { ReactNode } from 'react';
 import Navigation from './Navigation';
 import type { TabId } from '../types';
 
+// Import background image for proper bundling in production
+import backgroundImage from '../assets/background.jpg';
+
 interface LayoutProps {
     children: ReactNode;
     activeTab: TabId;
@@ -17,7 +20,7 @@ export default function Layout({ children, activeTab, onTabChange, version }: La
                 {/* Main Wallpaper - use CSS background for performance */}
                 <div
                     className="absolute inset-0 bg-cover bg-center will-change-transform blur-[2px] opacity-80"
-                    style={{ backgroundImage: 'url(/background_01.jpg)' }}
+                    style={{ backgroundImage: `url(${backgroundImage})` }}
                 >
                     <div className="absolute inset-0 bg-black/40" /> {/* Darkening for accessibility */}
                 </div>
