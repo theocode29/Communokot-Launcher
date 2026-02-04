@@ -43,6 +43,7 @@ export interface UserConfig {
 export interface LaunchResult {
     success: boolean;
     error?: string;
+    message?: string;
 }
 
 // Electron API (from preload)

@@ -9,37 +9,29 @@ export default {
                 'mono': ['JetBrains Mono', 'monospace'],
             },
             colors: {
-                // Backgrounds
-                'deep': '#0a0a0c',
-                'surface': '#131316',
+                // Backgrounds (Sand/Light Theme)
+                'deep': '#FDFCF5',   // Warm White / Pale Sand
+                'surface': '#F4F1E1', // Beige / Sand Surface
 
                 // Brand
                 'brand': {
-                    'primary': '#fbbf24', // Amber 400
-                    'glow': 'rgba(251, 191, 36, 0.5)',
+                    'primary': '#E6B325', // Deep Gold / Sand Accent
+                    'glow': 'rgba(230, 179, 37, 0.5)',
                 },
                 'action': {
-                    'blue': '#3b82f6', // Blue 500
+                    'blue': '#2563EB', // Blue 600 (Accessible on light)
                 },
 
                 // Text
                 'text': {
-                    'main': '#ffffff',
-                    'muted': '#a1a1aa', // Zinc 400
+                    'main': '#2C2A26',    // Dark Charcoal/Brown (High Contrast)
+                    'muted': '#78716C',   // Stone 500
                 },
 
-                // Utilities
-                'white-10': 'rgba(255, 255, 255, 0.1)',
-                'white-5': 'rgba(255, 255, 255, 0.05)',
-                'error': '#ef4444',
-            },
-            // Custom Easing for "Organic" feel
-            transitionTimingFunction: {
-                'organic': 'cubic-bezier(0.16, 1, 0.3, 1)',
-            },
-            // Custom Spacing/Sizing
-            letterSpacing: {
-                'widest-tech': '0.2em',
+                // Utilities (Adapted for Light Mode)
+                'white-10': 'rgba(0, 0, 0, 0.08)', // actually black-10 now
+                'white-5': 'rgba(0, 0, 0, 0.04)',  // actually black-5 now
+                'error': '#DC2626',   // Red 600
                 'tighter-loud': '-0.05em',
             },
             animation: {

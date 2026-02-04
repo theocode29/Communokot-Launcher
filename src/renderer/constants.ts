@@ -22,10 +22,10 @@ export const NEWS_URL = 'https://raw.githubusercontent.com/theocode29/Communokot
 
 // Tab Configuration
 export const TABS: TabConfig[] = [
-    { id: 'home', label: 'ACCUEIL', number: '01', color: '#C4F623' },
-    { id: 'map', label: 'CARTE', number: '02', color: '#3B82F6' },
-    { id: 'updates', label: 'MISES À JOUR', number: '03', color: '#FF4500' },
-    { id: 'settings', label: 'PARAMÈTRES', number: '04', color: '#D946EF' },
+    { id: 'home', label: 'ACCUEIL', number: '01', color: '#65a30d' }, // Lime 600 for contrast
+    { id: 'map', label: 'CARTE', number: '02', color: '#2563eb' },    // Blue 600
+    { id: 'updates', label: 'MISES À JOUR', number: '03', color: '#dc2626' }, // Red 600
+    { id: 'settings', label: 'PARAMÈTRES', number: '04', color: '#c026d3' }, // Fuchsia 600
 ] as const;
 
 // RAM Options

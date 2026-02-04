@@ -1,18 +1,18 @@
-# Server Status System Documentation
+# Documentation du Système de Statut Serveur
 
-## Overview
+## Vue d'ensemble
 
-The Communokot Launcher retrieves server status information from the **freemcserver.net** API. This document explains the data flow and architecture.
+Le Communokot Launcher récupère les informations d'état du serveur via l'API **freemcserver.net**. Ce document explique le flux de données et l'architecture que j'ai mis en place.
 
 ---
 
-## API Endpoint
+## Endpoint API
 
 **URL:** `https://api.freemcserver.net/v4/server/1949282/ping`
-**Method:** `GET`
-**Authentication:** None required
+**Méthode:** `GET`
+**Authentification:** Aucune requise
 
-### Response Structure
+### Structure de la Réponse
 
 ```json
 {
@@ -35,25 +35,25 @@ The Communokot Launcher retrieves server status information from the **freemcser
 }
 ```
 
-### Key Fields
+### Champs Clés
 
-| Field | Type | Description |
+| Champ | Type | Description |
 |-------|------|-------------|
-| `data.online` | `boolean` | Whether the server is currently online |
-| `data.players.online` | `number` | Current number of connected players |
-| `data.players.max` | `number` | Maximum allowed players |
-| `data.version.name` | `string` | Minecraft server version |
+| `data.online` | `boolean` | Si le serveur est actuellement en ligne |
+| `data.players.online` | `number` | Nombre actuel de joueurs connectés |
+| `data.players.max` | `number` | Nombre maximum de joueurs autorisés |
+| `data.version.name` | `string` | Version du serveur Minecraft |
 
 ---
 
-## Data Flow
+## Flux de Données
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                         MAIN PROCESS                              │
+│                         PROCESSUS PRINCIPAL                       │
 │  ┌─────────────────┐      ┌───────────────────────────────────┐  │
 │  │  serverStatus.ts │──────▶│ axios.get(freemcserver API)       │  │
-│  │  checkServerStatus()│◀────│ Returns: { online, players, ... }│  │
+│  │  checkServerStatus()│◀────│ Retourne: { online, players, ... }│  │
 │  └─────────────────┘      └───────────────────────────────────┘  │
 │           │                                                       │
 │           │ IPC: 'server:status'                                  │
@@ -67,7 +67,7 @@ The Communokot Launcher retrieves server status information from the **freemcser
            │ contextBridge
            ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│                       RENDERER PROCESS                            │
+│                       PROCESSUS DE RENDU                          │
 │  ┌─────────────────┐      ┌─────────────────┐                    │
 │  │ public/preload.cjs│──────▶│  window.electron │                    │
 │  │  getServerStatus()│      │  .getServerStatus()│                    │
@@ -77,42 +77,42 @@ The Communokot Launcher retrieves server status information from the **freemcser
 │                           ┌─────────────────┐                    │
 │                           │     App.tsx      │                    │
 │                           │  pollServerStatus│                    │
-│                           │  every 30 seconds│                    │
+│                           │  toutes les 30s  │                    │
 │                           └─────────────────┘                    │
 │                                    │                              │
 │                                    ▼                              │
 │                           ┌─────────────────┐                    │
 │                           │  HomePage.tsx    │                    │
 │                           │ - ServerStatus   │                    │
-│                           │ - Button disable │                    │
+│                           │ - Bouton désactivé│                    │
 │                           └─────────────────┘                    │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Issues & Debugging
+## Problèmes & Dépannage
 
-### Status Indicated as Offline?
+### Statut Indiqué Hors Ligne ?
 
-If the status indicator is offline but the API returns 200 OK:
+Si l'indicateur est hors ligne mais que l'API renvoie "200 OK" :
 
-1.  **Check Terminal Logs**: Look for `[ServerStatus] API Axios error` or `API unknown error`.
-2.  **Verify Preload**: Ensure `dist/renderer/preload.cjs` exists and is pure CommonJS.
-3.  **Check Renderer Logs**: Open the app DevTools (Cmd+Option+I), go to Console, and look for:
-    -   `[App] Server status received: ...` (Good)
-    -   `[App] window.electron is undefined` (Bad - Preload failed)
+1.  **Vérifier les Logs du Terminal** : Chercher `[ServerStatus] API Axios error` ou `API unknown error`.
+2.  **Vérifier le Preload** : S'assurer que `dist/renderer/preload.cjs` existe et est en pur CommonJS.
+3.  **Vérifier les Logs du Renderer** : Ouvrir les DevTools de l'app (Cmd+Option+I), aller dans Console, et chercher :
+    -   `[App] Server status received: ...` (Bon)
+    -   `[App] window.electron is undefined` (Mauvais - Échec du Preload)
 
-### Preload Script
+### Script de Preload
 
-The preload script is located at `public/preload.cjs`.
-- It is **NOT** bundled by Vite.
-- It uses the `.cjs` extension to force Electron to treat it as CommonJS (since `package.json` sets `"type": "module"`).
-- It is copied directly to `dist/renderer/preload.cjs` during the build.
+Le script de preload est situé à `public/preload.cjs`.
+- Il n'est **PAS** empaqueté par Vite.
+- Il utilise l'extension `.cjs` pour forcer Electron à le traiter comme du CommonJS (puisque `package.json` définit `"type": "module"`).
+- Il est copié directement vers `dist/renderer/preload.cjs` pendant le build.
 
-### Visual Representation
-The status is displayed via the `ServerStatusBadge` component, which uses the "CommunoCode" design system:
--   **Font**: JetBrains Mono (Technical/Terminal look).
--   **Offline**: Dark Red (`#7f1d1d`) text.
--   **Online**: White text with a glowing indicator.
--   **Layout**: Top-right corner of the Home Page.
+### Représentation Visuelle
+Le statut est affiché via le composant `ServerStatusBadge`, qui utilise le système de design "CommunoCode" :
+-   **Police** : JetBrains Mono (Look Technique/Terminal).
+-   **Hors Ligne** : Texte Rouge Foncé (`#7f1d1d`).
+-   **En Ligne** : Texte Blanc avec un indicateur lumineux.
+-   **Disposition** : Coin supérieur droit de la Page d'Accueil.

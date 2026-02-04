@@ -43,16 +43,16 @@ const UpdatesPage = memo(function UpdatesPage() {
             <div className="max-w-3xl mx-auto">
                 {/* Header */}
                 <motion.div
-                    className="mb-16 flex items-end gap-6 border-b border-white/10 pb-8"
+                    className="mb-16 flex items-end gap-6 border-b border-black/10 pb-8"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <div className="p-4 bg-brand-primary text-deep rounded-2xl">
+                    <div className="p-4 bg-brand-primary text-text-main rounded-2xl">
                         <Newspaper size={32} />
                     </div>
                     <div>
                         <h1 className="text-4xl font-black tracking-tighter text-white">ACTUALITÉS</h1>
-                        <p className="text-text-muted uppercase tracking-widest text-xs mt-2">
+                        <p className="text-white/60 uppercase tracking-widest text-xs mt-2">
                             Dernières communications du QG
                         </p>
                     </div>
@@ -61,7 +61,7 @@ const UpdatesPage = memo(function UpdatesPage() {
                 {/* Loading state */}
                 {loading && (
                     <div className="flex items-center justify-center py-20">
-                        <div className="w-8 h-8 border-2 border-white/20 border-t-brand-primary rounded-full animate-spin" />
+                        <div className="w-8 h-8 border-2 border-black/10 border-t-brand-primary rounded-full animate-spin" />
                     </div>
                 )}
 
@@ -94,7 +94,7 @@ const NewsCard = memo(function NewsCard({ item, index }: NewsCardProps) {
 
     return (
         <motion.article
-            className="group relative bg-surface border border-white/5 rounded-2xl overflow-hidden shadow-2xl hover:border-brand-primary/30 transition-colors"
+            className="group relative bg-surface border border-black/5 rounded-2xl overflow-hidden shadow-2xl hover:border-brand-primary/30 transition-colors"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -111,8 +111,8 @@ const NewsCard = memo(function NewsCard({ item, index }: NewsCardProps) {
                     {/* Gradient Overlay for Text Readability if needed, mostly decoration here */}
                     <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80" />
 
-                    <div className="absolute top-4 left-4 bg-deep/80 backdrop-blur px-3 py-1 rounded-full border border-white/10">
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">
+                    <div className="absolute top-4 left-4 bg-surface/90 backdrop-blur px-3 py-1 rounded-full border border-black/5 shadow-sm">
+                        <span className="text-[10px] font-bold text-text-main uppercase tracking-widest">
                             {item.date}
                         </span>
                     </div>
@@ -122,14 +122,14 @@ const NewsCard = memo(function NewsCard({ item, index }: NewsCardProps) {
             {/* Content Section */}
             <div className="p-8 relative">
                 {!item.image && (
-                    <div className="mb-4 inline-block bg-white/5 px-3 py-1 rounded-full">
+                    <div className="mb-4 inline-block bg-black/5 px-3 py-1 rounded-full">
                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
                             {item.date}
                         </span>
                     </div>
                 )}
 
-                <h3 className="text-2xl font-bold mb-3 leading-tight text-white group-hover:text-brand-primary transition-colors">
+                <h3 className="text-2xl font-bold mb-3 leading-tight text-text-main group-hover:text-brand-primary transition-colors">
                     {item.title}
                 </h3>
 
@@ -139,7 +139,7 @@ const NewsCard = memo(function NewsCard({ item, index }: NewsCardProps) {
                     </p>
                 )}
 
-                <div className="prose prose-invert prose-sm max-w-none text-white/70">
+                <div className="prose prose-sm max-w-none text-text-muted">
                     <p className="leading-relaxed whitespace-pre-line">
                         {item.content}
                     </p>

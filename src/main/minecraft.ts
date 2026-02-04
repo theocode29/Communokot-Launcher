@@ -1,7 +1,10 @@
-import { spawn, exec } from 'child_process';
-import { existsSync } from 'fs';
 import { join } from 'path';
 import { homedir, platform } from 'os';
+import { existsSync, mkdirSync } from 'fs';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const { Client, Authenticator } = require('minecraft-launcher-core');
 
 export interface LaunchOptions {
     username: string;
@@ -13,59 +16,13 @@ export interface LaunchOptions {
 export interface LaunchResult {
     success: boolean;
     error?: string;
+    message?: string;
 }
 
-const MC_SERVER = 'mc1949282.fmcs.cloud';
-const MC_PORT = 25565;
-const MC_VERSION = '1.21.11';
-
-/**
- * Find Java executable path automatically
- */
-async function findJavaPath(): Promise<string | null> {
-    const os = platform();
-
-    // Common Java locations
-    const javaPaths: string[] = [];
-
-    if (os === 'darwin') {
-        javaPaths.push(
-            '/usr/bin/java',
-            '/Library/Java/JavaVirtualMachines/*/Contents/Home/bin/java',
-            join(homedir(), '.sdkman/candidates/java/current/bin/java'),
-        );
-    } else if (os === 'win32') {
-        javaPaths.push(
-            'C:\\Program Files\\Java\\*\\bin\\java.exe',
-            'C:\\Program Files (x86)\\Java\\*\\bin\\java.exe',
-            join(process.env.JAVA_HOME || '', 'bin', 'java.exe'),
-        );
-    } else {
-        javaPaths.push(
-            '/usr/bin/java',
-            '/usr/lib/jvm/*/bin/java',
-        );
-    }
-
-    // Try to find java in PATH first
-    return new Promise((resolve) => {
-        const cmd = os === 'win32' ? 'where java' : 'which java';
-        exec(cmd, (error, stdout) => {
-            if (!error && stdout.trim()) {
-                resolve(stdout.trim().split('\n')[0]);
-            } else {
-                // Check common paths
-                for (const p of javaPaths) {
-                    if (!p.includes('*') && existsSync(p)) {
-                        resolve(p);
-                        return;
-                    }
-                }
-                resolve(null);
-            }
-        });
-    });
-}
+// Server configuration
+const MC_SERVER_NAME = 'Communokot';
+const MC_SERVER_IP = 'mc1949282.fmcs.cloud';
+const MC_SERVER_PORT = 25565;
 
 /**
  * Get default Minecraft installation path
@@ -83,104 +40,98 @@ function getDefaultMinecraftPath(): string {
 }
 
 /**
- * Launch Minecraft with the specified options
+ * Launch Minecraft using minecraft-launcher-core
  */
 export async function launchMinecraft(options: LaunchOptions): Promise<LaunchResult> {
-    const { username, ram, javaPath, minecraftPath } = options;
+    const { username, ram, minecraftPath } = options;
 
-    // Validate username
     if (!username || username.trim().length === 0) {
-        return { success: false, error: 'Username cannot be empty' };
+        return { success: false, error: 'Le pseudo ne peut pas être vide' };
     }
 
-    // Find Java
-    let java = javaPath;
-    if (!java || java === 'auto') {
-        java = await findJavaPath();
-        if (!java) {
-            return { success: false, error: 'Java not found. Please install Java or specify the path manually.' };
-        }
+    const launcher = new Client();
+    const rootPath = minecraftPath || getDefaultMinecraftPath();
+
+    // Create root if it doesn't exist
+    if (!existsSync(rootPath)) {
+        mkdirSync(rootPath, { recursive: true });
     }
 
-    // Check if Java exists
-    if (!existsSync(java)) {
-        return { success: false, error: `Java executable not found at: ${java}` };
-    }
+    // Determine authorization (Offline mode based on username)
+    // Note: For true online mode, we would need to implement Microsoft Auth flow
+    const authorization = Authenticator.getAuth(username);
 
-    // Get Minecraft path
-    const mcPath = minecraftPath || getDefaultMinecraftPath();
+    // Initial version to try
+    // The user strictly requested 1.21.11 support
+    let versionNumber = '1.21.11';
 
-    // Check if Minecraft is installed
-    if (!existsSync(mcPath)) {
-        return { success: false, error: `Minecraft installation not found at: ${mcPath}` };
-    }
+    // Check if 1.21.11 exists, if not fall back to 1.21.1
+    const v11Path = join(rootPath, 'versions', '1.21.11');
+    const v1Path = join(rootPath, 'versions', '1.21.1');
 
-    // Build the launcher command
-    // For offline/cracked mode, we use the official launcher with quickPlayMultiplayer
-    const os = platform();
-    let launcherPath: string;
-
-    if (os === 'darwin') {
-        launcherPath = '/Applications/Minecraft.app/Contents/MacOS/launcher';
-        // Alternative: Use the minecraft-launcher command directly
-        if (!existsSync(launcherPath)) {
-            launcherPath = join(mcPath, 'launcher', 'minecraft-launcher');
-        }
-    } else if (os === 'win32') {
-        launcherPath = join(process.env.LOCALAPPDATA || '', 'Packages', 'Microsoft.4297127D64EC6_8wekyb3d8bbwe', 'LocalCache', 'Local', 'runtime', 'java-runtime-gamma', 'windows-x64', 'java-runtime-gamma', 'bin', 'java.exe');
-        // Standard launcher path
-        if (!existsSync(launcherPath)) {
-            launcherPath = join(process.env.APPDATA || '', '.minecraft', 'launcher', 'MinecraftLauncher.exe');
-        }
+    if (existsSync(v11Path)) {
+        console.log('[Launcher] Found custom version 1.21.11');
+        versionNumber = '1.21.11';
+    } else if (existsSync(v1Path)) {
+        console.log('[Launcher] Found version 1.21.1');
+        versionNumber = '1.21.1';
     } else {
-        launcherPath = 'minecraft-launcher';
+        // Default to asking for 1.21.1 if neither found (MCLC might download it)
+        console.log('[Launcher] Version not found locally, requesting 1.21.1');
+        versionNumber = '1.21.1';
     }
 
-    // Build arguments for direct game launch
-    const args: string[] = [
-        `--quickPlayMultiplayer=${MC_SERVER}:${MC_PORT}`,
-        '--fullscreen',
-        `--version=${MC_VERSION}`,
-    ];
+    console.log(`[Launcher] Starting launch process for ${username} with version ${versionNumber}`);
+    console.log(`[Launcher] Target Server: ${MC_SERVER_IP}:${MC_SERVER_PORT}`);
 
-    console.log(`Launching Minecraft with: ${launcherPath} ${args.join(' ')}`);
+    const launchOptions = {
+        clientPackage: null,
+        authorization: authorization,
+        root: rootPath,
+        version: {
+            number: versionNumber,
+            type: "release",
+            custom: versionNumber === '1.21.11' ? '1.21.11' : undefined // Mark as custom if it's the specific non-standard one
+        },
+        memory: {
+            max: `${ram}G`,
+            min: `${Math.max(2, ram / 2)}G`
+        },
+        javaPath: options.javaPath && options.javaPath !== 'auto' ? options.javaPath : undefined,
+        quickPlay: {
+            type: "multiplayer",
+            identifier: `${MC_SERVER_IP}:${MC_SERVER_PORT}`
+        }
+    };
 
-    try {
-        // Try launching with the Minecraft launcher
-        const child = spawn(launcherPath, args, {
-            detached: true,
-            stdio: 'ignore',
-            cwd: mcPath,
-            env: {
-                ...process.env,
-                _JAVA_OPTIONS: `-Xmx${ram}G`,
-            },
+    return new Promise((resolve) => {
+        // Event listeners for debugging
+        launcher.on('debug', (e) => console.log(`[MCLC Debug] ${e}`));
+        launcher.on('data', (e) => console.log(`[MCLC Data] ${e}`));
+
+        launcher.on('progress', (e) => {
+            console.log(`[MCLC Progress] ${e.type} - ${Math.round(e.task / e.total * 100)}%`);
         });
 
-        child.unref();
+        launcher.on('close', (code) => {
+            console.log(`[Launcher] Game closed with code ${code}`);
+        });
 
-        return { success: true };
-    } catch (error) {
-        // If launcher fails, try opening Minecraft via system
-        try {
-            const openCmd = os === 'darwin' ? 'open' : os === 'win32' ? 'start' : 'xdg-open';
-            const mcApp = os === 'darwin' ? 'minecraft://' : os === 'win32' ? 'minecraft://' : 'minecraft://';
-
-            exec(`${openCmd} "${mcApp}"`, (err) => {
-                if (err) {
-                    console.error('Failed to open Minecraft:', err);
-                }
-            });
-
-            return {
+        // Launch the game
+        launcher.launch(launchOptions).then(() => {
+            // Success assumes the process started. MCLC launch returns promise when process spawns?
+            // Actually MCLC launch returns a Promise<void> that resolves when the game process starts
+            console.log('[Launcher] Game process started successfully');
+            resolve({
                 success: true,
-                error: 'Launched via system. You may need to connect to the server manually.'
-            };
-        } catch (fallbackError) {
-            return {
+                message: undefined // UI will not show message
+            });
+        }).catch((err) => {
+            console.error('[Launcher] Error during launch:', err);
+            resolve({
                 success: false,
-                error: error instanceof Error ? error.message : 'Failed to launch Minecraft'
-            };
-        }
-    }
+                error: err.message || 'Erreur lors du lancement du jeu'
+            });
+        });
+    });
 }

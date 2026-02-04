@@ -4,7 +4,7 @@
 
 ![Communokot Logo](public/icon.png)
 
-**A modern, high-performance Minecraft launcher for the Communokot server**
+**Un launcher Minecraft moderne et performant pour le serveur Communokot**
 
 [![Electron](https://img.shields.io/badge/Electron-33-47848F?logo=electron&logoColor=white)](https://www.electronjs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
@@ -15,92 +15,84 @@
 
 ---
 
-## ✨ Features
+## ✨ Fonctionnalités
 
-- 🚀 **One-Click Launch** — Connect to Communokot server instantly
-- 🗺️ **Live Map** — Integrated BlueMap 3D world viewer
-- 📰 **News Feed** — Server updates and announcements
-- ⚙️ **Settings** — RAM allocation, Java path, username
-- 🔄 **Auto-Updates** — Automatic launcher updates via GitHub Releases
-- 🎨 **Modern UI** — Dark theme with smooth animations
+- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot
+- 🗺️ **Carte en direct** — Visualiseur de monde 3D BlueMap intégré
+- 📰 **Fil d'actualités** — Mises à jour du serveur et annonces
+- ⚙️ **Paramètres** — Allocation de RAM, chemin Java, nom d'utilisateur
+- 🔄 **Mises à jour automatiques** — Mises à jour automatiques du launcher via GitHub Releases
+- 🎨 **Interface Moderne** — Thème clair "Sable" avec animations fluides
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Stack Technique
 
-| Layer | Technology |
+| Couche | Technologie |
 |-------|------------|
 | Core | Electron 33 |
 | UI | React 18 + TypeScript |
 | Bundler | Vite 5 |
 | Styling | Tailwind CSS |
 | Animations | Framer Motion |
-| Storage | electron-store |
+| Stockage | electron-store |
 
 ---
 
 ## 📦 Installation
 
-### From Releases
-Download the latest version from [GitHub Releases](https://github.com/theocode29/Communokot-Launcher/releases).
+### Depuis les Releases
+Téléchargez la dernière version depuis les [GitHub Releases](https://github.com/theocode29/Communokot-Launcher/releases).
 
-- **Windows**: `.exe` installer
+- **Windows**: installeur `.exe`
 - **macOS (Intel)**: `-x64.dmg`
 - **macOS (Apple Silicon)**: `-arm64.dmg`
 
-### From Source
+### Depuis la Source
+
+Consultez le [Guide de Développement](docs/DEVELOPMENT.md) pour les instructions complètes d'installation.
 
 ```bash
-# Clone the repository
-git clone https://github.com/theocode29/Communokot-Launcher.git
-cd Communokot-Launcher
-
-# Install dependencies
+# Démarrage Rapide
 npm install
-
-# Run in development
 npm run electron:dev
-
-# Build for production
-npm run dist:mac   # macOS
-npm run dist:win   # Windows
 ```
 
 ---
 
-## 📁 Project Structure
+## 📁 Structure du Projet
 
 ```
 src/
-├── main/               # Electron main process
-│   ├── index.ts        # Window & IPC handlers
-│   ├── minecraft.ts    # Game launch logic
-│   ├── serverStatus.ts # Server ping
-│   └── utils/          # Config, IPC utilities
-└── renderer/           # React UI
-    ├── components/     # Navigation, Button, Layout
-    ├── pages/          # Home, Map, Updates, Settings
-    └── styles/         # Tailwind globals
+├── main/               # Processus principal Electron
+│   ├── index.ts        # Gestionnaires de fenêtre & IPC
+│   ├── minecraft.ts    # Logique de lancement du jeu
+│   └── serverStatus.ts # Ping du serveur
+└── renderer/           # UI React
+    ├── components/     # Navigation, Bouton, Layout
+    ├── pages/          # Accueil, Carte, Mises à jour, Paramètres
+    └── styles/         # Variables globales Tailwind
 ```
 
 ---
 
 ## 📚 Documentation
 
-- [Technical Specifications](docs/LAUNCHER_DESCRIPTION.md)
-- [Project Architecture](docs/PROJECT_ARCHITECTURE.md)
-- [Server Status API](docs/SERVER_STATUS.md)
-- [Performance Optimizations](docs/PERFORMANCE.md)
+- [Spécifications Techniques](docs/LAUNCHER_DESCRIPTION.md) - Spécifications complètes du projet et logique.
+- [Architecture du Projet](docs/PROJECT_ARCHITECTURE.md) - Analyse approfondie de la stack et du flux de données.
+- [Guide de Développement](docs/DEVELOPMENT.md) - Comment lancer, construire et contribuer.
+- [API Statut Serveur](docs/SERVER_STATUS.md) - Détails de l'intégration API.
+- [Optimisations de Performance](docs/PERFORMANCE.md) - Commutateurs GPU et bundling.
 
 ---
 
-## 🔗 Links
+## 🔗 Liens
 
-- **Server**: `mc1949282.fmcs.cloud:25565`
-- **Live Map**: [BlueMap](http://mc1949282.fmcs.cloud:50100)
+- **Serveur**: `mc1949282.fmcs.cloud:25565`
+- **Carte en direct**: [BlueMap](http://mc1949282.fmcs.cloud:50100)
 
 ---
 
-## 📄 License
+## 📄 Licence
 
-MIT © Communokot Team
+MIT © Équipe Communokot

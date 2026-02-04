@@ -25,8 +25,8 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                 className={`
                     relative group flex flex-col items-center justify-center p-6 rounded-2xl border-2 transition-all duration-300
                     ${isSelected
-                        ? 'bg-brand-primary/10 border-brand-primary shadow-[0_0_20px_rgba(251,191,36,0.1)]'
-                        : 'bg-surface border-white/5 hover:border-white/20 hover:bg-white/5'}
+                        ? 'bg-brand-primary/10 border-brand-primary shadow-[0_0_20px_rgba(230,179,37,0.1)]'
+                        : 'bg-surface border-black/5 hover:border-black/20 hover:bg-black/5'}
                 `}
             >
                 {isSelected && (
@@ -34,7 +34,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                         <Check size={16} strokeWidth={4} />
                     </div>
                 )}
-                <span className={`text-2xl font-black ${isSelected ? 'text-brand-primary' : 'text-white'}`}>
+                <span className={`text-2xl font-black ${isSelected ? 'text-brand-primary' : 'text-text-main'}`}>
                     {gb} <span className="text-xs font-bold text-text-muted">GO</span>
                 </span>
             </button>
@@ -46,17 +46,17 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
             <div className="max-w-3xl mx-auto">
                 {/* Header */}
                 <motion.div
-                    className="mb-12 flex items-end justify-between border-b border-white/10 pb-8"
+                    className="mb-12 flex items-end justify-between border-b border-black/10 pb-8"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
                     <div className="flex items-end gap-6">
-                        <div className="p-4 bg-surface border border-white/10 rounded-2xl">
-                            <Settings size={32} className="text-white" />
+                        <div className="p-4 bg-surface border border-black/10 rounded-2xl">
+                            <Settings size={32} className="text-text-main" />
                         </div>
                         <div>
                             <h1 className="text-4xl font-black tracking-tighter text-white">PARAMÈTRES</h1>
-                            <p className="text-text-muted uppercase tracking-widest text-xs mt-2">
+                            <p className="text-white/60 uppercase tracking-widest text-xs mt-2">
                                 Configuration système
                             </p>
                         </div>
@@ -64,7 +64,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
 
                     <button
                         onClick={() => setIsHelpOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-bold text-white transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-surface hover:bg-surface/90 border border-white/10 rounded-lg text-sm font-bold text-text-main transition-colors shadow-lg"
                     >
                         <HelpCircle size={18} className="text-brand-primary" />
                         <span>AIDE INSTALLATION</span>
@@ -86,7 +86,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                         </h2>
 
                         <div className="grid gap-6">
-                            <div className="bg-surface p-6 rounded-2xl border border-white/5">
+                            <div className="bg-surface p-6 rounded-2xl border border-black/5">
                                 <label className="block text-xs font-bold text-text-muted uppercase tracking-widest mb-3">
                                     Pseudo Minecraft
                                 </label>
@@ -95,7 +95,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                                     value={config.username}
                                     onChange={(e) => onConfigChange('username', e.target.value)}
                                     placeholder="Votre pseudo..."
-                                    className="w-full bg-deep p-4 rounded-xl text-white font-bold border-2 border-transparent focus:border-brand-primary focus:bg-deep/50 transition-colors outline-none placeholder:text-white/20"
+                                    className="w-full bg-deep p-4 rounded-xl text-text-main font-bold border-2 border-transparent focus:border-brand-primary focus:bg-deep/50 transition-colors outline-none placeholder:text-text-muted/50"
                                 />
                                 <p className="mt-2 text-[10px] text-text-muted flex items-center gap-2">
                                     <AlertTriangle size={12} className="text-amber-500" />
@@ -116,7 +116,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                             PERFORMANCES (RAM)
                         </h2>
 
-                        <div className="bg-surface p-8 rounded-2xl border border-white/5">
+                        <div className="bg-surface p-8 rounded-2xl border border-black/5">
                             <div className="flex items-center gap-3 mb-6">
                                 <Cpu className="text-text-muted" size={20} />
                                 <p className="text-sm text-text-muted">
@@ -141,7 +141,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                             JAVA & FICHIERS
                         </h2>
 
-                        <div className="bg-surface p-6 rounded-2xl border border-white/5 space-y-6">
+                        <div className="bg-surface p-6 rounded-2xl border border-black/5 space-y-6">
                             {/* Java Path */}
                             <div>
                                 <label className="block text-xs font-bold text-text-muted uppercase tracking-widest mb-3">
@@ -152,7 +152,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                                         type="text"
                                         value={config.javaPath}
                                         readOnly
-                                        className="flex-1 bg-deep p-4 rounded-xl text-white/60 font-mono text-xs border border-white/5"
+                                        className="flex-1 bg-deep p-4 rounded-xl text-text-muted font-mono text-xs border border-black/5"
                                     />
                                     <Button
                                         variant="secondary"
@@ -182,7 +182,7 @@ const ParametersPage = memo(function ParametersPage({ config, onConfigChange }: 
                                         type="text"
                                         value={config.minecraftPath || 'Dossier par défaut'}
                                         readOnly
-                                        className="flex-1 bg-deep p-4 rounded-xl text-white/60 font-mono text-xs border border-white/5"
+                                        className="flex-1 bg-deep p-4 rounded-xl text-text-muted font-mono text-xs border border-black/5"
                                     />
                                     <Button
                                         variant="secondary"

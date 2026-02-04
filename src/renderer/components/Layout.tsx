@@ -16,14 +16,14 @@ export default function Layout({ children, activeTab, onTabChange, version }: La
             <div className="absolute inset-0 z-0">
                 {/* Main Wallpaper - use CSS background for performance */}
                 <div
-                    className="absolute inset-0 bg-cover bg-center will-change-transform"
+                    className="absolute inset-0 bg-cover bg-center will-change-transform blur-[2px] opacity-80"
                     style={{ backgroundImage: 'url(/background_01.jpg)' }}
                 >
-                    <div className="absolute inset-0 bg-deep/70" /> {/* Darkening */}
+                    <div className="absolute inset-0 bg-black/40" /> {/* Darkening for accessibility */}
                 </div>
 
-                {/* Ambient Glow (Brand) - optimized: smaller blur, smaller element */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60vw] h-[40vh] bg-brand-primary/5 blur-[80px] rounded-full pointer-events-none will-change-transform" />
+                {/* Ambient Glow (Brand) - optimized */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60vw] h-[40vh] bg-brand-primary/10 blur-[80px] rounded-full pointer-events-none will-change-transform" />
             </div>
 
             {/* --- Effects Layer --- */}

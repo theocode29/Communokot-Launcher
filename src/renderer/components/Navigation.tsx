@@ -23,7 +23,7 @@ const Navigation = memo(function Navigation({ activeTab, onTabChange }: Navigati
 
     return (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4 pointer-events-none flex justify-center">
-            <nav className="pointer-events-auto flex items-center gap-2 p-2 bg-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl ring-1 ring-black/50">
+            <nav className="pointer-events-auto flex items-center gap-2 p-2 bg-surface/80 backdrop-blur-xl border border-black/10 rounded-2xl shadow-xl ring-1 ring-black/5">
                 <LayoutGroup>
                     {TABS.map((tab) => {
                         const isActive = activeTab === tab.id;
@@ -34,18 +34,18 @@ const Navigation = memo(function Navigation({ activeTab, onTabChange }: Navigati
                                 className={`
                                     relative group flex flex-col items-center justify-center
                                     h-16 w-24 rounded-xl transition-all duration-300
-                                    ${isActive ? 'text-brand-primary' : 'text-text-muted hover:text-white hover:bg-white/5'}
+                                    ${isActive ? 'text-text-main' : 'text-text-muted hover:text-text-main hover:bg-black/5'}
                                 `}
                             >
                                 {isActive && (
                                     <motion.div
                                         layoutId="activeTabBg"
-                                        className="absolute inset-0 bg-white/5 rounded-xl border border-white/5 will-change-transform"
+                                        className="absolute inset-0 bg-black/5 rounded-xl border border-black/5 will-change-transform"
                                         transition={{ type: "spring", stiffness: 400, damping: 35 }}
                                     />
                                 )}
 
-                                <span className="relative z-10 mb-1">
+                                <span className={`relative z-10 mb-1 ${isActive ? 'text-brand-primary' : ''}`}>
                                     <tab.icon size={24} strokeWidth={isActive ? 2.5 : 2} />
                                 </span>
                                 <span className={`

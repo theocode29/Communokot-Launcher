@@ -74,7 +74,7 @@ const MapPage = memo(function MapPage() {
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
             >
                 <motion.div
-                    className="flex items-center bg-surface/60 backdrop-blur-xl border border-white-10 rounded-full shadow-lg overflow-hidden group hover:border-brand-primary/30 hover:shadow-[0_0_15px_rgba(251,191,36,0.15)] transition-colors duration-300"
+                    className="flex items-center bg-surface/60 backdrop-blur-xl border border-black/5 rounded-full shadow-lg overflow-hidden group hover:border-brand-primary/30 hover:shadow-[0_0_15px_rgba(251,191,36,0.15)] transition-colors duration-300"
                     onHoverStart={() => setIsHovered(true)}
                     onHoverEnd={() => setIsHovered(false)}
                     initial={{ width: 44 }}

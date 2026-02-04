@@ -1,6 +1,6 @@
 # Communokot Launcher — Spécifications Techniques & Guide de Reconstruction
 
-Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. Il contient l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier.
+Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier.
 
 ---
 
@@ -20,7 +20,7 @@ Ce document sert de **référence unique** pour reconstruire intégralement l'ap
 
 ## 2. Structure du Projet
 
-L'arborescence complète des fichiers à recréer :
+L'arborescence complète des fichiers que j'ai établie :
 
 ```
 Communokot launcher/
@@ -110,7 +110,7 @@ Communokot launcher/
 }
 ```
 
-### 🛠 `electron-builder.yml` configuration
+### 🛠 Configuration `electron-builder.yml`
 
 ```yaml
 appId: com.communokot.launcher
@@ -165,10 +165,10 @@ module.exports = {
 
 ### Processus Principal (`src/main`)
 
-1.  **`index.ts`** : Créer une fenêtre `BrowserWindow` avec `frame: false` (sans bordures OS). Injecter `preload.js`.
+1.  **`index.ts`** : Je crée une fenêtre `BrowserWindow` avec `frame: false` (sans bordures OS). J'injecte `preload.js`.
 2.  **`minecraft.ts`** :
     *   Fonction `launchGame(options)`
-    *   Utiliser `child_process.spawn` pour lancer Java.
+    *   J'utilise `child_process.spawn` pour lancer Java.
     *   **Arguments Java essentiels** :
         *   `-Xmx{ram}G` (Mémoire)
         *   Définir le classpath (Jars du jeu + Libraries).
@@ -183,13 +183,13 @@ module.exports = {
 ### Renderer (`src/renderer`)
 
 1.  **Navigation (`App.tsx`)** :
-    *   Utilise un state `activeTab` ('home', 'map', etc.).
-    *   Affiche conditionnellement les composants de page (`<HomePage />`, `<MapPage />`).
+    *   J'utilise un state `activeTab` ('home', 'map', etc.).
+    *   J'affiche conditionnellement les composants de page (`<HomePage />`, `<MapPage />`).
     *   La barre de navigation change de couleur de bordure selon l'onglet actif.
 
 2.  **Map (`MapPage.tsx`)** :
     *   Iframe pointant vers `http://mc1949282.fmcs.cloud:50100`.
-    *   Gérer le `onLoad` pour masquer le spinner de chargement.
+    *   Je gère le `onLoad` pour masquer le spinner de chargement.
 
 3.  **Updates (`UpdatesPage.tsx`)** :
     *   `useEffect` qui fetch: `https://raw.githubusercontent.com/theocode29/Communokot-Launcher/main/launcher-news/main/updates.json`
@@ -226,7 +226,7 @@ Un script Node.js simple pour générer le JSON des news.
     `npm install electron electron-builder ...`
 
 2.  **Configuration** :
-    Créer les fichiers de config (`vite.config.ts`, `tailwind.config.js`) avec le contenu ci-dessus.
+    Je crée les fichiers de config (`vite.config.ts`, `tailwind.config.js`) avec le contenu ci-dessus.
 
 3.  **Développement** :
     `npm run dev` -> Lance React (port 5173) + Electron Window.

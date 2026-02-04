@@ -24,6 +24,7 @@
     "electron-updater": "^6.1.7",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.563.0",
+    "minecraft-launcher-core": "^3.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sonner": "^2.0.7",

@@ -1,30 +1,26 @@
-# Performance Optimizations
+# Optimisations de Performance
 
-This document describes the performance optimizations implemented in the Communokot Launcher to ensure smooth 3D map rendering and fast startup times.
-
----
-
-## GPU & Chromium Switches
-
-The following Chromium command-line switches are applied before `app.whenReady()` in [src/main/index.ts](../src/main/index.ts):
-
-| Switch | Purpose |
-|--------|---------|
-| `ignore-gpu-blacklist` | Bypass Chromium's GPU restrictions for WebGL |
-| `enable-gpu-rasterization` | Smoother 2D rendering |
-| `enable-zero-copy` | Better GPU memory efficiency |
-| `enable-webgl-draft-extensions` | Advanced WebGL features for BlueMap |
-| `force_high_performance_gpu` | Use dedicated GPU on laptops |
-| `enable-accelerated-video-decode` | Hardware video decoding |
-| `disable-frame-rate-limit` | Unlock framerate for animations |
+Ce document décrit les optimisations de performance que j'ai implémentées dans le Communokot Launcher pour assurer un rendu des cartes 3D fluide et des temps de démarrage rapides.
 
 ---
 
-## Bundle Optimization
+## Commutateurs GPU & Chromium
 
-### Vite Chunking
+J'applique les commutateurs de ligne de commande Chromium suivants avant `app.whenReady()` dans [src/main/index.ts](../src/main/index.ts) :
 
-Vendor libraries are split into separate chunks for better caching:
+| `ignore-gpu-blacklist` | Contourner les restrictions GPU de Chromium pour WebGL |
+| `enable-accelerated-2d-canvas` | Accélération matérielle pour le Canvas 2D |
+| `force_high_performance_gpu` | Utiliser le GPU dédié sur les ordinateurs portables |
+
+*(J'ai retiré d'autres commutateurs comme `enable-zero-copy` pour des raisons de stabilité)*
+
+---
+
+## Optimisation du Bundle
+
+### Découpage Vite (Chunking)
+
+Les bibliothèques tierces sont séparées dans des chunks distincts pour une meilleure mise en cache :
 
 ```javascript
 manualChunks: {
@@ -34,9 +30,9 @@ manualChunks: {
 }
 ```
 
-### ASAR Configuration
+### Configuration ASAR
 
-Native modules are unpacked for proper loading:
+Les modules natifs sont décompressés pour un chargement correct :
 
 ```yaml
 asar: true
@@ -47,46 +43,46 @@ asarUnpack:
 
 ---
 
-## Lazy Loading
+## Chargement Différé (Lazy Loading)
 
-Heavy pages are loaded on-demand using React.lazy():
+Les pages lourdes sont chargées à la demande en utilisant React.lazy() :
 
 ```typescript
 const MapPage = lazy(() => import('./pages/MapPage.tsx'));
 ```
 
-This ensures the BlueMap module is only loaded when the user navigates to the Map tab.
+Cela garantit que le module BlueMap n'est chargé que lorsque l'utilisateur navigue vers l'onglet Carte.
 
 ---
 
-## IPC Best Practices
+## Bonnes Pratiques IPC
 
-The [ipcUtils.ts](../src/main/utils/ipcUtils.ts) module provides utilities for safe IPC handler management:
+Le module [ipcUtils.ts](../src/main/utils/ipcUtils.ts) fournit des utilitaires pour la gestion sécurisée des gestionnaires IPC :
 
-- `createSafeIpcHandler()` — Registers handlers with cleanup support
-- `cleanupAllIpcHandlers()` — Bulk cleanup on app shutdown
+- `createSafeIpcHandler()` — Enregistre les gestionnaires avec support de nettoyage
+- `cleanupAllIpcHandlers()` — Nettoyage en masse à la fermeture de l'application
 
-This prevents memory leaks from orphaned listeners during long sessions.
+Cela évite les fuites de mémoire dues aux auditeurs orphelins pendant les longues sessions.
 
 ---
 
-## Performance Targets
+## Objectifs de Performance
 
-| Metric | Target | Impact |
+| Métrique | Cible | Impact |
 |--------|--------|--------|
-| Time to Interactive | < 3.5s | Fast perceived startup |
-| JavaScript Bundle | < 300 KB | Quick initial parse |
-| IPC Latency | < 10ms | Responsive UI |
-| Base Memory | 50-150 MB | Low system footprint |
-| Idle CPU | < 2% | Preserves resources for game |
+| Temps Interactif | < 3.5s | Démarrage perçu comme rapide |
+| Bundle JavaScript | < 300 KB | Analyse initiale rapide |
+| Latence IPC | < 10ms | UI Réactive |
+| Mémoire de Base | 50-150 MB | Faible empreinte système |
+| CPU en Veille | < 2% | Préserve les ressources pour le jeu |
 
 ---
 
-## Build Architectures
+## Architectures de Build
 
-Multi-architecture builds are configured in `electron-builder.yml`:
+Les builds multi-architectures sont configurés dans `electron-builder.yml` :
 
-- **macOS**: `arm64` (Apple Silicon) + `x64` (Intel)
-- **Windows**: `x64`
+- **macOS** : `arm64` (Apple Silicon) + `x64` (Intel)
+- **Windows** : `x64`
 
-This ensures native performance without Rosetta translation on Apple Silicon Macs.
+Cela assure une performance native sans traduction Rosetta sur les Macs Apple Silicon.

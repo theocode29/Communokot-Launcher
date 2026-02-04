@@ -76,7 +76,7 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
                         onClick={handleLaunch}
                         loading={launching}
                         disabled={!serverStatus.online}
-                        className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(251,191,36,0.0)] hover:shadow-[0_0_50px_rgba(251,191,36,0.3)] transition-shadow duration-500 ${!serverStatus.online ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-white/10' : ''}`}
+                        className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(230,179,37,0.0)] hover:shadow-[0_0_50px_rgba(230,179,37,0.3)] transition-shadow duration-500 ${!serverStatus.online ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-black/5' : ''}`}
                         icon={!launching && <Play fill="currentColor" size={20} />}
                     >
                         {launching ? 'INITIALISATION...' : (serverStatus.online ? 'JOUER' : 'HORS LIGNE')}

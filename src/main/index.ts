@@ -44,6 +44,8 @@ function createWindow(): void {
             contextIsolation: true,
             sandbox: false,
             webviewTag: true, // Enable webview for BlueMap control
+            webSecurity: false, // Allow loading HTTP BlueMap in iframe
+            allowRunningInsecureContent: true,
         },
         icon: join(__dirname, '../../public/icon.png'),
     });
@@ -127,7 +129,7 @@ ipcMain.handle('config:getAll', async () => {
 // Dialog for file/folder selection
 ipcMain.handle('dialog:openFile', async (_, options?: Electron.OpenDialogOptions) => {
     const result = await dialog.showOpenDialog(mainWindow!, {
-        properties: ['openFile'],
+        properties: ['openFile', 'showHiddenFiles'],
         ...options,
     });
     return result.canceled ? null : result.filePaths[0];
@@ -135,7 +137,7 @@ ipcMain.handle('dialog:openFile', async (_, options?: Electron.OpenDialogOptions
 
 ipcMain.handle('dialog:openFolder', async (_, options?: Electron.OpenDialogOptions) => {
     const result = await dialog.showOpenDialog(mainWindow!, {
-        properties: ['openDirectory'],
+        properties: ['openDirectory', 'showHiddenFiles'],
         ...options,
     });
     return result.canceled ? null : result.filePaths[0];

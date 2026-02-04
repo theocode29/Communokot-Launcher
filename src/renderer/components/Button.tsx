@@ -31,21 +31,21 @@ const Button = memo(function Button({
 
     const variants = {
         primary: `
-      bg-brand-primary text-deep border-brand-primary
-      hover:bg-amber-300
+      bg-brand-primary text-text-main border-brand-primary
+      hover:bg-[#FCD34D] hover:shadow-lg hover:shadow-[#FCD34D]/20
     `,
         secondary: `
-      bg-surface text-white border-white-10
-      hover:bg-white-5 hover:border-white/30
+      bg-surface text-text-main border-black/5
+      hover:bg-black/5 hover:border-black/20
     `,
         ghost: `
       bg-transparent text-text-muted border-transparent
-      hover:text-white
+      hover:text-text-main hover:bg-black/5
     `,
         glow: `
-      bg-surface text-brand-primary border-brand-primary/20
-      shadow-[0_0_20px_rgba(251,191,36,0.1)]
-      hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] hover:border-brand-primary/50
+      bg-surface text-text-main border-brand-primary/50
+      shadow-[0_0_20px_rgba(230,179,37,0.1)]
+      hover:shadow-[0_0_30px_rgba(230,179,37,0.3)] hover:border-brand-primary
     `
     };
 

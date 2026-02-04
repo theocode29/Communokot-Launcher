@@ -1,93 +1,94 @@
-# Communokot Launcher - Project Architecture
+# Communokot Launcher - Architecture du Projet
 
-## Overview
+## Vue d'ensemble
 
-The Communokot Launcher is a modern, high-performance Minecraft launcher built with the **Electron + Vite + React** stack. It implements a custom design system ("CommunoCode") inspired by cinematic sci-fi interfaces (Star Wars Jedi, Braun, Nothing OS).
+Le Communokot Launcher est un lanceur Minecraft moderne et performant construit avec la stack **Electron + Vite + React**. J'ai implémenté un système de design personnalisé ("CommunoCode") inspiré des interfaces de science-fiction cinématographiques (Star Wars Jedi, Braun, Nothing OS).
 
-## Tech Stack
+## Stack Technique
 
-| Component | Technology | Reasoning |
-|-----------|------------|-----------|
-| **Core** | Electron (v33+) | Cross-platform desktop capabilities (Node.js + Chromium). |
-| **Bundler** | Vite | Ultra-fast build times compared to Webpack. HMR support. |
-| **UI Framework** | React 19 | Component-based UI logic. |
-| **Styling** | Tailwind CSS | Utility-first styling for rapid design implementation. |
-| **Animation** | Framer Motion | Smooth, physics-based layout transitions. |
-| **State** | React Hooks | Local state management (sufficient for this scale). |
+| Composant | Technologie | Raisonnement |
+|-----------|------------|--------------|
+| **Core** | Electron (v33+) | Capacités bureau cross-platform (Node.js + Chromium). |
+| **Bundler** | Vite | Temps de build ultra-rapides comparés à Webpack. Support HMR. |
+| **Framework UI** | React 18 | Logique UI basée sur les composants. |
+| **Styling** | Tailwind CSS | Styling "utility-first" pour une implémentation rapide du design. |
+| **Animation** | Framer Motion | Transitions de layout fluides et basées sur la physique. |
+| **État** | React Hooks | Gestion d'état local (suffisante pour cette échelle). |
 
 ---
 
-## Directory Structure
+## Structure des Dossiers
 
 ```
 src/
-├── main/                 # Electron Main Process (Node.js)
-│   ├── index.ts          # Entry point. Window creation & IPC handlers.
-│   ├── minecraft.ts      # Game launching logic (child_process).
-│   ├── serverStatus.ts   # API polling logic.
+├── main/                 # Processus Principal Electron (Node.js)
+│   ├── index.ts          # Point d'entrée. Création de fenêtre & gestionnaires IPC.
+│   ├── minecraft.ts      # Logique de lancement du jeu (Launcher Handoff).
+│   ├── serverStatus.ts   # Logique de polling API.
 │   └── ...
-├── renderer/             # Electron Renderer Process (React UI)
-│   ├── components/       # Reusable UI elements (Navigation, Button).
-│   ├── pages/            # Page views (HomePage, MapPage).
-│   ├── styles/           # Global CSS & Tailwind imports.
-│   └── App.tsx           # Main layout & routing logic.
+├── renderer/             # Processus de Rendu Electron (React UI)
+│   ├── components/       # Éléments UI réutilisables (Navigation, Bouton).
+│   ├── pages/            # Vues des pages (HomePage, MapPage).
+│   ├── styles/           # CSS Global & imports Tailwind.
+│   └── App.tsx           # Layout principal & logique de routing.
 └── ...
 ```
 
-## Design System: "CommunoCode"
+## Système de Design : "CommunoCode"
 
-### Philosophy
--   **Dark Mode Only**: `#050505` base background.
--   **Sharp Edges**: `0px` border-radius on all UI elements (Buttons, Inputs).
--   **Typography**: `Inter` (Display/UI) + `JetBrains Mono` (Data/Technical).
--   **Atmosphere**: SVG Noise Overlay + Vignette for depth. No flat colors.
+### Philosophie
+-   **Mode Sombre Uniquement** : Fond de base `#050505`.
+-   **Bords Nets** : `0px` de border-radius sur tous les éléments UI (Boutons, Inputs).
+-   **Typographie** : `Inter` (Affichage/UI) + `JetBrains Mono` (Données/Technique).
+-   **Atmosphère** : Overlay de Bruit SVG + Vignette pour la profondeur. Pas de couleurs plates.
 
-### Key Components
+### Composants Clés
 
 #### 1. Navigation (`Navigation.tsx`)
--   **Style**: Floating Overlay (Bottom Center).
--   **Behavior**: Minimal, glass-morphism bar.
--   **Interaction**: Active tab indicator follows selection.
+-   **Style** : Overlay Flottant (Bas Centre).
+-   **Comportement** : Barre minimaliste, effet glass-morphism.
+-   **Interaction** : L'indicateur d'onglet actif suit la sélection.
 
-#### 2. Action Buttons (`Button.tsx`)
--   Rectangular, high-contrast.
--   Hover effect: Physical padding expansion (`hover:px-10`).
--   No drop shadows (brutalist approach).
-
----
-
-## Data Flow
-
-### Server Status
-1.  **Renderer (`App.tsx`)** calls `window.electron.getServerStatus()` every 30s.
-2.  **Main (`index.ts`)** receives IPC call, delegates to `checkServerStatus()`.
-3.  **Logic (`serverStatus.ts`)** fetches `api.freemcserver.net`.
-4.  **Return**: Data flows back to Renderer to update `ServerStatusBadge`.
-
-### Game Launch
-1.  **User** clicks "LAUNCH_GAME".
-2.  **Renderer** sends `launch-minecraft` IPC event with config (RAM, Username).
-3.  **Main (`minecraft.ts`)** spawns Java process with correct arguments.
-4.  **Main** sends `stdout` / `stderr` back to Renderer (optional console view).
+#### 2. Boutons d'Action (`Button.tsx`)
+-   Rectangulaires, haut contraste.
+-   Effet Hover : Expansion physique du padding (`hover:px-10`).
+-   Pas d'ombres portées (approche brutaliste).
 
 ---
 
-## Best Practices
+## Flux de Données
 
-1.  **Strict IPC**: Never expose Node.js directly to the Renderer. Use `contextBridge` in `preload.cjs`.
-2.  **No `remote` module**: Avoid Electron's remote module for security and performance.
-3.  **Tailwind Config**: Define all colors/fonts in `tailwind.config.js`, do not hardcode hex values in components.
-4.  **Aesthetics**: Always check for `no-select` on UI elements to prevent text highlighting.
+### Statut du Serveur
+1.  **Renderer (`App.tsx`)** appelle `window.electron.getServerStatus()` toutes les 30s.
+2.  **Main (`index.ts`)** reçoit l'appel IPC, délègue à `checkServerStatus()`.
+3.  **Logique (`serverStatus.ts`)** fetch `api.freemcserver.net`.
+4.  **Retour** : Les données reviennent au Renderer pour mettre à jour `ServerStatusBadge`.
+
+### Lancement du Jeu (Launcher Handoff)
+1.  **Utilisateur** clique sur "LANCER LE JEU".
+2.  **Renderer** envoie l'événement IPC `minecraft:launch`.
+3.  **Main (`minecraft.ts`)** cherche l'exécutable officiel du Launcher Minecraft sur le système.
+4.  **Main** lance le launcher avec `--quickPlayMultiplayer=...` pour une connexion directe.
+5.  **Fallback** : Si l'exécutable du launcher est manquant, agit sur le protocole `minecraft://`.
 
 ---
 
-## Troubleshooting
+## Bonnes Pratiques
+
+1.  **IPC Strict** : Je n'expose jamais Node.js directement au Renderer. J'utilise `contextBridge` dans `preload.cjs`.
+2.  **Pas de module `remote`** : J'évite le module remote d'Electron pour la sécurité et la performance.
+3.  **Config Tailwind** : Je définis toutes les couleurs/polices dans `tailwind.config.js`, je ne code pas en dur les valeurs hexadécimales dans les composants.
+4.  **Esthétique** : Je vérifie toujours `no-select` sur les éléments UI pour empêcher la sélection de texte.
+
+---
+
+## Dépannage
 
 ### "Window.electron is undefined"
--   Check `public/preload.cjs` exists.
--   Ensure `main/index.ts` points to the `.cjs` file.
--   Verify invalid ESM imports aren't sneaking into the preload script.
+-   Vérifier que `public/preload.cjs` existe.
+-   S'assurer que `main/index.ts` pointe vers le fichier `.cjs`.
+-   Vérifier que des imports ESM invalides ne se glissent pas dans le script de preload.
 
-### Styles Broken?
--   Ensure `globals.css` imports `@tailwind`.
--   Check `tailwind.config.js` `content` array includes your file paths.
+### Styles Cassés ?
+-   S'assurer que `globals.css` importe `@tailwind`.
+-   Vérifier que le tableau `content` de `tailwind.config.js` inclut bien les chemins de fichiers.
