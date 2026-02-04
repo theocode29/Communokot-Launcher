@@ -83,7 +83,7 @@ Communokot launcher/
 {
   "name": "communokot-launcher",
   "productName": "Communokot Launcher",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "main": "dist/main/index.js",
   "scripts": {
     "dev": "vite",
