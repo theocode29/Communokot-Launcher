@@ -15,15 +15,13 @@
 
 ---
 
-## ✨ Fonctionnalités
-
-- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot
-- 🗺️ **Carte en direct** — Visualiseur de monde 3D BlueMap intégré
-- 📰 **Fil d'actualités** — Mises à jour du serveur et annonces
-- ⚙️ **Paramètres** — Allocation de RAM, chemin Java, nom d'utilisateur
-- 🔄 **Mises à jour automatiques** — Mises à jour automatiques du launcher via GitHub Releases
-- 🎨 **Interface Moderne** — Thème clair "Sable" avec animations fluides
-- 📦 **Resource Pack Auto** — Synchronisation automatique du pack de textures via GitHub
+- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.1.1)
+- 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive et vue "Virtual Window"
+- 📰 **Fil d'actualités** — Mises à jour du serveur via un outil de publication dédié
+- ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft
+- 🔄 **Mises à jour automatiques** — Système de déploiement continu via GitHub Releases
+- 🎨 **Interface Moderne** — Thème sombre "Liquid Glass" optimisé pour le contraste et l'accessibilité
+- 📦 **Resource Pack Auto** — Synchronisation avec vérification d'intégrité SHA-256 et logs détaillés
 
 ---
 
