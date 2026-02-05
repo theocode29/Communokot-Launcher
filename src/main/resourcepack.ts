@@ -26,11 +26,17 @@ export class ResourcePackManager {
         this.versionFilePath = join(this.resourcePackPath, 'version.json');
         this.packFilePath = join(this.resourcePackPath, 'pack.zip');
 
+        console.log('[ResourcePack] Initialized paths:');
+        console.log('  - Data path:', this.launcherDataPath);
+        console.log('  - Pack path:', this.packFilePath);
+        console.log('  - Version file:', this.versionFilePath);
+
         this.ensureDirectories();
     }
 
     private ensureDirectories() {
         if (!existsSync(this.resourcePackPath)) {
+            console.log('[ResourcePack] Creating directories:', this.resourcePackPath);
             mkdirSync(this.resourcePackPath, { recursive: true });
         }
     }
@@ -38,8 +44,11 @@ export class ResourcePackManager {
     private getLocalVersion(): PackVersion | null {
         try {
             if (existsSync(this.versionFilePath)) {
-                return JSON.parse(readFileSync(this.versionFilePath, 'utf-8'));
+                const version = JSON.parse(readFileSync(this.versionFilePath, 'utf-8'));
+                console.log(`[ResourcePack] Local version found: ${version.version} (Hash: ${version.sha256.substring(0, 8)}...)`);
+                return version;
             }
+            console.log('[ResourcePack] No local version.json found.');
         } catch (error) {
             console.error('[ResourcePack] Error reading local version:', error);
         }
@@ -48,14 +57,17 @@ export class ResourcePackManager {
 
     private async getRemoteVersion(): Promise<PackVersion | null> {
         try {
-            console.log('[ResourcePack] Checking for updates at', `${REPO_BASE_URL}/version.json`);
-            const response = await axios.get(`${REPO_BASE_URL}/version.json`, {
+            const url = `${REPO_BASE_URL}/version.json`;
+            console.log('[ResourcePack] Fetching remote version from:', url);
+            const response = await axios.get(url, {
                 timeout: 5000,
                 headers: { 'Cache-Control': 'no-cache' } // Prevent caching
             });
-            return response.data;
-        } catch (error) {
-            console.error('[ResourcePack] Failed to fetch remote version:', error);
+            const version = response.data;
+            console.log(`[ResourcePack] Remote version: ${version.version} (Hash: ${version.sha256.substring(0, 8)}...)`);
+            return version;
+        } catch (error: any) {
+            console.error('[ResourcePack] Failed to fetch remote version:', error.message);
             return null;
         }
     }
@@ -64,32 +76,35 @@ export class ResourcePackManager {
         const tempPath = join(this.resourcePackPath, 'temp_pack.zip');
 
         try {
-            console.log('[ResourcePack] Downloading new pack...');
+            console.log(`[ResourcePack] Downloading pack (Size: ${(expectedSize / 1024 / 1024).toFixed(2)} MB)...`);
             const response = await axios.get(`${REPO_BASE_URL}/pack.zip`, {
                 responseType: 'stream',
                 timeout: 30000 // 30s timeout for download
             });
 
             await pipeline(response.data, createWriteStream(tempPath));
+            console.log('[ResourcePack] Download complete. Verifying integrity...');
 
             // Verify content
             const isValid = await this.verifyFile(tempPath, expectedHash, expectedSize);
 
             if (isValid) {
+                console.log('[ResourcePack] Verification passed.');
                 // Atomic replacement
                 if (existsSync(this.packFilePath)) {
-                    unlinkSync(this.packFilePath); // Remove old pack
+                    console.log('[ResourcePack] Removing old pack file.');
+                    unlinkSync(this.packFilePath);
                 }
+                console.log('[ResourcePack] Installing new pack to data folder.');
                 renameSync(tempPath, this.packFilePath);
-                console.log('[ResourcePack] Pack updated successfully');
                 return true;
             } else {
-                console.error('[ResourcePack] Verification failed: Hash or size mismatch');
+                console.error('[ResourcePack] Verification failed. Deleting corrupted temporary file.');
                 if (existsSync(tempPath)) unlinkSync(tempPath);
                 return false;
             }
-        } catch (error) {
-            console.error('[ResourcePack] Download failed:', error);
+        } catch (error: any) {
+            console.error('[ResourcePack] Download failed:', error.message);
             if (existsSync(tempPath)) unlinkSync(tempPath); // cleanup
             return false;
         }
@@ -98,17 +113,23 @@ export class ResourcePackManager {
     private async verifyFile(path: string, expectedHash: string, expectedSize: number): Promise<boolean> {
         try {
             const data = readFileSync(path);
+            const actualSize = data.length;
+
+            console.log(`[ResourcePack] Verifying file: ${path}`);
+            console.log(`  - Expected Size: ${expectedSize}, Actual: ${actualSize}`);
 
             // Size check
-            if (data.length !== expectedSize) {
-                console.warn(`[ResourcePack] Size mismatch. Expected ${expectedSize}, got ${data.length}`);
-                // return false; // Warning for now, maybe GitHub raw serves slightly different bytes? usually strict is better
+            if (actualSize !== expectedSize) {
+                console.warn(`[ResourcePack] Size mismatch detected.`);
             }
 
             // Hash check
-            const hash = createHash('sha256').update(data).digest('hex');
-            if (hash !== expectedHash) {
-                console.error(`[ResourcePack] Hash mismatch. Expected ${expectedHash}, got ${hash}`);
+            const actualHash = createHash('sha256').update(data).digest('hex');
+            console.log(`  - Expected Hash: ${expectedHash}`);
+            console.log(`  - Actual Hash:   ${actualHash}`);
+
+            if (actualHash !== expectedHash) {
+                console.error(`[ResourcePack] Hash mismatch!`);
                 return false;
             }
 
@@ -119,12 +140,9 @@ export class ResourcePackManager {
         }
     }
 
-    /**
-     * Checks for updates and downloads if necessary.
-     * Returns true if a valid pack exists (updated or cached), false otherwise.
-     */
     public async checkAndInstall(minecraftPath: string): Promise<boolean> {
         try {
+            console.log('[ResourcePack] Starting checkAndInstall sequence.');
             this.ensureDirectories();
 
             const localVersion = this.getLocalVersion();
@@ -133,36 +151,42 @@ export class ResourcePackManager {
             let updateNeeded = false;
 
             if (!localVersion) {
-                console.log('[ResourcePack] No local version found. Update needed.');
+                console.log('[ResourcePack] Update required: no local version found.');
                 updateNeeded = true;
             } else if (remoteVersion && remoteVersion.version !== localVersion.version) {
-                console.log(`[ResourcePack] New version found: ${remoteVersion.version} (Local: ${localVersion.version})`);
+                console.log(`[ResourcePack] Update required: version mismatch. ${localVersion.version} -> ${remoteVersion.version}`);
                 updateNeeded = true;
             } else {
-                console.log('[ResourcePack] Up to date.');
+                console.log('[ResourcePack] Version is up to date.');
             }
 
             // Force update if pack file is missing but version exists
             if (!updateNeeded && !existsSync(this.packFilePath)) {
-                console.log('[ResourcePack] Pack file missing. Re-downloading.');
+                console.log('[ResourcePack] Update required: pack.zip is missing from data folder.');
                 updateNeeded = true;
             }
 
-            if (updateNeeded && remoteVersion) {
-                const success = await this.downloadPack(remoteVersion.sha256, remoteVersion.size);
-                if (success) {
-                    writeFileSync(this.versionFilePath, JSON.stringify(remoteVersion, null, 2));
+            if (updateNeeded) {
+                if (remoteVersion) {
+                    const success = await this.downloadPack(remoteVersion.sha256, remoteVersion.size);
+                    if (success) {
+                        console.log('[ResourcePack] Updating version.json with remote metadata.');
+                        writeFileSync(this.versionFilePath, JSON.stringify(remoteVersion, null, 2));
+                    } else {
+                        console.error('[ResourcePack] Update process failed.');
+                    }
                 } else {
-                    console.error('[ResourcePack] Update failed. Keeping old version if available.');
+                    console.error('[ResourcePack] Update needed but remote metadata is unavailable.');
                 }
             }
 
             // Install to game
-            return this.installToGame(minecraftPath);
+            const installed = this.installToGame(minecraftPath);
+            console.log(`[ResourcePack] Final installation status: ${installed ? 'SUCCESS' : 'FAILURE'}`);
+            return installed;
 
         } catch (error) {
-            console.error('[ResourcePack] General error:', error);
-            // Even if update fails, try to install existing pack
+            console.error('[ResourcePack] General error during checkAndInstall:', error);
             return this.installToGame(minecraftPath);
         }
     }
@@ -170,21 +194,21 @@ export class ResourcePackManager {
     private installToGame(minecraftPath: string): boolean {
         try {
             if (!existsSync(this.packFilePath)) {
-                console.warn('[ResourcePack] No pack to install.');
+                console.warn('[ResourcePack] Cannot install to game: pack.zip not found in data folder.');
                 return false;
             }
 
             const targetDir = join(minecraftPath, 'resourcepacks');
+            const targetFile = join(targetDir, 'Communokot_Pack.zip');
+
             if (!existsSync(targetDir)) {
+                console.log('[ResourcePack] Creating game resourcepacks directory:', targetDir);
                 mkdirSync(targetDir, { recursive: true });
             }
 
-            const targetFile = join(targetDir, 'Communokot_Pack.zip');
-
-            // Only copy if different to save IO? Or just copy always to be safe?
-            // Simple copy for now.
+            console.log('[ResourcePack] Copying pack to game folder:', targetFile);
             copyFileSync(this.packFilePath, targetFile);
-            console.log('[ResourcePack] Installed to', targetFile);
+            console.log('[ResourcePack] Copy successful.');
 
             return true;
 
