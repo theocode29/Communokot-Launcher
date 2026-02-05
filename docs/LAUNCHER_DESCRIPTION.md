@@ -41,26 +41,29 @@ Communokot launcher/
 │
 ├── src/
 │   ├── main/              # --- PROCESSUS PRINCIPAL (Node.js) ---
-│   │   ├── index.ts       # Entry point, Window creation, IPC handling
-│   │   ├── preload.ts     # ContextBridge (Secure Bridge)
-│   │   ├── minecraft.ts   # Logique de lancement CLI Java
-│   │   ├── updater.ts     # Logique Auto-Updater
-│   │   ├── resourcepack.ts # (Stub) Gestion future des Resource Packs
+│   │   ├── index.ts        # Entry point, Window creation, IPC handling
+│   │   ├── preload.ts      # ContextBridge (Secure Bridge)
+│   │   ├── minecraft.ts    # Logique de lancement CLI Java & Orchestration
+│   │   ├── fabric.ts       # Installation automatique de Fabric Loader
+│   │   ├── mods.ts         # Gestionnaire de mods (Modrinth API)
+│   │   ├── updater.ts      # Logique Auto-Updater
+│   │   ├── resourcepack.ts # Gestion automatique des Resource Packs
 │   │   └── utils/
-│   │       ├── logger.ts  # Winston ou console wrapper
-│   │       └── config.ts  # Gestion electron-store / .env
+│   │       ├── logger.ts   # Console wrapper instrumenté
+│   │       └── config.ts   # Gestion electron-store / .env
 │   │
 │   └── renderer/          # --- PROCESSUS DE RENDU (React UI) ---
-│       ├── index.html     # Point d'entrée HTML
-│       ├── index.tsx      # Montage React Root
-│       ├── App.tsx        # Layout principal & Router
-│       ├── types.ts       # Types partagés (IPC interfaces)
-│       ├── constants.ts   # Couleurs, URLs, Config statique
+│       ├── index.html      # Point d'entrée HTML
+│       ├── index.tsx       # Montage React Root
+│       ├── App.tsx         # Layout principal & Router
+│       ├── types.ts        # Types partagés (IPC interfaces)
+│       ├── constants.ts    # Couleurs, URLs, Config statique
 │       ├── styles/
-│       │   └── globals.css # Imports Tailwind components/utilities
+│       │   └── globals.css  # Imports Tailwind components/utilities
 │       ├── components/
 │       │   ├── Navigation.tsx   # Barre d'onglets colorés
 │       │   ├── Button.tsx       # Boutons "Brutalist" (Hard Shadow)
+│       │   ├── ProgressBar.tsx  # Barre de progression "Liquid Glass"
 │       │   └── BlueMapViewer.tsx # Iframe wrapper avec loader
 │       └── pages/
 │           ├── HomePage.tsx     # Hero section + Bouton PLAY
@@ -165,17 +168,19 @@ module.exports = {
 
 ### Processus Principal (`src/main`)
 
-1.  **`index.ts`** : Je crée une fenêtre `BrowserWindow` avec `frame: false` (sans bordures OS). J'injecte `preload.js`.
+1.  **`index.ts`** : Je crée une fenêtre `BrowserWindow` avec `frame: false`. J'injecte `preload.js`. Il gère le canal IPC `launch:progress` pour remonter les étapes au renderer.
 2.  **`minecraft.ts`** :
-    *   Fonction `launchGame(options)`
-    *   J'utilise `child_process.spawn` pour lancer Java.
-    *   **Arguments Java essentiels** :
-        *   `-Xmx{ram}G` (Mémoire)
-        *   Définir le classpath (Jars du jeu + Libraries).
-        *   `--server mc1949282.fmcs.cloud --port 25565` (Auto-connect).
-3.  **IPC Handling** :
+    *   Orchestration du lancement : Check Resource Pack -> Install Fabric -> Update Mods -> Launch MCLC.
+    *   **Arguments Java** : `-Xmx{ram}G` + Connect Auto.
+3.  **`fabric.ts`** : 
+    *   Télécharge l'installeur JAR officiel de Fabric.
+    *   Exécute l'installation en mode silencieux (`-noprofile`) pour générer le JSON de version dans le dossier `versions/`.
+4.  **`mods.ts`** :
+    *   Interroge l'API Modrinth pour trouver les versions exactes de (Sodium, Lithium, FerriteCore, ImmediatelyFast, EntityCulling) compatibles avec 1.21.11.
+    *   Nettoie le dossier `mods/` pour ne garder que les JARs officiels optimisés.
+5.  **IPC Handling** :
     ```typescript
-    ipcMain.handle('launch-minecraft', async (_, args) => { ... });
+    ipcMain.handle('minecraft:launch', async (_, options) => { ... });
     ipcMain.handle('get-config', () => store.get('config'));
     ipcMain.handle('set-config', (_, key, val) => store.set(key, val));
     ```

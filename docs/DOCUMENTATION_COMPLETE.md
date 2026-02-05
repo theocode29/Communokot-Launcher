@@ -15,19 +15,22 @@ Bienvenue dans la documentation complète et unifiée du projet **Communokot Lau
 7.  [Système de Statut Serveur](#7-système-de-statut-serveur)
 8.  [Guide de Développement](#8-guide-de-développement)
 9.  [Gestion du Resource Pack et Logs](#9-gestion-du-resource-pack-et-logs)
-10. [Crédits et Licence](#10-crédits-et-licence)
+10. [Système d'Installation et d'Optimisation](#10-système-dinstallation-et-doptimisation)
+11. [Crédits et Licence](#11-crédits-et-licence)
 
 ---
 
 ## 1. Introduction
 
-Le **Communokot Launcher** (v1.1.1) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot". L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
+Le **Communokot Launcher** (v1.1.1) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Version 1.21.11). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
 
 ---
 
 ## 2. Fonctionnalités
 
 -   🚀 **Lancement Direct** : Connexion automatique au serveur avec configuration optimisée.
+-   🛠️ **Auto-Fabric & Mods** : Installation transparente de Fabric Loader 0.18.0 et des mods d'optimisation via Modrinth API.
+-   📊 **Barre de Progression** : Feedback visuel détaillé pendant l'initialisation du jeu.
 -   🗺️ **Carte Satellite** : Intégration de *BlueMap* via une stratégie de "Virtual Window" qui masque l'interface native pour une immersion totale.
 -   📰 **Système de News** : Affichage dynamique de cartes d'actualités gérées via un outil CLI dédié.
 -   ⚙️ **Gestion des Paramètres** : Allocation RAM, sélecteur de dossier Minecraft, et persistence des préférences.
@@ -91,7 +94,22 @@ J'ai implémenté un système robuste de mise à jour du pack de textures :
 
 ---
 
-## 10. Crédits et Licence
+## 10. Système d'Installation et d'Optimisation
+
+J'ai ajouté une couche d'automatisation critique pour garantir une expérience de jeu fluide sans intervention manuelle de l'utilisateur :
+
+- **Fabric Installer** : Le launcher télécharge dynamiquement l'installeur Fabric et configure le profil `fabric-loader-0.18.0-1.21.11`.
+- **Modrinth API SDK** : Une intégration sur mesure avec Modrinth permet de récupérer les dernières versions stables de :
+    - *Sodium* (Performances de rendu)
+    - *ImmediatelyFast* (Optimisation réseau/entités)
+    - *Lithium* (Optimisation CPU/physique)
+    - *FerriteCore* (Réduction de l'usage RAM)
+    - *EntityCulling* (Culling des entités non visibles)
+- **Nettoyage Intelligent** : Le launcher vérifie le dossier `mods` à chaque démarrage et supprime les fichiers obsolètes ou non autorisés pour éviter les conflits.
+
+---
+
+## 11. Crédits et Licence
 
 **Auteur** : Théophile (Communokot)
 **Licence** : MIT

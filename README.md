@@ -15,7 +15,10 @@
 
 ---
 
-- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.1.1)
+- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11)
+- 🛠️ **Installation Auto Fabric** — Installation automatique de Fabric Loader 1.21.11 (v0.18.0+)
+- 📦 **Optimisation Dynamique** — Téléchargement automatique via Modrinth API de 5 mods essentiels (Sodium, ImmediatelyFast, etc.)
+- 📊 **Progression en Temps Réel** — Barre de progression esthétique "Liquid Glass" détaillant chaque étape du lancement
 - 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive et vue "Virtual Window"
 - 📰 **Fil d'actualités** — Mises à jour du serveur via un outil de publication dédié
 - ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft

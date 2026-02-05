@@ -64,12 +64,15 @@ src/
 3.  **Logique (`serverStatus.ts`)** fetch `api.freemcserver.net`.
 4.  **Retour** : Les données reviennent au Renderer pour mettre à jour `ServerStatusBadge`.
 
-### Lancement du Jeu (Launcher Handoff)
-1.  **Utilisateur** clique sur "LANCER LE JEU".
+### Lancement du Jeu (Orchestration Interne)
+1.  **Utilisateur** clique sur "JOUER".
 2.  **Renderer** envoie l'événement IPC `minecraft:launch`.
-3.  **Main (`minecraft.ts`)** cherche l'exécutable officiel du Launcher Minecraft sur le système.
-4.  **Main** lance le launcher avec `--quickPlayMultiplayer=...` pour une connexion directe.
-5.  **Fallback** : Si l'exécutable du launcher est manquant, agit sur le protocole `minecraft://`.
+3.  **Main (`minecraft.ts`)** orchestre la séquence :
+    - `resourcepack.ts` : Mise à jour du pack de ressources.
+    - `fabric.ts` : Installation du loader Fabric si manquant.
+    - `mods.ts` : Résolution dynamique des mods via Modrinth API et nettoyage.
+4.  **Main** invoque `minecraft-launcher-core` (MCLC) pour lancer le processus Java.
+5.  **Feedback** : Le Main émet `launch:progress` pour mettre à jour la `ProgressBar` en temps réel.
 
 ---
 
