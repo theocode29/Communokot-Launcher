@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, memo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import ServerStatusBadge from '../components/ServerStatus';
@@ -13,9 +13,24 @@ interface HomePageProps {
 
 const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProps) {
     const [launching, setLaunching] = useState(false);
+    const [cooldown, setCooldown] = useState(false);
+    const [cooldownTime, setCooldownTime] = useState(0);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        if (cooldownTime > 0) {
+            const timer = setInterval(() => {
+                setCooldownTime((prev) => Math.max(0, prev - 1));
+            }, 1000);
+            return () => clearInterval(timer);
+        } else if (cooldownTime === 0 && cooldown) {
+            setCooldown(false);
+        }
+    }, [cooldownTime, cooldown]);
+
     const handleLaunch = useCallback(async () => {
+        if (cooldown) return;
+
         setLaunching(true);
         setError(null);
 
@@ -28,8 +43,10 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
             setError(err instanceof Error ? err.message : 'Erreur inconnue');
         } finally {
             setLaunching(false);
+            setCooldown(true);
+            setCooldownTime(60); // 1 minute cooldown
         }
-    }, [onLaunch]);
+    }, [onLaunch, cooldown]);
 
     return (
         <div
@@ -72,14 +89,14 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
                 >
                     <Button
                         size="lg"
-                        variant={launching ? 'secondary' : (serverStatus.online ? 'primary' : 'secondary')}
+                        variant={launching || cooldown ? 'secondary' : (serverStatus.online ? 'primary' : 'secondary')}
                         onClick={handleLaunch}
                         loading={launching}
-                        disabled={!serverStatus.online}
-                        className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(230,179,37,0.0)] hover:shadow-[0_0_50px_rgba(230,179,37,0.3)] transition-shadow duration-500 ${!serverStatus.online ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-black/5' : ''}`}
-                        icon={!launching && <Play fill="currentColor" size={20} />}
+                        disabled={!serverStatus.online || cooldown}
+                        className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(230,179,37,0.0)] hover:shadow-[0_0_50px_rgba(230,179,37,0.3)] transition-shadow duration-500 ${!serverStatus.online || cooldown ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-black/5' : ''}`}
+                        icon={!launching && !cooldown && <Play fill="currentColor" size={20} />}
                     >
-                        {launching ? 'INITIALISATION...' : (serverStatus.online ? 'JOUER' : 'HORS LIGNE')}
+                        {launching ? 'INITIALISATION...' : (cooldown ? `PATIENTER (${cooldownTime}s)` : (serverStatus.online ? 'JOUER' : 'HORS LIGNE'))}
                     </Button>
 
                     <div className="h-6">

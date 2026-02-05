@@ -2,6 +2,7 @@ import { join } from 'path';
 import { homedir, platform } from 'os';
 import { existsSync, mkdirSync } from 'fs';
 import { createRequire } from 'module';
+import { ResourcePackManager } from './resourcepack';
 
 const require = createRequire(import.meta.url);
 const { Client, Authenticator } = require('minecraft-launcher-core');
@@ -49,13 +50,24 @@ export async function launchMinecraft(options: LaunchOptions): Promise<LaunchRes
         return { success: false, error: 'Le pseudo ne peut pas être vide' };
     }
 
-    const launcher = new Client();
     const rootPath = minecraftPath || getDefaultMinecraftPath();
 
     // Create root if it doesn't exist
     if (!existsSync(rootPath)) {
         mkdirSync(rootPath, { recursive: true });
     }
+
+    // --- Resource Pack Auto-Update ---
+    try {
+        console.log('[Launcher] Checking for resource pack updates...');
+        const resourcePackManager = new ResourcePackManager();
+        await resourcePackManager.checkAndInstall(rootPath);
+    } catch (error) {
+        console.error('[Launcher] Resource pack update failed (non-fatal):', error);
+    }
+    // ---------------------------------
+
+    const launcher = new Client();
 
     // Determine authorization (Offline mode based on username)
     // Note: For true online mode, we would need to implement Microsoft Auth flow

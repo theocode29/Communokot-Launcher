@@ -28,7 +28,7 @@ export default function InstallationHelpModal({ isOpen, onClose }: InstallationH
 
                     <div className="p-8">
                         <h2 className="text-2xl font-bold mb-6 text-brand-primary">
-                            Guide d'Installation & Mise à jour
+                            Un petit coup de main pour l'installe ?
                         </h2>
 
                         <div className="grid md:grid-cols-2 gap-8">
@@ -42,14 +42,14 @@ export default function InstallationHelpModal({ isOpen, onClose }: InstallationH
                                 </div>
                                 <div className="bg-surface p-4 rounded-lg border border-black/5 space-y-3">
                                     <p className="text-sm text-text-muted">
-                                        Lors de la première installation ou mise à jour, vous pourriez voir l'écran bleu <strong>SmartScreen</strong>.
+                                        Pour la première installation, Windows risque de t'afficher son écran bleu <strong>SmartScreen</strong> (il est un peu méfiant).
                                     </p>
                                     <ol className="list-decimal list-inside text-sm text-text-muted space-y-2">
-                                        <li>Cliquez sur <strong>Informations complémentaires</strong></li>
-                                        <li>Cliquez sur le bouton <strong>Exécuter quand même</strong></li>
+                                        <li>Clique sur <strong>Informations complémentaires</strong></li>
+                                        <li>Puis sur le bouton <strong>Exécuter quand même</strong></li>
                                     </ol>
                                     <div className="mt-2 text-xs text-amber-700 bg-amber-500/10 p-2 rounded">
-                                        Cela arrive car notre application est développée par la communauté et n'a pas de certificat payant Microsoft.
+                                        C'est normal : je suis seul à dev le launcher et je n'ai pas de certificat payant Microsoft (c'est pas donné !). L'app est saine, promis.
                                     </div>
                                 </div>
                             </div>
@@ -64,13 +64,13 @@ export default function InstallationHelpModal({ isOpen, onClose }: InstallationH
                                 </div>
                                 <div className="bg-surface p-4 rounded-lg border border-black/5 space-y-3">
                                     <p className="text-sm text-text-muted">
-                                        Apple bloque les applications non signées par défaut via <strong>Gatekeeper</strong>.
+                                        Apple bloque les apps qui ne viennent pas de l'App Store par défaut avec <strong>Gatekeeper</strong>. C'est un peu chiant mais ça se règle vite :
                                     </p>
                                     <ol className="list-decimal list-inside text-sm text-text-muted space-y-2">
                                         <li>Si le message "Impossible d'ouvrir" apparaît :</li>
-                                        <li>Faites un <strong>Clic Droit</strong> (ou Ctrl+Clic) sur l'application</li>
-                                        <li>Sélectionnez <strong>Ouvrir</strong> dans le menu</li>
-                                        <li>Cliquez sur <strong>Ouvrir</strong> dans la fenêtre de confirmation</li>
+                                        <li>Fais un <strong>Clic Droit</strong> (ou Ctrl+Clic) sur l'app</li>
+                                        <li>Sélectionne <strong>Ouvrir</strong> dans le menu</li>
+                                        <li>Puis clique sur <strong>Ouvrir</strong> dans la petite fenêtre</li>
                                     </ol>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@ export default function InstallationHelpModal({ isOpen, onClose }: InstallationH
 
                         <div className="mt-8 pt-6 border-t border-black/10 text-center">
                             <p className="text-sm text-text-muted/60">
-                                Une fois cette manipulation effectuée lors de la première installation, les futures mises à jour seront beaucoup plus fluides !
+                                Désolé pour ces manips un peu lourdes, c'est le prix de l'indépendance ! Une fois que c'est fait, tu seras tranquille pour les prochaines fois.
                             </p>
                         </div>
                     </div>
