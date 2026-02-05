@@ -23,6 +23,7 @@
 - ⚙️ **Paramètres** — Allocation de RAM, chemin Java, nom d'utilisateur
 - 🔄 **Mises à jour automatiques** — Mises à jour automatiques du launcher via GitHub Releases
 - 🎨 **Interface Moderne** — Thème clair "Sable" avec animations fluides
+- 📦 **Resource Pack Auto** — Synchronisation automatique du pack de textures via GitHub
 
 ---
 
@@ -83,6 +84,7 @@ src/
 - [Guide de Développement](docs/DEVELOPMENT.md) - Comment lancer, construire et contribuer.
 - [API Statut Serveur](docs/SERVER_STATUS.md) - Détails de l'intégration API.
 - [Optimisations de Performance](docs/PERFORMANCE.md) - Commutateurs GPU et bundling.
+- [Gestion du Resource Pack](docs/DOCUMENTATION_COMPLETE.md#9-gestion-du-resource-pack) - Guide complet sur l'auto-update et les outils de hachage.
 
 ---
 

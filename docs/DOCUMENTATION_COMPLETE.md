@@ -14,7 +14,8 @@ Bienvenue dans la documentation complète et unifiée du projet **Communokot Lau
 6.  [Optimisations de Performance](#6-optimisations-de-performance)
 7.  [Système de Statut Serveur](#7-système-de-statut-serveur)
 8.  [Guide de Développement](#8-guide-de-développement)
-9.  [Crédits et Licence](#9-crédits-et-licence)
+9.  [Gestion du Resource Pack](#9-gestion-du-resource-pack)
+10. [Crédits et Licence](#10-crédits-et-licence)
 
 ---
 
@@ -157,10 +158,38 @@ J'ai créé un petit outil en ligne de commande pour faciliter la gestion des ne
 
 ---
 
-## 9. Crédits et Licence
+## 9. Gestion du Resource Pack
+
+Le launcher intègre un système de synchronisation automatique pour le resource pack du serveur. Cela me permet de garantir que tous les joueurs ont toujours la dernière version des textures sans manip manuelle.
+
+### Fonctionnement (Côté Launcher)
+- **Vérification** : À chaque clic sur "JOUER", le launcher télécharge `resourcepack/version.json` depuis GitHub.
+- **Comparaison** : Il compare la version distante avec la version stockée localement dans `LauncherData`.
+- **Téléchargement** : Si une mise à jour est nécessaire, il télécharge le `pack.zip`, vérifie son empreinte SHA-256 pour éviter toute corruption, et l'installe.
+- **Isolation** : Le pack est copié dans le dossier `resourcepacks` de Minecraft sous le nom `Communokot_Pack.zip`.
+
+### Guide de Mise à Jour (Côté Dev)
+Quand je modifie le pack de textures, je dois suivre ces étapes pour que le launcher le diffuse à tout le monde :
+
+1.  Placer le nouveau pack dans le dossier `/resourcepack/pack.zip` du projet.
+2.  Générer le nouveau hash et mettre à jour `version.json` avec l'outil que j'ai créé :
+    ```bash
+    node tools/generate-resourcepack-hash.cjs resourcepack/pack.zip 1.1.0
+    ```
+    *Remplacer `1.1.0` par le nouveau numéro de version.*
+3.  Commit et Push les changements (le dossier `resourcepack/` fait partie du repo).
+
+### L'Outil de Hachage (`generate-resourcepack-hash.cjs`)
+Cet outil automatise la création du fichier `version.json`. Il calcule :
+- La taille exacte du fichier en octets.
+- L'empreinte **SHA-256** pour la vérification d'intégrité.
+
+---
+
+## 10. Crédits et Licence
 
 **Auteur** : Théophile (Projet Communokot)
 **Licence** : MIT
 
 ---
-*Cette documentation a été générée le 4 Février 2026 et reflète l'état actuel de la version 1.0.4.*
+*Cette documentation a été mise à jour le 5 Février 2026 pour inclure le système de Resource Pack.*
