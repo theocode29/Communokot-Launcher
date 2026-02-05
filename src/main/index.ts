@@ -1,6 +1,8 @@
 import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import electronUpdater from 'electron-updater';
+const { autoUpdater } = electronUpdater;
 import { launchMinecraft, type LaunchOptions } from './minecraft';
 import { checkServerStatus } from './serverStatus';
 import { getConfig, setConfig, getAllConfig, type ConfigSchema } from './utils/config';
@@ -72,6 +74,37 @@ function createWindow(): void {
 // App lifecycle
 app.whenReady().then(() => {
     createWindow();
+
+    // Auto Updater Configuration
+    autoUpdater.autoDownload = true;
+    autoUpdater.allowPrerelease = false;
+
+    // Send update events to renderer
+    autoUpdater.on('checking-for-update', () => {
+        mainWindow?.webContents.send('update:checking');
+    });
+
+    autoUpdater.on('update-available', (info) => {
+        mainWindow?.webContents.send('update:available', info);
+    });
+
+    autoUpdater.on('download-progress', (progressObj) => {
+        mainWindow?.webContents.send('update:progress', progressObj);
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+        mainWindow?.webContents.send('update:ready', info);
+    });
+
+    autoUpdater.on('error', (err) => {
+        console.error('AutoUpdater Error:', err);
+        mainWindow?.webContents.send('update:error', err.message);
+    });
+
+    // Check for updates immediately
+    autoUpdater.checkForUpdatesAndNotify().catch(err => {
+        console.error('Failed to check for updates:', err);
+    });
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -150,14 +183,24 @@ ipcMain.handle('server:status', async () => {
 
 // Minecraft launching
 ipcMain.handle('minecraft:launch', async (_, options: LaunchOptions) => {
+    console.log('[IPC] Received minecraft:launch request');
     try {
-        const result = await launchMinecraft(options);
+        const onProgress = (task: string, progress: number) => {
+            console.log(`[IPC] Progress update: ${task} (${progress}%)`);
+            if (mainWindow && !mainWindow.isDestroyed()) {
+                mainWindow.webContents.send('launch:progress', { task, progress });
+            }
+        };
+
+        console.log('[IPC] Calling launching logic...');
+        const result = await launchMinecraft({ ...options, onProgress });
+        console.log('[IPC] Launch logic completed with result:', result);
         return result;
     } catch (error) {
-        console.error('Failed to launch Minecraft:', error);
+        console.error('[IPC] FATAL ERROR in minecraft:launch:', error);
         return {
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error'
+            error: error instanceof Error ? error.message : 'Unknown critical error'
         };
     }
 });

@@ -2,6 +2,7 @@ import { useState, useCallback, memo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import ServerStatusBadge from '../components/ServerStatus';
+import ProgressBar from '../components/ProgressBar';
 import type { ServerStatus, LaunchResult } from '../types';
 import { Play } from 'lucide-react';
 
@@ -17,7 +18,12 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
     const [cooldownTime, setCooldownTime] = useState(0);
     const [error, setError] = useState<string | null>(null);
 
+    // Progress State
+    const [progress, setProgress] = useState(0);
+    const [progressText, setProgressText] = useState('');
+
     useEffect(() => {
+        // Cooldown timer
         if (cooldownTime > 0) {
             const timer = setInterval(() => {
                 setCooldownTime((prev) => Math.max(0, prev - 1));
@@ -28,23 +34,41 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
         }
     }, [cooldownTime, cooldown]);
 
+    useEffect(() => {
+        // Listen for progress events
+        const removeListener = window.electron.on('launch:progress', (data: any) => {
+            setProgress(data.progress);
+            setProgressText(data.task);
+        });
+
+        return () => {
+            removeListener();
+        };
+    }, []);
+
     const handleLaunch = useCallback(async () => {
         if (cooldown) return;
 
         setLaunching(true);
         setError(null);
+        setProgress(0);
+        setProgressText("Initialisation...");
 
         try {
             const result = await onLaunch();
             if (!result.success) {
                 setError(result.error || 'Échec du lancement');
+                setLaunching(false); // Only stop launching state if error
+            } else {
+                // Success - wait a bit then start cooldown
+                // Usually we consider it launched
+                setLaunching(false);
+                setCooldown(true);
+                setCooldownTime(60); // 1 minute cooldown
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erreur inconnue');
-        } finally {
             setLaunching(false);
-            setCooldown(true);
-            setCooldownTime(60); // 1 minute cooldown
         }
     }, [onLaunch, cooldown]);
 
@@ -85,23 +109,35 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="mt-4 flex flex-col items-center gap-6"
+                    className="mt-4 flex flex-col items-center gap-6 w-full max-w-lg px-4"
                 >
                     <Button
                         size="lg"
                         variant={launching || cooldown ? 'secondary' : (serverStatus.online ? 'primary' : 'secondary')}
                         onClick={handleLaunch}
-                        loading={launching}
-                        disabled={!serverStatus.online || cooldown}
-                        className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(230,179,37,0.0)] hover:shadow-[0_0_50px_rgba(230,179,37,0.3)] transition-shadow duration-500 ${!serverStatus.online || cooldown ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-black/5' : ''}`}
+                        loading={launching} // We keep this true during launch to show spinner/disabled state
+                        disabled={!serverStatus.online || cooldown || launching}
+                        className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(230,179,37,0.0)] hover:shadow-[0_0_50px_rgba(230,179,37,0.3)] transition-shadow duration-500 ${(!serverStatus.online || cooldown || launching) ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-black/5' : ''}`}
                         icon={!launching && !cooldown && <Play fill="currentColor" size={20} />}
                     >
-                        {launching ? 'INITIALISATION...' : (cooldown ? `PATIENTER (${cooldownTime}s)` : (serverStatus.online ? 'JOUER' : 'HORS LIGNE'))}
+                        {launching ? 'LANCEMENT EN COURS...' : (cooldown ? `PATIENTER (${cooldownTime}s)` : (serverStatus.online ? 'JOUER' : 'HORS LIGNE'))}
                     </Button>
 
-                    <div className="h-6">
-                        {/* Spacer for error to prevent layout jump, or absolute positioning */}
-                        {error && (
+                    {/* Progress Bar Container */}
+                    <div className="w-full h-12 flex items-center justify-center">
+                        {launching && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                className="w-full"
+                            >
+                                <ProgressBar progress={progress} text={progressText} />
+                            </motion.div>
+                        )}
+
+                        {/* Spacer for error to prevent layout jump */}
+                        {!launching && error && (
                             <motion.p
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
