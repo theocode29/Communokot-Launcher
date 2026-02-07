@@ -5,6 +5,8 @@ export interface ConfigSchema {
     ram: number;
     javaPath: string;
     minecraftPath: string;
+    performancePreset: 'low-end' | 'balanced' | 'high-end' | 'auto';
+    manageOwnConfigs: boolean;
 }
 
 const defaults: ConfigSchema = {
@@ -12,6 +14,8 @@ const defaults: ConfigSchema = {
     ram: 4,
     javaPath: 'auto',
     minecraftPath: '',
+    performancePreset: 'auto',
+    manageOwnConfigs: false,
 };
 
 const store = new Store<ConfigSchema>({
@@ -34,6 +38,8 @@ export function getAllConfig(): ConfigSchema {
         ram: store.get('ram'),
         javaPath: store.get('javaPath'),
         minecraftPath: store.get('minecraftPath'),
+        performancePreset: store.get('performancePreset'),
+        manageOwnConfigs: store.get('manageOwnConfigs'),
     };
 }
 

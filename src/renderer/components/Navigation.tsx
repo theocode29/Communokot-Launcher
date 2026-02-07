@@ -1,8 +1,11 @@
 import { memo, useCallback } from 'react';
 import type { TabId } from '../types';
 import { motion, LayoutGroup } from 'framer-motion';
-import { Home, Map, Newspaper, Settings, Power } from 'lucide-react';
-// If Lucide is not available, I'll use text or SVGs. I installed it in the previous step.
+import { House, Map, Newspaper, Settings2, LogOut } from 'lucide-react';
+// Using Premium Apple-style icons:
+// Home -> House (More modern)
+// Newspaper -> Newspaper (Classic News, thin stroke)
+// Settings -> Settings2 (Sliders, more refined)
 
 interface NavigationProps {
     activeTab: TabId;
@@ -10,10 +13,10 @@ interface NavigationProps {
 }
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
-    { id: 'home', label: 'ACCUEIL', icon: Home },
+    { id: 'home', label: 'ACCUEIL', icon: House },
     { id: 'map', label: 'CARTE', icon: Map },
-    { id: 'updates', label: 'ACTUALITÉS', icon: Newspaper },
-    { id: 'settings', label: 'PARAMÈTRES', icon: Settings },
+    { id: 'updates', label: 'ACTUS', icon: Newspaper },
+    { id: 'settings', label: 'RÉGLAGES', icon: Settings2 },
 ];
 
 const Navigation = memo(function Navigation({ activeTab, onTabChange }: NavigationProps) {
@@ -59,7 +62,7 @@ const Navigation = memo(function Navigation({ activeTab, onTabChange }: Navigati
                                 {isActive && (
                                     <motion.div
                                         layoutId="activeTabGlow"
-                                        className="absolute bottom-0 w-8 h-1 bg-brand-primary rounded-t-full will-change-transform"
+                                        className="absolute -bottom-1 w-12 h-[3px] bg-brand-primary rounded-full shadow-[0_0_10px_rgba(230,179,37,0.5)] will-change-transform"
                                         transition={{ type: "spring", stiffness: 400, damping: 35 }}
                                     />
                                 )}
@@ -78,8 +81,8 @@ const Navigation = memo(function Navigation({ activeTab, onTabChange }: Navigati
                         "
                         title="Quitter"
                     >
-                        <Power size={24} />
-                        <span className="text-[10px] font-bold tracking-widest uppercase mt-1 opacity-60 group-hover:opacity-100">
+                        <LogOut size={22} strokeWidth={2} />
+                        <span className="text-[9px] font-bold tracking-widest uppercase mt-1 opacity-60 group-hover:opacity-100">
                             QUIT
                         </span>
                     </button>

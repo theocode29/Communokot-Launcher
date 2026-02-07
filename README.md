@@ -16,15 +16,18 @@
 ---
 
 - 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11)
+- 🛡️ **Robustesse & Protection** — Système de backups versionnés, protection anti-corruption (round-trip) et mode "Safe Boot"
 - 🛠️ **Installation Auto Fabric** — Installation automatique de Fabric Loader 1.21.11 (v0.18.0+)
-- 📦 **Optimisation Dynamique** — Téléchargement automatique via Modrinth API de 5 mods essentiels (Sodium, ImmediatelyFast, etc.)
+- 📦 **Optimisation Dynamique** — Presets intelligents (`Low`, `Balanced`, `High`) basés sur une détection matérielle avancée
+- 💻 **Hardware-Aware** — Corrections automatiques pour les CPUs Intel (13/14th gen), AMD et Apple Silicon via une DB d'incompatibilités
 - 📊 **Progression en Temps Réel** — Barre de progression esthétique "Liquid Glass" détaillant chaque étape du lancement
 - 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive et vue "Virtual Window"
 - 📰 **Fil d'actualités** — Mises à jour du serveur via un outil de publication dédié
-- ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft
+- ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft et gestion des presets
 - 🔄 **Mises à jour automatiques** — Système de déploiement continu via GitHub Releases
 - 🎨 **Interface Moderne** — Thème sombre "Liquid Glass" optimisé pour le contraste et l'accessibilité
 - 📦 **Resource Pack Auto** — Synchronisation avec vérification d'intégrité SHA-256 et logs détaillés
+- 🧪 **Qualité Garantie** — Suite de 50+ tests unitaires (Vitest) assurant la fiabilité du moteur de config
 
 ---
 
@@ -37,6 +40,7 @@
 | Bundler | Vite 5 |
 | Styling | Tailwind CSS |
 | Animations | Framer Motion |
+| Tests | Vitest |
 | Stockage | electron-store |
 
 ---
@@ -69,6 +73,9 @@ src/
 ├── main/               # Processus principal Electron
 │   ├── index.ts        # Gestionnaires de fenêtre & IPC
 │   ├── minecraft.ts    # Logique de lancement du jeu
+│   ├── preset-orchestrator.ts # Moteur d'optimisation robuste
+│   ├── backup-manager.ts # Système de backups & audit
+│   ├── incompatibility-db.ts # DB matériel & mods
 │   └── serverStatus.ts # Ping du serveur
 └── renderer/           # UI React
     ├── components/     # Navigation, Bouton, Layout
@@ -83,8 +90,9 @@ src/
 - [Spécifications Techniques](docs/LAUNCHER_DESCRIPTION.md) - Spécifications complètes du projet et logique.
 - [Architecture du Projet](docs/PROJECT_ARCHITECTURE.md) - Analyse approfondie de la stack et du flux de données.
 - [Guide de Développement](docs/DEVELOPMENT.md) - Comment lancer, construire et contribuer.
+- [Guide Utilisateur & Robustesse](docs/USER_GUIDE_ROBUST.md) - Détails sur les presets et la sécurité des données.
 - [API Statut Serveur](docs/SERVER_STATUS.md) - Détails de l'intégration API.
-- [Optimisations de Performance](docs/PERFORMANCE.md) - Commutateurs GPU et bundling.
+- [Optimisations de Performance](docs/PERFORMANCE.md) - Commutateurs GPU, bundling et détection matérielle.
 - [Gestion du Resource Pack](docs/DOCUMENTATION_COMPLETE.md#9-gestion-du-resource-pack) - Guide complet sur l'auto-update et les outils de hachage.
 
 ---

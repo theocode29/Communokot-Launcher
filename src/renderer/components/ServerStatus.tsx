@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import type { ServerStatus } from '../types';
-import { Users } from 'lucide-react';
+import { Wifi, WifiOff } from 'lucide-react';
 
 interface ServerStatusBadgeProps {
     status: ServerStatus;
@@ -37,9 +37,13 @@ const ServerStatusBadge = memo(function ServerStatusBadge({
             {/* Separator */}
             <div className="w-px h-4 bg-black/10" />
 
-            {/* Player Count */}
+            {/* Player Count -> Replaced by Signal Strength since players are less relevant in Apple design */}
             <div className="flex items-center gap-2">
-                <Users size={14} className={online ? 'text-text-muted' : 'text-text-muted/50'} />
+                {online ? (
+                    <Wifi size={16} className="text-green-500" strokeWidth={2} />
+                ) : (
+                    <WifiOff size={16} className="text-red-400" strokeWidth={2} />
+                )}
                 <span className={`text-xs font-mono font-bold ${online ? 'text-text-main' : 'text-text-muted'}`}>
                     {online && players ? (
                         <>{players.online} <span className="text-text-muted">/</span> {players.max}</>

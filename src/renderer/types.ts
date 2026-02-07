@@ -37,6 +37,8 @@ export interface UserConfig {
     ram: number;
     javaPath: string;
     minecraftPath: string;
+    performancePreset: 'low-end' | 'balanced' | 'high-end' | 'auto';
+    manageOwnConfigs: boolean;
 }
 
 // Launch result
@@ -66,6 +68,7 @@ export interface ElectronAPI {
     }) => Promise<LaunchResult>;
     getVersion: () => Promise<string>;
     getPlatform: () => Promise<string>;
+    installUpdate: () => void;
     on: (channel: string, func: (...args: any[]) => void) => () => void;
 }
 

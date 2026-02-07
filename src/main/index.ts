@@ -1,8 +1,7 @@
 import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import electronUpdater from 'electron-updater';
-const { autoUpdater } = electronUpdater;
+import { initAutoUpdater } from './updater';
 import { launchMinecraft, type LaunchOptions } from './minecraft';
 import { checkServerStatus } from './serverStatus';
 import { getConfig, setConfig, getAllConfig, type ConfigSchema } from './utils/config';
@@ -76,35 +75,7 @@ app.whenReady().then(() => {
     createWindow();
 
     // Auto Updater Configuration
-    autoUpdater.autoDownload = true;
-    autoUpdater.allowPrerelease = false;
-
-    // Send update events to renderer
-    autoUpdater.on('checking-for-update', () => {
-        mainWindow?.webContents.send('update:checking');
-    });
-
-    autoUpdater.on('update-available', (info) => {
-        mainWindow?.webContents.send('update:available', info);
-    });
-
-    autoUpdater.on('download-progress', (progressObj) => {
-        mainWindow?.webContents.send('update:progress', progressObj);
-    });
-
-    autoUpdater.on('update-downloaded', (info) => {
-        mainWindow?.webContents.send('update:ready', info);
-    });
-
-    autoUpdater.on('error', (err) => {
-        console.error('AutoUpdater Error:', err);
-        mainWindow?.webContents.send('update:error', err.message);
-    });
-
-    // Check for updates immediately
-    autoUpdater.checkForUpdatesAndNotify().catch(err => {
-        console.error('Failed to check for updates:', err);
-    });
+    initAutoUpdater(mainWindow!);
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -213,4 +184,10 @@ ipcMain.handle('app:version', () => {
 // Get platform
 ipcMain.handle('app:platform', () => {
     return process.platform;
+});
+
+// Hardware detection
+ipcMain.handle('hardware:detect', async () => {
+    const { detectHardware } = await import('./hardware-detection');
+    return detectHardware();
 });

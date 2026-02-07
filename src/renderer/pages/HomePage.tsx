@@ -118,7 +118,7 @@ const HomePage = memo(function HomePage({ serverStatus, onLaunch }: HomePageProp
                         loading={launching} // We keep this true during launch to show spinner/disabled state
                         disabled={!serverStatus.online || cooldown || launching}
                         className={`text-lg px-12 py-6 tracking-widest font-black shadow-[0_0_50px_rgba(230,179,37,0.0)] hover:shadow-[0_0_50px_rgba(230,179,37,0.3)] transition-shadow duration-500 ${(!serverStatus.online || cooldown || launching) ? 'opacity-50 grayscale cursor-not-allowed bg-surface border-black/5' : ''}`}
-                        icon={!launching && !cooldown && <Play fill="currentColor" size={20} />}
+                        icon={!launching && !cooldown && <Play fill="currentColor" className="ml-1" size={20} />}
                     >
                         {launching ? 'LANCEMENT EN COURS...' : (cooldown ? `PATIENTER (${cooldownTime}s)` : (serverStatus.online ? 'JOUER' : 'HORS LIGNE'))}
                     </Button>

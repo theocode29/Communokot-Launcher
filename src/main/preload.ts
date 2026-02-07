@@ -32,6 +32,9 @@ export interface ElectronAPI {
     getVersion: () => Promise<string>;
     getPlatform: () => Promise<string>;
 
+    // Update
+    installUpdate: () => void;
+
     // Events
     on: (channel: string, func: (...args: unknown[]) => void) => () => void;
 }
@@ -62,6 +65,9 @@ const electronAPI: ElectronAPI = {
     // App info
     getVersion: () => ipcRenderer.invoke('app:version'),
     getPlatform: () => ipcRenderer.invoke('app:platform'),
+
+    // Update
+    installUpdate: () => ipcRenderer.send('update:install'),
 
     // Events
     on: (channel, func) => {

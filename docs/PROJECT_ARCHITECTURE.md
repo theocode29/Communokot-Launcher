@@ -24,7 +24,9 @@ src/
 ├── main/                 # Processus Principal Electron (Node.js)
 │   ├── index.ts          # Point d'entrée. Création de fenêtre & gestionnaires IPC.
 │   ├── minecraft.ts      # Logique de lancement du jeu (Launcher Handoff).
-│   ├── serverStatus.ts   # Logique de polling API.
+│   ├── preset-orchestrator.ts # Orchestrateur de performance & sécurité.
+│   ├── backup-manager.ts # Backups, Audit logs & Safe Boot.
+│   ├── incompatibility-db.ts # Base de données de correctifs hardware.
 │   └── ...
 ├── renderer/             # Processus de Rendu Electron (React UI)
 │   ├── components/       # Éléments UI réutilisables (Navigation, Bouton).
@@ -64,15 +66,21 @@ src/
 3.  **Logique (`serverStatus.ts`)** fetch `api.freemcserver.net`.
 4.  **Retour** : Les données reviennent au Renderer pour mettre à jour `ServerStatusBadge`.
 
-### Lancement du Jeu (Orchestration Interne)
+### Lancement du Jeu (Orchestration Robuste)
 1.  **Utilisateur** clique sur "JOUER".
 2.  **Renderer** envoie l'événement IPC `minecraft:launch`.
-3.  **Main (`minecraft.ts`)** orchestre la séquence :
-    - `resourcepack.ts` : Mise à jour du pack de ressources.
-    - `fabric.ts` : Installation du loader Fabric si manquant.
-    - `mods.ts` : Résolution dynamique des mods via Modrinth API et nettoyage.
-4.  **Main** invoque `minecraft-launcher-core` (MCLC) pour lancer le processus Java.
-5.  **Feedback** : Le Main émet `launch:progress` pour mettre à jour la `ProgressBar` en temps réel.
+3.  **Main (`preset-orchestrator.ts`)** orchestre la séquence de sécurité :
+    - `hardware-detection.ts` : Analyse du matériel et calcul du score.
+    - `incompatibility-db.ts` : Vérification des conflits mod/hardware.
+    - `backup-manager.ts` : Création automatique d'un point de restauration.
+    - `dry-run-engine.ts` : Simulation interne pour valider la fusion des configs.
+    - `config-manager.ts` : Application atomique avec validation round-trip.
+4.  **Main** poursuit avec la mise à jour classique :
+    - `resourcepack.ts` : Sync du pack de ressources (SHA-256).
+    - `fabric.ts` : Installation du loader Fabric si nécessaire.
+    - `mods.ts` : Résolution dynamique (Modrinth API).
+5.  **Main** invoque `minecraft-launcher-core` (MCLC).
+6.  **Feedback** : Émission de `launch:progress` et journalisation dans `audit-log.json`.
 
 ---
 

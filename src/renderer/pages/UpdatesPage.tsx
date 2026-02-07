@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { NEWS_URL } from '../constants';
 import type { NewsItem } from '../types';
-import { Newspaper } from 'lucide-react';
+import { Bell } from 'lucide-react';
 
 const UpdatesPage = memo(function UpdatesPage() {
     const [news, setNews] = useState<NewsItem[]>([]);
@@ -47,14 +47,16 @@ const UpdatesPage = memo(function UpdatesPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <div className="p-4 bg-brand-primary text-text-main rounded-2xl">
-                        <Newspaper size={32} />
-                    </div>
-                    <div>
-                        <h1 className="text-4xl font-black tracking-tighter text-white">ACTUALITÉS</h1>
-                        <p className="text-white/60 uppercase tracking-widest text-xs mt-2">
-                            Dernières communications du QG
-                        </p>
+                    <div className="flex items-end gap-6">
+                        <div className="p-4 bg-surface border border-black/10 rounded-2xl shadow-sm">
+                            <Bell size={32} strokeWidth={1.5} className="text-text-main" />
+                        </div>
+                        <div>
+                            <h1 className="text-4xl font-black tracking-tighter text-white">ACTUALITÉS</h1>
+                            <p className="text-white/60 uppercase tracking-widest text-xs mt-2">
+                                Mises à jour & Annonces
+                            </p>
+                        </div>
                     </div>
                 </motion.div>
 

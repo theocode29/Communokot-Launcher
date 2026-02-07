@@ -23,7 +23,7 @@ export default function InstallationHelpModal({ isOpen, onClose }: InstallationH
                         onClick={onClose}
                         className="absolute top-4 right-4 p-2 text-text-muted hover:text-text-main hover:bg-black/5 rounded-full transition-colors"
                     >
-                        <X size={20} />
+                        <X size={24} strokeWidth={1.5} />
                     </button>
 
                     <div className="p-8">

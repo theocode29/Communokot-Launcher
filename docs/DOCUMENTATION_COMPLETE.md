@@ -94,18 +94,23 @@ J'ai implémenté un système robuste de mise à jour du pack de textures :
 
 ---
 
-## 10. Système d'Installation et d'Optimisation
+## 10. Système d'Installation et d'Optimisation Robuste (v1.1.1)
 
-J'ai ajouté une couche d'automatisation critique pour garantir une expérience de jeu fluide sans intervention manuelle de l'utilisateur :
+J'ai ajouté une couche d'automatisation et de sécurité critique pour garantir une expérience de jeu fluide et sans crash :
 
-- **Fabric Installer** : Le launcher télécharge dynamiquement l'installeur Fabric et configure le profil `fabric-loader-0.18.0-1.21.11`.
-- **Modrinth API SDK** : Une intégration sur mesure avec Modrinth permet de récupérer les dernières versions stables de :
-    - *Sodium* (Performances de rendu)
-    - *ImmediatelyFast* (Optimisation réseau/entités)
-    - *Lithium* (Optimisation CPU/physique)
-    - *FerriteCore* (Réduction de l'usage RAM)
-    - *EntityCulling* (Culling des entités non visibles)
-- **Nettoyage Intelligent** : Le launcher vérifie le dossier `mods` à chaque démarrage et supprime les fichiers obsolètes ou non autorisés pour éviter les conflits.
+### 🛡️ Moteur de Robustesse
+- **Détection Hardware** : Analyse en temps réel des spécifications du PC pour attribuer un score de performance.
+- **Backups Automatiques** : Chaque modification de configuration est précédée d'une sauvegarde versionnée avec manifest.
+- **Protection Anti-Corruption** : Les fichiers sont écrits de manière atomique et vérifiés par une lecture de contrôle immediat (round-trip validation).
+- **Mode Safe Boot** : Possibilité de restaurer une configuration minimale stable en un clic.
+
+### 📦 Optimisation Dynamique
+- **Presets Intelligents** (Low, Balanced, High) configurés par des experts.
+- **Correctifs d'Incompatibilités** : Workarounds automatiques pour les CPUs récents, les drivers instables et les spécificités macOS ARM.
+
+### 🧪 Qualité Logicielle
+- **Tests Unitaires (Vitest)** : Couverture complète du moteur de configuration avec 50+ tests automatisés.
+- **Audit Log** : Journal persistant de toutes les actions système pour faciliter le support technique.
 
 ---
 

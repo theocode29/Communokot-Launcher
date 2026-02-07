@@ -30,6 +30,17 @@ npm run electron:dev
 *   Le Renderer tourne sur `http://localhost:5173`.
 *   Electron se connecte à ce serveur local.
 
+### Lancer les Tests
+J'utilise **Vitest** pour garantir la fiabilité du moteur de configuration :
+```bash
+# Lancer tous les tests unitaires (50+)
+npm test
+
+# Mode watch pour le développement
+npm run test:watch
+```
+Les tests couvrent la détection matérielle, la fusion des presets et l'intégrité des fichiers.
+
 ### Lancer l'Outil de News
 Pour gérer les articles de news :
 ```bash
@@ -55,9 +66,10 @@ Sortie : `dist/1.0.4/Communokot Launcher-1.0.4-arm64.dmg` (sur Apple Silicon)
 
 ## Structure du Projet
 
-- `src/main/` : **Backend** (Processus Principal Electron). Pas d'accès UI. Gère le système de fichiers, le lancement du jeu, etc.
+- `src/main/` : **Backend** (Processus Principal Electron). Gère le système de fichiers, le lancement du jeu, les backups et l'optimisation.
 - `src/renderer/` : **Frontend** (UI React). Communique avec le main via `window.electron`.
 - `public/` : Assets statiques (icônes, fond) et `preload.cjs`.
+- `vitest.config.ts` : Configuration de la suite de tests.
 
 ## Directives de Code
 

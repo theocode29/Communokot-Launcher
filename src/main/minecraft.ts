@@ -88,9 +88,17 @@ export async function launchMinecraft(options: LaunchOptions): Promise<LaunchRes
         console.log('[Launcher] Updating optimization mods...');
         await updateMods(rootPath, onProgress);
         console.log('[Launcher:Flow] Step 2 Complete. Mods updated.');
+
+        console.log('[Launcher:Flow] Step 2.5: Performance Preset Application');
+        console.log('[Launcher] Applying performance optimizations...');
+        const { applyPerformancePreset } = await import('./preset-orchestrator');
+        const { getConfig } = await import('./utils/config');
+        const userPreset = getConfig('performancePreset');
+        await applyPerformancePreset(rootPath, userPreset, onProgress);
+        console.log('[Launcher:Flow] Step 2.5 Complete. Performance preset applied.');
     } catch (error) {
         console.error('[Launcher:Flow] CRITICAL ERROR in Fabric/Mods Setup:', error);
-        return { success: false, error: 'Erreur lors de l’installation de Fabric/Mods: ' + (error as Error).message };
+        return { success: false, error: 'Erreur lors de l\'installation de Fabric/Mods: ' + (error as Error).message };
     }
     // ---------------------------------------
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, CheckCircle, RefreshCw, XCircle } from 'lucide-react';
+import { Download, CheckCircle2, RefreshCw, XCircle } from 'lucide-react';
 
 interface UpdateProgress {
     percent: number;
@@ -69,7 +69,7 @@ export default function UpdateNotification() {
                 <div className="p-4">
                     <div className="flex items-center gap-3 mb-2">
                         {status === 'downloading' && <Download className="w-5 h-5 text-brand-primary animate-pulse" />}
-                        {status === 'downloaded' && <CheckCircle className="w-5 h-5 text-green-500" />}
+                        {status === 'downloaded' && <CheckCircle2 className="w-5 h-5 text-green-500" />}
                         {status === 'available' && <RefreshCw className="w-5 h-5 text-blue-400" />}
                         {status === 'error' && <XCircle className="w-5 h-5 text-red-500" />}
 
@@ -104,9 +104,14 @@ export default function UpdateNotification() {
                     )}
 
                     {status === 'downloaded' && (
-                        <p className="text-xs text-text-muted mt-1">
-                            {window.electron ? "L'application va vous demander l'autorisation pour l'installer." : "Redémarrage requis."}
-                        </p>
+                        <div className="mt-2">
+                            <button
+                                onClick={() => window.electron.installUpdate()}
+                                className="w-full px-3 py-1.5 text-xs font-medium text-white bg-brand-primary hover:bg-brand-primary/90 rounded transition-colors"
+                            >
+                                Redémarrer pour installer
+                            </button>
+                        </div>
                     )}
                 </div>
             </motion.div>

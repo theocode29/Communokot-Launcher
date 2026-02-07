@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Info, Loader2 } from 'lucide-react';
+import { Loader2, Compass } from 'lucide-react';
 import { BLUEMAP } from '../constants';
 
 /**
@@ -82,7 +82,7 @@ const MapPage = memo(function MapPage() {
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 >
                     <div className="flex-shrink-0 w-11 h-11 flex items-center justify-center text-text-muted group-hover:text-brand-primary transition-colors duration-300">
-                        <Info size={20} />
+                        <Compass size={20} strokeWidth={1.5} />
                     </div>
 
                     <motion.div

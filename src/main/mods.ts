@@ -49,6 +49,7 @@ async function resolveModVersion(projectId: string, mcVersion: string): Promise<
             const latest = versions[0];
             const primaryFile = latest.files.find((f: any) => f.primary) || latest.files[0];
 
+            console.log(`[Mods] Resolved ${projectId} (MC ${mcVersion}): ${primaryFile.filename}`);
             return {
                 url: primaryFile.url,
                 filename: primaryFile.filename

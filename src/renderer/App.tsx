@@ -44,6 +44,8 @@ export default function App() {
                         ram: 4,
                         javaPath: 'auto',
                         minecraftPath: '',
+                        performancePreset: 'auto',
+                        manageOwnConfigs: false,
                     });
                 }
             } catch (error) {
@@ -76,7 +78,7 @@ export default function App() {
     }, [checkServerStatus]);
 
     // Update config
-    const updateConfig = useCallback(async (key: keyof UserConfig, value: string | number) => {
+    const updateConfig = useCallback(async (key: keyof UserConfig, value: string | number | boolean) => {
         if (window.electron) {
             await window.electron.setConfig(key, value);
         }

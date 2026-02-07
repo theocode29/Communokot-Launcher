@@ -1,6 +1,6 @@
-# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction
+# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.1.1)
 
-Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier.
+Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier, incluant le moteur d'optimisation robuste introduit en v1.1.1.
 
 ---
 
@@ -43,11 +43,16 @@ Communokot launcher/
 │   ├── main/              # --- PROCESSUS PRINCIPAL (Node.js) ---
 │   │   ├── index.ts        # Entry point, Window creation, IPC handling
 │   │   ├── preload.ts      # ContextBridge (Secure Bridge)
-│   │   ├── minecraft.ts    # Logique de lancement CLI Java & Orchestration
+│   │   ├── minecraft.ts    # Logique de lancement CLI Java (Handoff)
 │   │   ├── fabric.ts       # Installation automatique de Fabric Loader
 │   │   ├── mods.ts         # Gestionnaire de mods (Modrinth API)
 │   │   ├── updater.ts      # Logique Auto-Updater
 │   │   ├── resourcepack.ts # Gestion automatique des Resource Packs
+│   │   ├── preset-orchestrator.ts # Orchestration robuste des performances
+│   │   ├── backup-manager.ts # Système de versioning & recovery
+│   │   ├── incompatibility-db.ts # Gestionnaire de correctifs hardware
+│   │   ├── dry-run-engine.ts # Moteur de simulation de config
+│   │   ├── config-manager.ts # Gestionnaire de fusion & validation atomique
 │   │   └── utils/
 │   │       ├── logger.ts   # Console wrapper instrumenté
 │   │       └── config.ts   # Gestion electron-store / .env
@@ -169,14 +174,17 @@ module.exports = {
 ### Processus Principal (`src/main`)
 
 1.  **`index.ts`** : Je crée une fenêtre `BrowserWindow` avec `frame: false`. J'injecte `preload.js`. Il gère le canal IPC `launch:progress` pour remonter les étapes au renderer.
-2.  **`minecraft.ts`** :
+2.  **`preset-orchestrator.ts`** :
+    *   **Sécurité** : Création d'un backup -> Check Incompatibilités -> Simulation Dry Run.
+    *   **Application** : Fusion intelligente des configs avec préservation des touches utilisateur et validation round-trip (Zéro corruption).
+3.  **`minecraft.ts`** :
     *   Orchestration du lancement : Check Resource Pack -> Install Fabric -> Update Mods -> Launch MCLC.
     *   **Arguments Java** : `-Xmx{ram}G` + Connect Auto.
-3.  **`fabric.ts`** : 
+4.  **`fabric.ts`** : 
     *   Télécharge l'installeur JAR officiel de Fabric.
-    *   Exécute l'installation en mode silencieux (`-noprofile`) pour générer le JSON de version dans le dossier `versions/`.
-4.  **`mods.ts`** :
-    *   Interroge l'API Modrinth pour trouver les versions exactes de (Sodium, Lithium, FerriteCore, ImmediatelyFast, EntityCulling) compatibles avec 1.21.11.
+    *   Exécute l'installation en mode silencieux (`-noprofile`) pour générer le JSON de version.
+5.  **`mods.ts`** :
+    *   Interroge l'API Modrinth pour trouver les versions exactes de (Sodium, Lithium, FerriteCore, ImmediatelyFast, EntityCulling).
     *   Nettoie le dossier `mods/` pour ne garder que les JARs officiels optimisés.
 5.  **IPC Handling** :
     ```typescript
