@@ -23,6 +23,7 @@ Le Communokot Launcher est un lanceur Minecraft moderne et performant construit 
 src/
 ├── main/                 # Processus Principal Electron (Node.js)
 │   ├── index.ts          # Point d'entrée. Création de fenêtre & gestionnaires IPC.
+│   ├── updater.ts        # Gestionnaire de mises à jour modulaire (GitHub Releases).
 │   ├── minecraft.ts      # Logique de lancement du jeu (Launcher Handoff).
 │   ├── preset-orchestrator.ts # Orchestrateur de performance & sécurité.
 │   ├── backup-manager.ts # Backups, Audit logs & Safe Boot.
@@ -65,6 +66,12 @@ src/
 2.  **Main (`index.ts`)** reçoit l'appel IPC, délègue à `checkServerStatus()`.
 3.  **Logique (`serverStatus.ts`)** fetch `api.freemcserver.net`.
 4.  **Retour** : Les données reviennent au Renderer pour mettre à jour `ServerStatusBadge`.
+
+### Mises à jour Automatiques (v1.1.2)
+1.  **Main (`updater.ts`)** : Vérifie la présence d'une nouvelle version sur GitHub Releases au démarrage.
+2.  **Download** : Si disponible, le téléchargement commence en arrière-plan avec émission de `update:progress`.
+3.  **Renderer (`UpdateNotification.tsx`)** : Affiche la progression et, une fois terminé, propose un bouton "Redémarrer".
+4.  **Action** : Le clic sur le bouton envoie l'IPC `update:install` qui déclenche `quitAndInstall()` dans le Main.
 
 ### Lancement du Jeu (Orchestration Robuste)
 1.  **Utilisateur** clique sur "JOUER".

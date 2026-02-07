@@ -1,6 +1,6 @@
-# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.1.1)
+# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.1.2)
 
-Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier, incluant le moteur d'optimisation robuste introduit en v1.1.1.
+Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier, incluant le moteur d'optimisation robuste introduit en v1.1.1 et le système de mise à jour modulaire de la v1.1.2.
 
 ---
 
@@ -46,7 +46,7 @@ Communokot launcher/
 │   │   ├── minecraft.ts    # Logique de lancement CLI Java (Handoff)
 │   │   ├── fabric.ts       # Installation automatique de Fabric Loader
 │   │   ├── mods.ts         # Gestionnaire de mods (Modrinth API)
-│   │   ├── updater.ts      # Logique Auto-Updater
+│   │   ├── updater.ts      # Logique Auto-Updater modulaire (v1.1.2)
 │   │   ├── resourcepack.ts # Gestion automatique des Resource Packs
 │   │   ├── preset-orchestrator.ts # Orchestration robuste des performances
 │   │   ├── backup-manager.ts # Système de versioning & recovery
