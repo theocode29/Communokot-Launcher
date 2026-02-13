@@ -140,4 +140,4 @@ J'ai ajouté une couche d'automatisation et de sécurité critique pour garantir
 **Licence** : MIT
 
 ---
-*Dernière mise à jour : 13 Février 2026 (v1.1.3)*
+*Dernière mise à jour : 13 Février 2026 (v1.2.4)*
