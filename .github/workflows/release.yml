@@ -34,10 +34,28 @@ jobs:
           find . -name '.DS_Store' -delete 2>/dev/null || true
           xattr -cr . 2>/dev/null || true
 
-      - name: Build and Publish
+      - name: Build and Publish (Windows)
+        if: matrix.os == 'windows-latest'
         run: npm run publish
         env:
-          # GitHub Token for uploading release assets
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          # Skip code signing identity discovery for unsigned builds
+
+      - name: Build and Publish (macOS - arm64)
+        if: matrix.os == 'macos-latest'
+        run: |
+          npm run build
+          npm run clean
+          npx electron-builder build --mac --arm64 --publish always
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Build and Publish (macOS - x64)
+        if: matrix.os == 'macos-latest'
+        run: |
+          npm run build
+          npm run clean
+          npx electron-builder build --mac --x64 --publish always
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
