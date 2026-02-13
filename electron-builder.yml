@@ -52,11 +52,6 @@ mac:
         - arm64
         - x64
     - target: pkg
-      arch:
-        - arm64
-    - target: pkg
-      arch:
-        - x64
   icon: public/icon.png
   category: public.app-category.games
   artifactName: ${productName}-${version}-${arch}.${ext}
