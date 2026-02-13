@@ -26,7 +26,9 @@ import {
     LITHIUM_PRESETS,
     FERRITECORE_PRESETS,
     ENTITYCULLING_PRESETS,
-    IMMEDIATELYFAST_PRESETS
+    IMMEDIATELYFAST_PRESETS,
+    MODERNFIX_PRESETS,
+    SODIUMLEAFCULLING_PRESETS
 } from './performance-presets';
 import {
     createVersionedBackup,
@@ -82,6 +84,8 @@ const CONFIG_FILES = [
     { filename: 'ferritecore-common.toml', format: 'toml', presets: FERRITECORE_PRESETS },
     { filename: 'entityculling.json', format: 'json', presets: ENTITYCULLING_PRESETS },
     { filename: 'immediatelyfast.json', format: 'json', presets: IMMEDIATELYFAST_PRESETS },
+    { filename: 'modernfix-mixins.properties', format: 'properties', presets: MODERNFIX_PRESETS },
+    { filename: 'sodiumleafculling.json', format: 'json', presets: SODIUMLEAFCULLING_PRESETS },
 ] as const;
 
 // ============================================

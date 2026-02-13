@@ -9,6 +9,8 @@ export interface SodiumConfig {
         clouds_quality: 'off' | 'fast' | 'fancy' | 'default';
         weather_quality: 'fast' | 'fancy' | 'default';
         leaves_quality: 'fast' | 'fancy' | 'default';
+        smooth_lighting: 'off' | 'minimum' | 'maximum';
+        particles: 'all' | 'decreased' | 'minimal';
         enable_vignette: boolean;
         enable_fog: boolean;
     };
@@ -68,6 +70,8 @@ export interface FerriteCoreConfig {
 
 // EntityCulling configuration (entityculling.json)
 export interface EntityCullingConfig {
+    skipHiddenEntityRendering: boolean;
+    skipHiddenBlockEntityRendering: boolean;
     tracingDistance: number;
     debugMode: boolean;
     skipMarkerArmorStands: boolean;
@@ -79,15 +83,36 @@ export interface EntityCullingConfig {
 
 // ImmediatelyFast configuration (immediatelyfast.json)
 export interface ImmediatelyFastConfig {
-    experimental_screen_batching: boolean;
+    font_atlas_resizing: boolean;
     map_atlas_generation: boolean;
     hud_batching: boolean;
+    fast_text_lookup: boolean;
     fast_buffer_upload: boolean;
-    font_atlas_resizing: boolean;
+    experimental_screen_batching: boolean;
+    experimental_disable_error_checking: boolean;
+    experimental_sign_text_buffering: boolean;
+}
+
+// ModernFix configuration (modernfix-mixins.properties)
+export interface ModernFixConfig {
+    'mixin.perf.dynamic_resources': boolean;
+    'mixin.perf.blast_search_trees': boolean;
+    'mixin.perf.faster_item_rendering': boolean;
+    'mixin.perf.deduplicate_location': boolean;
+    'mixin.perf.compact_bit_storage': boolean;
+    'mixin.opt.low_mem': boolean;
+    'mixin.bugfix.concurrency_fixes': boolean;
+    'mixin.bugfix.world_leaks': boolean;
+}
+
+// SodiumLeafCulling configuration (sodiumleafculling.json)
+export interface SodiumLeafCullingConfig {
+    mode: 'solid_aggressive' | 'solid' | 'hollow' | 'off';
+    debug: boolean;
 }
 
 // Union type for all configs
-export type ModConfig = SodiumConfig | LithiumConfig | FerriteCoreConfig | EntityCullingConfig | ImmediatelyFastConfig;
+export type ModConfig = SodiumConfig | LithiumConfig | FerriteCoreConfig | EntityCullingConfig | ImmediatelyFastConfig | ModernFixConfig | SodiumLeafCullingConfig;
 
 // Preset type
 export type PerformancePreset = 'low-end' | 'balanced' | 'high-end' | 'auto';

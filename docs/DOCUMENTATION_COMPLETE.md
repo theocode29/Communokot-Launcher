@@ -15,14 +15,15 @@ Bienvenue dans la documentation complète et unifiée du projet **Communokot Lau
 7.  [Système de Statut Serveur](#7-système-de-statut-serveur)
 8.  [Guide de Développement](#8-guide-de-développement)
 9.  [Gestion du Resource Pack et Logs](#9-gestion-du-resource-pack-et-logs)
-10. [Système d'Installation et d'Optimisation](#10-système-dinstallation-et-doptimisation)
-11. [Crédits et Licence](#11-crédits-et-licence)
+10. [Documentation des Mods et Optimisations](#10-documentation-des-mods-et-optimisations)
+11. [Système d'Installation et d'Optimisation](#11-système-dinstallation-et-doptimisation)
+12. [Crédits et Licence](#12-crédits-et-licence)
 
 ---
 
 ## 1. Introduction
 
-Le **Communokot Launcher** (v1.1.2) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Version 1.21.1). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
+Le **Communokot Launcher** (v1.1.2) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Minecraft Version 1.21.11). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
 
 ---
 
@@ -93,8 +94,26 @@ J'ai implémenté un système robuste de mise à jour du pack de textures :
 - **Logs Détaillés** : Le processus de synchronisation est entièrement loggué dans la console (`[ResourcePack]`) pour faciliter le diagnostic des erreurs de téléchargement ou d'installation dans le dossier Minecraft.
 
 ---
+10. Documentation des Mods et Optimisations
 
-## 10. Système d'Installation et d'Optimisation Robuste (v1.1.1)
+Le launcher installe et gère une suite de 9 mods d'optimisation pour garantir la meilleure expérience possible :
+- **Fabric API** : Base technique nécessaire.
+- **Sodium** : Optimisation majeure du moteur de rendu.
+- **ImmediatelyFast** : Accélération du rendu des interfaces et du texte.
+- **FerriteCore** : Réduction de la consommation de RAM.
+- **Entity Culling** : Suppression du rendu des entités non visibles.
+- **Lithium** : Optimisation de la logique de jeu (physique, IA, ticking).
+- **LazyDFU** : Démarrage accéléré (si version compatible disponible).
+- **ModernFix** : Corrections de bugs et performances globales.
+- **Sodium Leaf Culling** : Optimisation du rendu des feuilles.
+
+Le système de **Presets de Performance** permet d'adapter ces mods selon trois niveaux (Bas de gamme, Équilibré, Haut de gamme) avec une détection automatique du matériel et des correctifs spécifiques pour les CPUs Intel récents et les puces Apple Silicon.
+
+Pour plus de détails, consultez la [documentation dédiée aux mods](./MODS_DOCUMENTATION.md).
+
+---
+
+## 11. Système d'Installation et d'Optimisation Robuste (v1.1.1)
 
 J'ai ajouté une couche d'automatisation et de sécurité critique pour garantir une expérience de jeu fluide et sans crash :
 
@@ -114,10 +133,10 @@ J'ai ajouté une couche d'automatisation et de sécurité critique pour garantir
 
 ---
 
-## 11. Crédits et Licence
+## 12. Crédits et Licence
 
 **Auteur** : Théophile (Communokot)
 **Licence** : MIT
 
 ---
-*Dernière mise à jour : 7 Février 2026 (v1.1.2)*
+*Dernière mise à jour : 13 Février 2026 (v1.1.2)*

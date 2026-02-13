@@ -71,7 +71,21 @@ function createWindow(): void {
 }
 
 // App lifecycle
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    // Clear all cache on startup to ensure fresh data (especially for BlueMap)
+    // This prevents cache accumulation and ensures map data is always up-to-date
+    console.log('[Cache] Clearing session cache and storage data...');
+    try {
+        const { session } = await import('electron');
+        await session.defaultSession.clearCache();
+        await session.defaultSession.clearStorageData({
+            storages: ['cookies', 'filesystem', 'indexdb', 'localstorage', 'shadercache', 'websql', 'serviceworkers', 'cachestorage']
+        });
+        console.log('[Cache] ✓ Cache cleared successfully');
+    } catch (error) {
+        console.error('[Cache] ✗ Error clearing cache:', error);
+    }
+
     createWindow();
 
     // Auto Updater Configuration

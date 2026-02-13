@@ -10,6 +10,10 @@ import { ProgressCallback } from './fabric';
 // ImmediatelyFast: '5ZwdcRci'
 // FerriteCore: 'uXXizFIs'
 // Entity Culling: 'NNAgCjsB'
+// Lithium: 'gvQqBUqZ'
+// LazyDFU: 'hvFnDODi'
+// ModernFix: 'nmDcB62a'
+// Sodium Leaf Culling: 'M25bkObt'
 
 interface ModConfig {
     name: string;
@@ -21,7 +25,11 @@ const REQUIRED_MODS: ModConfig[] = [
     { name: 'Sodium', projectId: 'AANobbMI' },
     { name: 'ImmediatelyFast', projectId: '5ZwdcRci' },
     { name: 'FerriteCore', projectId: 'uXXizFIs' },
-    { name: 'Entity Culling', projectId: 'NNAgCjsB' }
+    { name: 'Entity Culling', projectId: 'NNAgCjsB' },
+    { name: 'Lithium', projectId: 'gvQqBUqZ' },
+    { name: 'LazyDFU', projectId: 'hvFnDODi' },
+    { name: 'ModernFix', projectId: 'nmDcB62a' },
+    { name: 'Sodium Leaf Culling', projectId: 'M25bkObt' },
 ];
 
 const TARGET_MC_VERSION = '1.21.11';

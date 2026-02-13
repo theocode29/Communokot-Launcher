@@ -9,7 +9,7 @@ Le launcher Communokot intègre un système de gestion de configuration robuste 
 1.  **Application de Presets Intelligente**
     *   Détection automatique de votre matériel (RAM, CPU, GPU).
     *   Application de presets optimisés : `Low-End`, `Balanced`, ou `High-End`.
-    *   Supporte Sodium, Lithium, FerriteCore, EntityCulling, et ImmediatelyFast.
+    *   Supporte Sodium, Lithium, FerriteCore, EntityCulling, ImmediatelyFast, LazyDFU, ModernFix, et Sodium Leaf Culling.
 
 2.  **Sécurité et Fiabilité**
     *   **Zéro Corruption** : Vérification stricte des fichiers avant écriture.

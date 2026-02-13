@@ -184,7 +184,7 @@ module.exports = {
     *   Télécharge l'installeur JAR officiel de Fabric.
     *   Exécute l'installation en mode silencieux (`-noprofile`) pour générer le JSON de version.
 5.  **`mods.ts`** :
-    *   Interroge l'API Modrinth pour trouver les versions exactes de (Sodium, Lithium, FerriteCore, ImmediatelyFast, EntityCulling).
+    *   Interroge l'API Modrinth pour trouver les versions exactes de (Sodium, Lithium, FerriteCore, ImmediatelyFast, EntityCulling, LazyDFU, ModernFix, Sodium Leaf Culling).
     *   Nettoie le dossier `mods/` pour ne garder que les JARs officiels optimisés.
 5.  **IPC Handling** :
     ```typescript
