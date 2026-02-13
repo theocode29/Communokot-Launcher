@@ -67,7 +67,7 @@ src/
 3.  **Logique (`serverStatus.ts`)** fetch `api.freemcserver.net`.
 4.  **Retour** : Les données reviennent au Renderer pour mettre à jour `ServerStatusBadge`.
 
-### Mises à jour Automatiques (v1.1.2)
+### Mises à jour Automatiques (v1.1.3)
 1.  **Main (`updater.ts`)** : Vérifie la présence d'une nouvelle version sur GitHub Releases au démarrage.
 2.  **Download** : Si disponible, le téléchargement commence en arrière-plan avec émission de `update:progress`.
 3.  **Renderer (`UpdateNotification.tsx`)** : Affiche la progression et, une fois terminé, propose un bouton "Redémarrer".

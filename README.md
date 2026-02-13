@@ -24,7 +24,7 @@
 - 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive et vue "Virtual Window"
 - 📰 **Fil d'actualités** — Mises à jour du serveur via un outil de publication dédié
 - ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft et gestion des presets
-- 🔄 **Mises à jour automatiques** — Système robuste avec notifications et bouton de redémarrage (v1.1.2)
+- 🔄 **Mises à jour automatiques** — Système robuste avec notifications et bouton de redémarrage (v1.1.3)
 - 🎨 **Interface Moderne** — Thème sombre "Liquid Glass" optimisé pour le contraste et l'accessibilité
 - 📦 **Resource Pack Auto** — Synchronisation avec vérification d'intégrité SHA-256 et logs détaillés
 - 🧪 **Qualité Garantie** — Suite de 50+ tests unitaires (Vitest) assurant la fiabilité du moteur de config
