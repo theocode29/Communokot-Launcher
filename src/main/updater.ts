@@ -57,7 +57,7 @@ export function initAutoUpdater(mainWindow: BrowserWindow): void {
 
     // Initial check
     setTimeout(() => {
-        autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+        autoUpdater.checkForUpdates().catch((err) => {
             console.error('[Updater] Check failed:', err);
         });
     }, 3000);

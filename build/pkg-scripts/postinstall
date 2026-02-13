@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Fix permissions and remove quarantine attributes
+# The INSTALL_PKG_SESSION_ID variable is set by the Apple Installer, checking it ensures we are running in that context
+# But for safety we will just point to the installation path directly if possible or use $2 (target location)
+
+# The installer typically installs to /Applications, let's target that.
+# $2 is the target location passed by the installer.
+TARGET_DIR="$2"
+APP_NAME="Communokot Launcher.app"
+
+if [ -z "$TARGET_DIR" ]; then
+    TARGET_DIR="/Applications"
+fi
+
+APP_PATH="${TARGET_DIR}/${APP_NAME}"
+
+# Log to a file for debugging if needed
+LOG_FILE="/tmp/communokot_install.log"
+echo "Running postinstall script for ${APP_PATH}" > "$LOG_FILE"
+
+if [ -d "$APP_PATH" ]; then
+    echo "Found app at $APP_PATH. Removing quarantine attributes..." >> "$LOG_FILE"
+    # Remove quarantine attribute recursively
+    xattr -cr "$APP_PATH"
+    echo "Quarantine removal complete." >> "$LOG_FILE"
+else
+    echo "Application not found at $APP_PATH" >> "$LOG_FILE"
+fi
+
+exit 0
