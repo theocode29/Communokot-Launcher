@@ -35,7 +35,8 @@ Le **Communokot Launcher** (v1.1.3) est une application de bureau conçue pour f
 -   🗺️ **Carte Satellite** : Intégration de *BlueMap* via une stratégie de "Virtual Window" qui masque l'interface native pour une immersion totale.
 -   📰 **Système de News** : Affichage dynamique de cartes d'actualités gérées via un outil CLI dédié.
 -   ⚙️ **Gestion des Paramètres** : Allocation RAM, sélecteur de dossier Minecraft, et persistence des préférences.
--   🔄 **Auto-Update Launcher** : Intégration `electron-updater` avec architecture modulaire et bouton de redémarrage interactif (v1.1.2).
+-   🔄 **Auto-Update Launcher** : Intégration `electron-updater` avec architecture modulaire, notifications localisées en Français et bouton de redémarrage interactif (v1.1.3+).
+-   🛡️ **Installation Robuste** : Utilisation de `.pkg` sur macOS avec script `postinstall` (`xattr -cr`) et script NSIS sur Windows pour unblocker les fichiers (SmartScreen mitigation).
 -   🎨 **UX Soignée** : Audit de contraste complet et animations Framer Motion.
 
 ---

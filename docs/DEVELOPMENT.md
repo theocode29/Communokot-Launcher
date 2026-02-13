@@ -56,13 +56,21 @@ J'utilise `electron-builder` pour empaqueter l'application.
 ```bash
 npm run dist:win
 ```
-Sortie : `dist/1.0.4/Communokot Launcher Setup 1.0.4.exe`
+Sortie : `dist/${version}/Communokot Launcher Setup ${version}.exe`
+> [!NOTE]
+> L'installeur Windows inclut désormais `build/installer.nsh` qui utilise PowerShell pour "unblocker" les fichiers installés et limiter les blocages SmartScreen.
 
-### macOS (.dmg / .zip)
+### macOS (.pkg / .dmg / .zip)
 ```bash
 npm run dist:mac
 ```
-Sortie : `dist/1.0.4/Communokot Launcher-1.0.4-arm64.dmg` (sur Apple Silicon)
+Sorties : 
+* `dist/${version}/Communokot Launcher-${version}-arm64.pkg` (Recommandé pour l'installation initiale)
+* `dist/${version}/Communokot Launcher-${version}-arm64.dmg`
+* `dist/${version}/Communokot Launcher-${version}-arm64.zip` (Utilisé par l'auto-updater)
+
+> [!TIP]
+> Le fichier `.pkg` contient un script `postinstall` (`build/pkg-scripts/postinstall`) qui exécute automatiquement `xattr -cr` sur l'application installée pour supprimer les attributs de quarantaine et corriger les erreurs de permissions lors des mises à jour.
 
 ## Structure du Projet
 
