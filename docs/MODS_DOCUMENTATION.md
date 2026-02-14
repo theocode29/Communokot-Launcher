@@ -21,6 +21,10 @@ Pour garantir une expérience fluide même sur des configurations modestes, le l
 11. **Simple Voice Chat** : Ajoute un chat vocal de proximité in-game, permettant de discuter avec les autres joueurs à proximité, avec des fonctionnalités comme le push-to-talk et l'ajustement du volume.
 12. **Mod Menu** : Ajoute un écran de configuration pour voir la liste des mods installés et accéder à leurs paramètres directement depuis le menu du jeu.
 13. **AmbientSounds 6** : (#listentonature) Ajoute une couche d'immersion sonore procédurale (bruits de vent, chants d'oiseaux, criquets) qui varie selon le biome et l'heure de la journée. Nécessite **CreativeCore**.
+14. **Cool Rain** : Ajoute des sons de pluie plus réalistes et apaisants, ainsi que des effets visuels d'éclaboussures et de brouillard lors des intempéries.
+15. **Sound Controller** : Permet de contrôler individuellement le volume de chaque son du jeu via une interface dédiée, pour un mixage audio personnalisé.
+16. **Item Landing Sound** : Ajoute un effet sonore subtil lorsqu'un item jeté touche le sol, améliorant le feedback physique du monde.
+17. **Presence Footsteps** : Remplace les bruits de pas par défaut par un moteur acoustique riche et varié, simulant différentes surfaces et types de chaussures pour une immersion maximale.
 
 ---
 

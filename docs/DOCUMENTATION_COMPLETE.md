@@ -23,7 +23,7 @@ Bienvenue dans la documentation complète et unifiée du projet **Communokot Lau
 
 ## 1. Introduction
 
-Le **Communokot Launcher** (v1.3.8) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Minecraft Version 1.21.11). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
+Le **Communokot Launcher** (v1.3.9) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Minecraft Version 1.21.11). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
 
 ---
 
@@ -141,4 +141,4 @@ J'ai ajouté une couche d'automatisation et de sécurité critique pour garantir
 **Licence** : MIT
 
 ---
-*Dernière mise à jour : 14 Février 2026 (v1.3.8)*
+*Dernière mise à jour : 15 Février 2026 (v1.3.9)*

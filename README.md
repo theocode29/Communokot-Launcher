@@ -15,7 +15,7 @@
 
 ---
 
-- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11 / v1.3.8)
+- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11 / v1.3.9)
 - 🛡️ **Robustesse & Protection** — Système de backups versionnés, protection anti-corruption (round-trip) et mode "Safe Boot"
 - 🛠️ **Installation Auto Fabric** — Installation automatique de Fabric Loader 1.21.11 (v0.18.4+)
 - 📦 **Optimisation Dynamique** — Presets intelligents (`Low`, `Balanced`, `High`) basés sur une détection matérielle avancée
@@ -27,7 +27,7 @@
 - 🔄 **Mises à jour automatiques** — Système robuste avec notifications localisées en Français et bouton de redémarrage (v1.2.5+)
 - 🎨 **Interface Moderne** — Thème sombre "Liquid Glass" optimisé pour le contraste et l'accessibilité
 - 📦 **Resource Pack Auto** — Synchronisation avec vérification d'intégrité SHA-256 et logs détaillés
-- 🔊 **Immersion Sonore** — Ajout d'AmbientSounds pour une ambiance naturelle réaliste (fM515JnW)
+- 🔊 **Immersion Sonore** — Suite audio complète : AmbientSounds, Cool Rain, Sound Physics, Presence Footsteps, etc.
 - 🧪 **Qualité Garantie** — Suite de 50+ tests unitaires (Vitest) assurant la fiabilité du moteur de config
 
 ---

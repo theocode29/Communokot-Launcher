@@ -37,6 +37,10 @@ const REQUIRED_MODS: ModConfig[] = [
     { name: 'Mod Menu', projectId: 'mOgUt4GM' },
     { name: 'AmbientSounds', projectId: 'fM515JnW' },
     { name: 'CreativeCore', projectId: 'OsZiaDHq' },
+    { name: 'Cool Rain', projectId: 'iDyqnQLT' },
+    { name: 'Sound Controller', projectId: 'uY9zbflw' },
+    { name: 'Item Landing Sound', projectId: 'T18xfcmD' },
+    { name: 'Presence Footsteps', projectId: 'rcTfTZr3' },
 ];
 
 const TARGET_MC_VERSION = '1.21.11';
