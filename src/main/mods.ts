@@ -35,6 +35,8 @@ const REQUIRED_MODS: ModConfig[] = [
     { name: 'Sound Physics Remastered', projectId: 'qyVF9oeo' },
     { name: 'Simple Voice Chat', projectId: '9eGKb6K1' },
     { name: 'Mod Menu', projectId: 'mOgUt4GM' },
+    { name: 'AmbientSounds', projectId: 'fM515JnW' },
+    { name: 'CreativeCore', projectId: 'OsZiaDHq' },
 ];
 
 const TARGET_MC_VERSION = '1.21.11';

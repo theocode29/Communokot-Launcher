@@ -20,6 +20,7 @@ Pour garantir une expérience fluide même sur des configurations modestes, le l
 10. **Sound Physics Remastered** : Améliore l'immersion sonore en simulant la réverbération, l'absorption et l'atténuation réaliste des sons à travers les blocs.
 11. **Simple Voice Chat** : Ajoute un chat vocal de proximité in-game, permettant de discuter avec les autres joueurs à proximité, avec des fonctionnalités comme le push-to-talk et l'ajustement du volume.
 12. **Mod Menu** : Ajoute un écran de configuration pour voir la liste des mods installés et accéder à leurs paramètres directement depuis le menu du jeu.
+13. **AmbientSounds 6** : (#listentonature) Ajoute une couche d'immersion sonore procédurale (bruits de vent, chants d'oiseaux, criquets) qui varie selon le biome et l'heure de la journée. Nécessite **CreativeCore**.
 
 ---
 

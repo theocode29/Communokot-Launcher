@@ -1,4 +1,4 @@
-# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.3.7)
+# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.3.8)
 
 Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier, incluant le moteur d'optimisation robuste introduit en v1.1.1 et le système de mise à jour modulaire de la v1.1.3.
 
