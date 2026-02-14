@@ -69,7 +69,7 @@ export function initAutoUpdater(mainWindow: BrowserWindow): void {
                 // URL encode the space: "Communokot%20Launcher"
                 // Assuming standard electron-builder output format
                 const currentArch = arch() === 'arm64' ? 'arm64' : 'x64';
-                const fileName = `Communokot%20Launcher-${info.version}-${currentArch}.pkg`;
+                const fileName = `Communokot-Launcher-${info.version}-${currentArch}.pkg`;
                 // Use the standard GitHub Releases download URL structure
                 // Adjust if using a different provider, but typically standard with generic/github provider
                 const downloadUrl = `https://github.com/theocode29/Communokot-Launcher/releases/download/v${info.version}/${fileName}`;
@@ -83,6 +83,9 @@ export function initAutoUpdater(mainWindow: BrowserWindow): void {
                 const response = await axios({
                     url: downloadUrl,
                     method: 'GET',
+                    headers: {
+                        'User-Agent': 'Communokot-Launcher'
+                    },
                     responseType: 'stream'
                 });
 
