@@ -6,7 +6,7 @@ import { pipeline } from 'stream/promises';
 
 const FABRIC_INSTALLER_URL = 'https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.0/fabric-installer-1.0.0.jar';
 const MINECRAFT_VERSION = '1.21.11';
-const FABRIC_LOADER_VERSION = '0.18.0'; // Updated to 0.18.0 for 1.21.11 compatibility
+const FABRIC_LOADER_VERSION = '0.18.4'; // Updated to 0.18.4 for compatibility
 const FABRIC_PROFILE_NAME = `fabric-loader-${FABRIC_LOADER_VERSION}-${MINECRAFT_VERSION}`;
 
 /**
