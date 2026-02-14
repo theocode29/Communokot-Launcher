@@ -17,6 +17,8 @@ Pour garantir une expérience fluide même sur des configurations modestes, le l
 7. **LazyDFU** : Diffère l'initialisation de DataFixerUpper au lancement pour accélérer le démarrage du jeu. *Note : obsolète depuis Minecraft 1.19.4, installé uniquement si une version compatible est disponible.*
 8. **ModernFix** : Mod "couteau suisse" qui améliore les performances, réduit la consommation mémoire et corrige de nombreux bugs. Compatible avec tous les autres mods de performance.
 9. **Sodium Leaf Culling** : Add-on pour Sodium qui optimise le rendu des feuilles en utilisant différents modes de culling (Solid Aggressive, Solid, Hollow) selon le préréglage de performance.
+10. **Sound Physics Remastered** : Améliore l'immersion sonore en simulant la réverbération, l'absorption et l'atténuation réaliste des sons à travers les blocs.
+11. **Simple Voice Chat** : Ajoute un chat vocal de proximité in-game, permettant de discuter avec les autres joueurs à proximité, avec des fonctionnalités comme le push-to-talk et l'ajustement du volume.
 
 ---
 

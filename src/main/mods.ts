@@ -14,6 +14,8 @@ import { ProgressCallback } from './fabric';
 // LazyDFU: 'hvFnDODi'
 // ModernFix: 'nmDcB62a'
 // Sodium Leaf Culling: 'M25bkObt'
+// Sound Physics Remastered: 'qyVF9oeo'
+// Simple Voice Chat: '9eGKb6K1'
 
 interface ModConfig {
     name: string;
@@ -30,6 +32,8 @@ const REQUIRED_MODS: ModConfig[] = [
     { name: 'LazyDFU', projectId: 'hvFnDODi' },
     { name: 'ModernFix', projectId: 'nmDcB62a' },
     { name: 'Sodium Leaf Culling', projectId: 'M25bkObt' },
+    { name: 'Sound Physics Remastered', projectId: 'qyVF9oeo' },
+    { name: 'Simple Voice Chat', projectId: '9eGKb6K1' },
 ];
 
 const TARGET_MC_VERSION = '1.21.11';

@@ -1,7 +1,7 @@
 {
   "name": "communokot-launcher",
   "productName": "Communokot Launcher",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "type": "module",
   "description": "Launcher Minecraft pour le serveur Communokot",
   "main": "dist/main/index.js",
