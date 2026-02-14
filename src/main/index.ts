@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, dialog, BrowserView } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { initAutoUpdater } from './updater';
@@ -13,6 +13,7 @@ const __dirname = dirname(__filename);
 // App is ready when this module is loaded
 
 let mainWindow: BrowserWindow | null = null;
+
 
 const isDev = !app.isPackaged;
 
@@ -205,3 +206,7 @@ ipcMain.handle('hardware:detect', async () => {
     const { detectHardware } = await import('./hardware-detection');
     return detectHardware();
 });
+
+// ============================================
+// End of IPC Handlers
+// ============================================

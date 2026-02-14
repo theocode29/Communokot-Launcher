@@ -1,4 +1,4 @@
-# Communokot Launcher v1.1.1 - Guide Utilisateur
+# Communokot Launcher v1.3.5 - Guide Utilisateur
 
 ## Système d'Optimisation Avancé
 
@@ -9,7 +9,7 @@ Le launcher Communokot intègre un système de gestion de configuration robuste 
 1.  **Application de Presets Intelligente**
     *   Détection automatique de votre matériel (RAM, CPU, GPU).
     *   Application de presets optimisés : `Low-End`, `Balanced`, ou `High-End`.
-    *   Supporte Sodium, Lithium, FerriteCore, EntityCulling, ImmediatelyFast, LazyDFU, ModernFix, et Sodium Leaf Culling.
+    *   Supporte Sodium, Lithium, FerriteCore, EntityCulling, ImmediatelyFast, LazyDFU, ModernFix, Sodium Leaf Culling et Mod Menu.
 
 2.  **Sécurité et Fiabilité**
     *   **Zéro Corruption** : Vérification stricte des fichiers avant écriture.
@@ -38,12 +38,10 @@ Lors du développement ou via la console, le système peut simuler l'application
 
 ### Dépannage
 
-*   **Le jeu crash au démarrage ?**
-    Le launcher détectera le crash et pourra vous proposer de lancer en "Safe Boot".
-*   **Mes FPS sont bas ?**
-    Vérifiez que vous êtes en mode "Auto" ou essayez le preset "Low-End".
+*   **Erreur lors de la mise à jour ?**
+    Le launcher affiche désormais une **Capsule Diagnostic** : cliquez sur "Voir logs" pour comprendre pourquoi la mise à jour bloque (ex: droits d'accès, réseau).
 *   **Conflits avec d'autres mods ?**
-    Le système détecte automatiquement les incompatibilités connues (ex: Intel 13/14th gen, Mac M1/M2) et applique des correctifs.
+    Le système détecte automatiquement les incompatibilités connues (ex: Intel 13/14th gen, Mac M1/M2) et installe automatiquement Fabric Loader **0.18.4** pour assurer la compatibilité logicielle.
 
 ---
 *Développé pour Communokot - Février 2026*

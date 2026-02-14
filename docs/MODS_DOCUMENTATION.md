@@ -6,7 +6,7 @@ Ce document détaille les mods Minecraft installés par le **Communokot Launcher
 
 ## 📦 Liste des Mods Installés (Côté Client)
 
-Pour garantir une expérience fluide même sur des configurations modestes, le launcher installe automatiquement une sélection de mods d'optimisation (version 1.21.11, sur Fabric) :
+Pour garantir une expérience fluide même sur des configurations modestes, le launcher installe automatiquement une sélection de mods d'optimisation (version 1.21.11, sur Fabric 0.18.4) :
 
 1. **Fabric API** : La bibliothèque de base indispensable pour faire fonctionner les autres mods sur l'écosystème Fabric.
 2. **Sodium** : Le mod de performance de référence. Il remplace le moteur de rendu de Minecraft pour augmenter massivement le nombre d'images par seconde (FPS) et réduire les micro-saccades.
@@ -19,6 +19,7 @@ Pour garantir une expérience fluide même sur des configurations modestes, le l
 9. **Sodium Leaf Culling** : Add-on pour Sodium qui optimise le rendu des feuilles en utilisant différents modes de culling (Solid Aggressive, Solid, Hollow) selon le préréglage de performance.
 10. **Sound Physics Remastered** : Améliore l'immersion sonore en simulant la réverbération, l'absorption et l'atténuation réaliste des sons à travers les blocs.
 11. **Simple Voice Chat** : Ajoute un chat vocal de proximité in-game, permettant de discuter avec les autres joueurs à proximité, avec des fonctionnalités comme le push-to-talk et l'ajustement du volume.
+12. **Mod Menu** : Ajoute un écran de configuration pour voir la liste des mods installés et accéder à leurs paramètres directement depuis le menu du jeu.
 
 ---
 

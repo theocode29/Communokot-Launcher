@@ -15,13 +15,13 @@
 
 ---
 
-- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11)
+- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11 / v1.3.5)
 - 🛡️ **Robustesse & Protection** — Système de backups versionnés, protection anti-corruption (round-trip) et mode "Safe Boot"
-- 🛠️ **Installation Auto Fabric** — Installation automatique de Fabric Loader 1.21.11 (v0.18.0+)
+- 🛠️ **Installation Auto Fabric** — Installation automatique de Fabric Loader 1.21.11 (v0.18.4+)
 - 📦 **Optimisation Dynamique** — Presets intelligents (`Low`, `Balanced`, `High`) basés sur une détection matérielle avancée
 - 💻 **Hardware-Aware** — Corrections automatiques pour les CPUs Intel (13/14th gen), AMD et Apple Silicon via une DB d'incompatibilités
 - 📊 **Progression en Temps Réel** — Barre de progression esthétique "Liquid Glass" détaillant chaque étape du lancement
-- 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive et vue "Virtual Window"
+- 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive, vue "Virtual Window" zoomée et interface épurée <!-- v1.3.5 -->
 - 📰 **Fil d'actualités** — Mises à jour du serveur via un outil de publication dédié
 - ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft et gestion des presets
 - 🔄 **Mises à jour automatiques** — Système robuste avec notifications localisées en Français et bouton de redémarrage (v1.2.5+)
@@ -51,9 +51,9 @@
 Téléchargez la dernière version depuis les [GitHub Releases](https://github.com/theocode29/Communokot-Launcher/releases).
 
 - **Windows**: installeur `.exe` (avec script d'unblock automatique)
-- **macOS (Initial)**: installeur `.pkg` (recommandé pour corriger les permissions via script post-install)
-- **macOS (Update/DMG)**: fichiers `.dmg` et `.zip` pour l'auto-update standard
+- **macOS**: installeur `.pkg` (recommandé car il inclut un script `postinstall` qui retire la quarantaine `xattr -cr` automatiquement)
 - **Architectures**: Support natif Apple Silicon (`arm64`) et Intel (`x64`)
+- **Auto-Update**: Flux hybride avec **Capsule de Diagnostic** (logs) pour faciliter le support technique.
 
 ### Depuis la Source
 
@@ -102,7 +102,7 @@ src/
 ## 🔗 Liens
 
 - **Serveur**: `mc1949282.fmcs.cloud:25565`
-- **Carte en direct**: [BlueMap](http://mc1949282.fmcs.cloud:50100)
+- **Carte en direct**: [BlueMap](https://theocode29.github.io/Communokot-world-map/#overworld:-1085:0:-155:1006:0.42:0.46:0:0:perspective)
 
 ---
 

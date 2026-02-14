@@ -69,10 +69,9 @@ Communokot launcher/
 │       │   ├── Navigation.tsx   # Barre d'onglets colorés
 │       │   ├── Button.tsx       # Boutons "Brutalist" (Hard Shadow)
 │       │   ├── ProgressBar.tsx  # Barre de progression "Liquid Glass"
-│       │   └── BlueMapViewer.tsx # Iframe wrapper avec loader
+│       │   └── MapPage.tsx      # Intégration BlueMap via <webview>
 │       └── pages/
 │           ├── HomePage.tsx     # Hero section + Bouton PLAY
-│           ├── MapPage.tsx      # Intégration BlueMap
 │           ├── UpdatesPage.tsx  # Liste des news (fetch JSON)
 │           └── ParametersPage.tsx # Formulaire settings (RAM, Java Path)
 │
@@ -201,8 +200,9 @@ module.exports = {
     *   La barre de navigation change de couleur de bordure selon l'onglet actif.
 
 2.  **Map (`MapPage.tsx`)** :
-    *   Iframe pointant vers `http://mc1949282.fmcs.cloud:50100`.
-    *   Je gère le `onLoad` pour masquer le spinner de chargement.
+    *   Balise `<webview>` pointant vers la carte GitHub Pages.
+    *   Injection CSS pour masquer l'interface (`#ui`, `.ui-root`).
+    *   Effet de zoom immersif (scale 1.25) et vignette overlay.
 
 3.  **Updates (`UpdatesPage.tsx`)** :
     *   `useEffect` qui fetch: `https://raw.githubusercontent.com/theocode29/Communokot-Launcher/main/launcher-news/main/updates.json`
@@ -226,7 +226,7 @@ Un script Node.js simple pour générer le JSON des news.
 ## 6. URLs & Ressources Externes
 
 *   **Serveur Minecraft** : `mc1949282.fmcs.cloud` (Port 25565)
-*   **Serveur Map** : `http://mc1949282.fmcs.cloud:50100`
+*   **Serveur Map** : `https://theocode29.github.io/Communokot-world-map/`
 *   **Repo News** : `https://raw.githubusercontent.com/theocode29/Communokot-Launcher/main/launcher-news/main/updates.json`
 *   **Repo Releases** : `theocode29/Communokot-Launcher`
 

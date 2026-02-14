@@ -23,7 +23,7 @@ Le Communokot Launcher est un lanceur Minecraft moderne et performant construit 
 src/
 ├── main/                 # Processus Principal Electron (Node.js)
 │   ├── index.ts          # Point d'entrée. Création de fenêtre & gestionnaires IPC.
-│   ├── updater.ts        # Gestionnaire de mises à jour modulaire (GitHub Releases).
+│   ├── updater.ts        # Gestionnaire de mises à jour (GitHub Releases). Gère le flux standard (Win) et le flux PKG Manuel + xattr (Mac).
 │   ├── minecraft.ts      # Logique de lancement du jeu (Launcher Handoff).
 │   ├── preset-orchestrator.ts # Orchestrateur de performance & sécurité.
 │   ├── backup-manager.ts # Backups, Audit logs & Safe Boot.
@@ -31,7 +31,7 @@ src/
 │   └── ...
 ├── renderer/             # Processus de Rendu Electron (React UI)
 │   ├── components/       # Éléments UI réutilisables (Navigation, Bouton).
-│   ├── pages/            # Vues des pages (HomePage, MapPage).
+│   ├── pages/            # Vues des pages (HomePage, MapPage avec <webview>).
 │   ├── styles/           # CSS Global & imports Tailwind.
 │   └── App.tsx           # Layout principal & logique de routing.
 └── ...
@@ -59,19 +59,19 @@ src/
 
 ---
 
-## Flux de Données
+### Carte Immersive (Webview)
+1.  **Renderer (`MapPage.tsx`)** intègre la carte via une balise `<webview>`.
+2.  **Isolation** : La carte tourne dans son propre processus de rendu, isolé du launcher.
+3.  **Personnalisation** : Le launcher injecte du CSS au chargement (`dom-ready`) pour masquer l'interface BlueMap et zoomer (scale 1.25) pour plus d'immersion.
+4.  **Overlay** : Permet aux effets visuels (vignette, overlays) du launcher de s'afficher au-dessus de la carte.
 
-### Statut du Serveur
-1.  **Renderer (`App.tsx`)** appelle `window.electron.getServerStatus()` toutes les 30s.
-2.  **Main (`index.ts`)** reçoit l'appel IPC, délègue à `checkServerStatus()`.
-3.  **Logique (`serverStatus.ts`)** fetch `api.freemcserver.net`.
-4.  **Retour** : Les données reviennent au Renderer pour mettre à jour `ServerStatusBadge`.
-
-### Mises à jour Automatiques (v1.1.3)
+### Mises à jour Automatiques (v1.3.5)
 1.  **Main (`updater.ts`)** : Vérifie la présence d'une nouvelle version sur GitHub Releases au démarrage.
-2.  **Download** : Si disponible, le téléchargement commence en arrière-plan avec émission de `update:progress`.
-3.  **Renderer (`UpdateNotification.tsx`)** : Affiche la progression et, une fois terminé, propose un bouton "Redémarrer".
-4.  **Action** : Le clic sur le bouton envoie l'IPC `update:install` qui déclenche `quitAndInstall()` dans le Main.
+2.  **Logic Hybride** : 
+    - **Windows** : Utilise `electron-updater` pour le téléchargement auto.
+    - **macOS** : Télécharge manuellement le `.pkg` (pour bypasser la signature) et émet des événements de progression personnalisés vers le renderer.
+3.  **Renderer (`UpdateNotification.tsx`)** : Affiche la progression et propose une **Capsule de Logs** (logs diffusés via `update:log`) pour diagnostiquer les erreurs d'installation.
+4.  **Action** : Le clic sur "Redémarrer" déclenche `quitAndInstall` (Win) ou l'ouverture du `.pkg` (Mac) suivie de la fermeture de l'app.
 
 ### Lancement du Jeu (Orchestration Robuste)
 1.  **Utilisateur** clique sur "JOUER".

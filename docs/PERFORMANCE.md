@@ -15,6 +15,8 @@ J'applique des commutateurs de ligne de commande Chromium pour maximiser l'accé
 ### Bundle & Chargement
 - **Vite Chunking** : Séparation des dépendances (`react`, `framer-motion`, `lucide`) pour un chargement atomique.
 - **Lazy Loading** : La `MapPage` (BlueMap) est chargée à la demande uniquement.
+- **Webview Isolation** : L'utilisation de `<webview>` isole le rendu CPU/GPU de la carte 3D, évitant de ralentir l'interface principale du launcher.
+- **Scale Optimization** : Le zoom immersif (scale 1.25) est appliqué via CSS transform, utilisant l'accélération GPU pour un rendu fluide.
 - **ASAR Unpack** : Les modules natifs comme `electron-store` sont décompressés pour éviter les lags d'accès disque.
 
 ---

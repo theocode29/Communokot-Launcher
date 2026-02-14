@@ -70,6 +70,8 @@ export interface ElectronAPI {
     getPlatform: () => Promise<string>;
     installUpdate: () => void;
     on: (channel: string, func: (...args: any[]) => void) => () => void;
+    showMap: () => void;
+    hideMap: () => void;
 }
 
 declare global {
