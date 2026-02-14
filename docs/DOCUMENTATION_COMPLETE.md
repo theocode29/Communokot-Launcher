@@ -23,7 +23,7 @@ Bienvenue dans la documentation complète et unifiée du projet **Communokot Lau
 
 ## 1. Introduction
 
-Le **Communokot Launcher** (v1.3.9) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Minecraft Version 1.21.11). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
+Le **Communokot Launcher** (v1.4.0) est une application de bureau conçue pour faciliter l'accès au serveur Minecraft "Communokot" (Minecraft Version 1.21.11). L'accent est mis sur la performance, l'esthétique et la simplicité, avec un design "Liquid Glass" sombre profond (`#050505`).
 
 ---
 
@@ -32,10 +32,10 @@ Le **Communokot Launcher** (v1.3.9) est une application de bureau conçue pour f
 -   🚀 **Lancement Direct** : Connexion automatique au serveur avec configuration optimisée.
 -   🛠️ **Auto-Fabric & Mods** : Installation transparente de Fabric Loader 0.18.4 et des mods d'optimisation (Sodium, Lithium, etc.) via Modrinth API.
 -   📊 **Barre de Progression** : Feedback visuel détaillé pendant l'initialisation du jeu.
--   🗺️ **Carte Satellite** : Intégration de *BlueMap* via une balise `<webview>` isolée, avec injection CSS pour une immersion totale (menus masqués) et zoom dynamique. <!-- v1.3.9 -->
+-   🗺️ **Carte Satellite** : Intégration de *BlueMap* via une balise `<webview>` isolée, avec injection CSS pour une immersion totale (menus masqués) et zoom dynamique. <!-- v1.4.0 -->
 -   📰 **Système de News** : Affichage dynamique de cartes d'actualités gérées via un outil CLI dédié.
 -   ⚙️ **Gestion des Paramètres** : Allocation RAM, sélecteur de dossier Minecraft, et persistence des préférences.
--   🔄 **Auto-Update Launcher** : Système robuste incluant une **Capsule de Diagnostic** (logs en temps réel) et un flux de mise à jour hybride (v1.3.9+).
+-   🔄 **Auto-Update Launcher** : Système robuste incluant une **Capsule de Diagnostic** (logs en temps réel) et un flux de mise à jour hybride (v1.4.0+).
 -   🛡️ **Installation macOS (Workaround Signature)** : Utilisation d'un flux de téléchargement manuel de `.pkg` sur macOS pour contourner l'absence de signature de code. Le paquet inclut un script `postinstall` (`xattr -cr`) pour retirer automatiquement les attributs de quarantaine et éviter l'erreur "Application endommagée". Sur Windows, le script NSIS gère le déblocage SmartScreen.
 -   🎨 **UX Soignée** : Audit de contraste complet et animations Framer Motion.
 
@@ -141,4 +141,4 @@ J'ai ajouté une couche d'automatisation et de sécurité critique pour garantir
 **Licence** : MIT
 
 ---
-*Dernière mise à jour : 15 Février 2026 (v1.3.9)*
+*Dernière mise à jour : 15 Février 2026 (v1.4.0)*
