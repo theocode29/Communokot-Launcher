@@ -1,0 +1,4 @@
+#!/bin/bash
+# Remove quarantine attributes to prevent "App is damaged" errors
+xattr -cr "/Applications/Communokot Launcher.app" || true
+exit 0

@@ -42,7 +42,7 @@ export function initAutoUpdater(mainWindow: BrowserWindow): void {
     sendLog('[Updater] Initializing auto-updater...');
     sendLog(`[Updater] Current version: ${app.getVersion()}`);
     sendLog(`[Updater] Platform: ${platform()}, Arch: ${arch()}`);
-    if (isMac) sendLog('[Updater] macOS detected: Using manual DMG update flow');
+    if (isMac) sendLog('[Updater] macOS detected: Using manual PKG update flow (Quarantine Bypass)');
 
     autoUpdater.on('checking-for-update', () => {
         sendLog('[Updater] Checking for updates...');
@@ -59,24 +59,24 @@ export function initAutoUpdater(mainWindow: BrowserWindow): void {
         }
 
         if (isMac) {
-            // Manual DMG Download Flow
+            // Manual PKG Download Flow
             if (manualState.isDownloading) return;
             manualState.isDownloading = true;
 
             try {
                 // Construct DMG URL
-                // Pattern: Communokot Launcher-${version}-${arch}.dmg
+                // Pattern: Communokot Launcher-${version}-${arch}.pkg
                 // URL encode the space: "Communokot%20Launcher"
                 // Assuming standard electron-builder output format
                 const currentArch = arch() === 'arm64' ? 'arm64' : 'x64';
-                const fileName = `Communokot%20Launcher-${info.version}-${currentArch}.dmg`;
+                const fileName = `Communokot%20Launcher-${info.version}-${currentArch}.pkg`;
                 // Use the standard GitHub Releases download URL structure
                 // Adjust if using a different provider, but typically standard with generic/github provider
                 const downloadUrl = `https://github.com/theocode29/Communokot-Launcher/releases/download/v${info.version}/${fileName}`;
 
-                const tempPath = join(app.getPath('downloads'), `Communokot-Launcher-${info.version}-${currentArch}.dmg`);
+                const tempPath = join(app.getPath('downloads'), `Communokot-Launcher-${info.version}-${currentArch}.pkg`);
 
-                sendLog(`[Updater] Starting manual download: ${downloadUrl}`);
+                sendLog(`[Updater] Starting manual download (PKG): ${downloadUrl}`);
                 sendLog(`[Updater] Target: ${tempPath}`);
 
                 const writer = createWriteStream(tempPath);
@@ -179,12 +179,12 @@ export function initAutoUpdater(mainWindow: BrowserWindow): void {
         sendLog('[Updater] IPC: Install requested.');
 
         if (isMac && manualState.downloadedFile) {
-            sendLog(`[Updater] Opening DMG: ${manualState.downloadedFile}`);
+            sendLog(`[Updater] Opening PKG: ${manualState.downloadedFile}`);
             shell.openPath(manualState.downloadedFile).then((err) => {
                 if (err) {
-                    sendLog(`[Updater] Failed to open DMG: ${err}`);
+                    sendLog(`[Updater] Failed to open PKG: ${err}`);
                 } else {
-                    sendLog('[Updater] DMG opened. Quitting app...');
+                    sendLog('[Updater] PKG opened. Quitting app...');
                     setTimeout(() => app.quit(), 1000);
                 }
             });
