@@ -34,6 +34,7 @@ const REQUIRED_MODS: ModConfig[] = [
     { name: 'Sodium Leaf Culling', projectId: 'M25bkObt' },
     { name: 'Sound Physics Remastered', projectId: 'qyVF9oeo' },
     { name: 'Simple Voice Chat', projectId: '9eGKb6K1' },
+    { name: 'Mod Menu', projectId: 'mOgUt4GM' },
 ];
 
 const TARGET_MC_VERSION = '1.21.11';
