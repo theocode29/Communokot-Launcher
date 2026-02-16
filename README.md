@@ -15,12 +15,13 @@
 
 ---
 
-- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11 / v1.4.0)
+- 🚀 **Lancement en un clic** — Connexion instantanée au serveur Communokot (Version 1.21.11 / v1.4.1)
 - 🛡️ **Robustesse & Protection** — Système de backups versionnés, protection anti-corruption (round-trip) et mode "Safe Boot"
 - 🛠️ **Installation Auto Fabric** — Installation automatique de Fabric Loader 1.21.11 (v0.18.4+)
 - 📦 **Optimisation Dynamique** — Presets intelligents (`Low`, `Balanced`, `High`) basés sur une détection matérielle avancée
 - 💻 **Hardware-Aware** — Corrections automatiques pour les CPUs Intel (13/14th gen), AMD et Apple Silicon via une DB d'incompatibilités
 - 📊 **Progression en Temps Réel** — Barre de progression esthétique "Liquid Glass" détaillant chaque étape du lancement
+- 🖥️ **Expérience Windows Fluide** — Masquage automatique du terminal Java via `javaw.exe` pour éviter les fermetures accidentelles <!-- v1.4.1 -->
 - 🗺️ **Carte immersive** — Visualiseur 3D BlueMap avec navigation intuitive, vue "Virtual Window" zoomée et interface épurée <!-- v1.4.0 -->
 - 📰 **Fil d'actualités** — Mises à jour du serveur via un outil de publication dédié
 - ⚙️ **Paramètres** — Allocation de RAM, chemin Java, sélecteur de chemin Minecraft et gestion des presets
@@ -28,7 +29,8 @@
 - 🎨 **Interface Moderne** — Thème sombre "Liquid Glass" optimisé pour le contraste et l'accessibilité
 - 📦 **Resource Pack Auto** — Synchronisation avec vérification d'intégrité SHA-256 et logs détaillés
 - 🔊 **Immersion Sonore** — Suite audio complète : AmbientSounds, Cool Rain, Sound Physics, Presence Footsteps, etc.
-- 🧪 **Qualité Garantie** — Suite de 50+ tests unitaires (Vitest) assurant la fiabilité du moteur de config
+- 🧪 **Qualité Garantie** — Suite de 60+ tests unitaires (Vitest) assurant la fiabilité du moteur de config
+
 
 ---
 

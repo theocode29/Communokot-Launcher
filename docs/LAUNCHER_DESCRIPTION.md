@@ -1,6 +1,6 @@
-# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.4.0)
+# Communokot Launcher — Spécifications Techniques & Guide de Reconstruction (v1.4.1)
 
-Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier, incluant le moteur d'optimisation robuste introduit en v1.1.1 et le système de mise à jour modulaire de la v1.1.3.
+Ce document sert de **référence unique** pour reconstruire intégralement l'application **Communokot Launcher**. J'y ai inclus l'architecture, la stack technique, la structure des fichiers, les configurations critiques et la logique métier, incluant le moteur d'optimisation robuste introduit en v1.1.1, le système de mise à jour modulaire de la v1.1.3 et le masquage automatique du terminal Java sur Windows (v1.4.1).
 
 ---
 
@@ -55,6 +55,7 @@ Communokot launcher/
 │   │   ├── config-manager.ts # Gestionnaire de fusion & validation atomique
 │   │   └── utils/
 │   │       ├── logger.ts   # Console wrapper instrumenté
+│   │       ├── java-utils.ts # Résolution cross-platform de l'exécutable Java (v1.4.1)
 │   │       └── config.ts   # Gestion electron-store / .env
 │   │
 │   └── renderer/          # --- PROCESSUS DE RENDU (React UI) ---
@@ -179,6 +180,8 @@ module.exports = {
 3.  **`minecraft.ts`** :
     *   Orchestration du lancement : Check Resource Pack -> Install Fabric -> Update Mods -> Launch MCLC.
     *   **Arguments Java** : `-Xmx{ram}G` + Connect Auto.
+    *   **Résolution Java (v1.4.1)** : Utilisation de `javaw.exe` sur Windows pour supprimer la fenêtre terminal console, assurant une expérience utilisateur plus propre et évitant les fermetures accidentelles du jeu. Logiciel compatible macOS/Linux via un fallback sur `java`.
+
 4.  **`fabric.ts`** : 
     *   Télécharge l'installeur JAR officiel de Fabric.
     *   Exécute l'installation en mode silencieux (`-noprofile`) pour générer le JSON de version.

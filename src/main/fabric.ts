@@ -29,7 +29,8 @@ export async function ensureFabricInstalled(rootPath: string, javaPath: string =
     const fabricVersionPath = join(versionsPath, FABRIC_PROFILE_NAME);
     const installerPath = join(rootPath, 'fabric-installer.jar');
 
-    const javaExecutable = javaPath === 'auto' ? 'java' : javaPath;
+    const javaExecutable = javaPath;
+    // Java path is now pre-resolved by resolveJavaExecutable() in minecraft.ts
 
     console.log(`[Fabric] Checking for existing installation at: ${fabricVersionPath}`);
 

@@ -5,6 +5,7 @@ import { createRequire } from 'module';
 import { ResourcePackManager } from './resourcepack';
 import { ensureFabricInstalled } from './fabric';
 import { updateMods } from './mods';
+import { resolveJavaExecutable } from './utils/java-utils';
 
 const require = createRequire(import.meta.url);
 const { Client, Authenticator } = require('minecraft-launcher-core');
@@ -79,9 +80,9 @@ export async function launchMinecraft(options: LaunchOptions): Promise<LaunchRes
     try {
         console.log('[Launcher:Flow] Step 1: Fabric Installation');
         console.log('[Launcher] Ensuring Fabric is installed...');
-        // We use system 'java' for the installer. 
-        // In a perfect world, we'd use the specific runtime from options.javaPath if valid, but 'java' usually works for the CLI installer.
-        fabricVersionId = await ensureFabricInstalled(rootPath, options.javaPath || 'java', onProgress);
+        // Use platform-aware Java executable (javaw on Windows to hide console)
+        const resolvedJavaPath = resolveJavaExecutable(options.javaPath);
+        fabricVersionId = await ensureFabricInstalled(rootPath, resolvedJavaPath, onProgress);
         console.log(`[Launcher:Flow] Step 1 Complete. Fabric ID: ${fabricVersionId}`);
 
         console.log('[Launcher:Flow] Step 2: Mod Updates');
@@ -127,7 +128,7 @@ export async function launchMinecraft(options: LaunchOptions): Promise<LaunchRes
             max: `${ram}G`,
             min: `${Math.max(2, ram / 2)}G`
         },
-        javaPath: options.javaPath && options.javaPath !== 'auto' ? options.javaPath : undefined,
+        javaPath: resolveJavaExecutable(options.javaPath),
         quickPlay: {
             type: "multiplayer",
             identifier: `${MC_SERVER_IP}:${MC_SERVER_PORT}`
