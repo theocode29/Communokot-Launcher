@@ -46,6 +46,7 @@ export default function App() {
                         minecraftPath: '',
                         performancePreset: 'auto',
                         manageOwnConfigs: false,
+                        controllerModeEnabled: false,
                     });
                 }
             } catch (error) {
@@ -79,11 +80,34 @@ export default function App() {
 
     // Update config
     const updateConfig = useCallback(async (key: keyof UserConfig, value: string | number | boolean) => {
-        if (window.electron) {
-            await window.electron.setConfig(key, value);
+        const previousValue = config?.[key];
+
+        // Optimistic UI update for smoother interactions (especially toggles)
+        setConfig((prev) => (prev ? { ...prev, [key]: value } : prev));
+
+        if (!window.electron) {
+            return;
         }
-        setConfig((prev) => prev ? { ...prev, [key]: value } : null);
-    }, []);
+
+        try {
+            await window.electron.setConfig(key, value);
+        } catch (error) {
+            console.error(`[Config] Failed to persist "${String(key)}":`, error);
+
+            // Roll back only if the value is still the optimistic one
+            setConfig((current) => {
+                if (!current || previousValue === undefined) {
+                    return current;
+                }
+
+                if (current[key] !== value) {
+                    return current;
+                }
+
+                return { ...current, [key]: previousValue };
+            });
+        }
+    }, [config]);
 
     // Launch game
     const launchGame = useCallback(async () => {

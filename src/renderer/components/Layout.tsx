@@ -49,7 +49,7 @@ export default function Layout({ children, activeTab, onTabChange, version }: La
             </div>
 
             {/* --- Version --- */}
-            <div className="fixed bottom-4 right-6 z-40 text-[10px] font-mono text-white/20 select-none pointer-events-none">
+            <div className="fixed top-4 right-6 z-40 text-[10px] font-mono text-white/20 select-none pointer-events-none">
                 v{version}
             </div>
 

@@ -6,6 +6,7 @@ import { ResourcePackManager } from './resourcepack';
 import { ensureFabricInstalled } from './fabric';
 import { updateMods } from './mods';
 import { resolveJavaExecutable } from './utils/java-utils';
+import { getConfig } from './utils/config';
 
 const require = createRequire(import.meta.url);
 const { Client, Authenticator } = require('minecraft-launcher-core');
@@ -87,13 +88,13 @@ export async function launchMinecraft(options: LaunchOptions): Promise<LaunchRes
 
         console.log('[Launcher:Flow] Step 2: Mod Updates');
         console.log('[Launcher] Updating optimization mods...');
-        await updateMods(rootPath, onProgress);
+        const controllerModeEnabled = getConfig('controllerModeEnabled');
+        await updateMods(rootPath, onProgress, { controllerModeEnabled });
         console.log('[Launcher:Flow] Step 2 Complete. Mods updated.');
 
         console.log('[Launcher:Flow] Step 2.5: Performance Preset Application');
         console.log('[Launcher] Applying performance optimizations...');
         const { applyPerformancePreset } = await import('./preset-orchestrator');
-        const { getConfig } = await import('./utils/config');
         const userPreset = getConfig('performancePreset');
         await applyPerformancePreset(rootPath, userPreset, onProgress);
         console.log('[Launcher:Flow] Step 2.5 Complete. Performance preset applied.');

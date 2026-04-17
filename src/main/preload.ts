@@ -1,5 +1,15 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+interface LauncherConfig {
+    username: string;
+    ram: number;
+    javaPath: string;
+    minecraftPath: string;
+    performancePreset: 'low-end' | 'balanced' | 'high-end' | 'auto';
+    manageOwnConfigs: boolean;
+    controllerModeEnabled: boolean;
+}
+
 // Types for the exposed API
 export interface ElectronAPI {
     // Window controls
@@ -11,7 +21,7 @@ export interface ElectronAPI {
     // Config
     getConfig: (key: string) => Promise<unknown>;
     setConfig: (key: string, value: unknown) => Promise<boolean>;
-    getAllConfig: () => Promise<Record<string, unknown>>;
+    getAllConfig: () => Promise<LauncherConfig>;
 
     // Dialogs
     openFile: (options?: { title?: string; filters?: { name: string; extensions: string[] }[] }) => Promise<string | null>;

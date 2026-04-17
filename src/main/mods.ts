@@ -1,4 +1,4 @@
-import { join, basename } from 'path';
+import { join } from 'path';
 import { readdirSync, unlinkSync, existsSync, createWriteStream, mkdirSync } from 'fs';
 import axios from 'axios';
 import { pipeline } from 'stream/promises';
@@ -22,6 +22,39 @@ interface ModConfig {
     projectId: string; // Modrinth Project ID
 }
 
+interface ModrinthDependency {
+    project_id: string | null;
+    dependency_type: string;
+}
+
+interface ModrinthVersionFile {
+    url: string;
+    filename: string;
+    primary?: boolean;
+}
+
+interface ModrinthVersion {
+    files: ModrinthVersionFile[];
+    dependencies?: ModrinthDependency[];
+}
+
+interface ResolvedModVersion {
+    url: string;
+    filename: string;
+    requiredDependencies: string[];
+}
+
+interface ResolvedMod {
+    name: string;
+    projectId: string;
+    filename: string;
+    url: string;
+}
+
+export interface UpdateModsOptions {
+    controllerModeEnabled?: boolean;
+}
+
 const REQUIRED_MODS: ModConfig[] = [
     { name: 'Fabric API', projectId: 'P7dR8mSH' },
     { name: 'Sodium', projectId: 'AANobbMI' },
@@ -43,6 +76,10 @@ const REQUIRED_MODS: ModConfig[] = [
     { name: 'Presence Footsteps', projectId: 'rcTfTZr3' },
 ];
 
+const CONTROLLER_MODE_MODS: ModConfig[] = [
+    { name: 'MidnightControls', projectId: 'bXX9h73M' },
+];
+
 const TARGET_MC_VERSION = '1.21.11';
 const LOADER = 'fabric';
 
@@ -57,21 +94,29 @@ async function downloadFile(url: string, destPath: string): Promise<void> {
 /**
  * Resolves the latest version of a mod for the target Minecraft version from Modrinth.
  */
-async function resolveModVersion(projectId: string, mcVersion: string): Promise<{ url: string, filename: string } | null> {
+async function resolveModVersion(projectId: string, mcVersion: string): Promise<ResolvedModVersion | null> {
     try {
         const url = `https://api.modrinth.com/v2/project/${projectId}/version?loaders=["${LOADER}"]&game_versions=["${mcVersion}"]`;
         const response = await axios.get(url);
-        const versions = response.data;
+        const versions = response.data as ModrinthVersion[];
 
         if (versions && versions.length > 0) {
             // Get the first (latest) version
             const latest = versions[0];
-            const primaryFile = latest.files.find((f: any) => f.primary) || latest.files[0];
+            const primaryFile = latest.files.find((f) => f.primary) || latest.files[0];
+            const requiredDependencies = (latest.dependencies || [])
+                .filter((dependency) => dependency.dependency_type === 'required' && !!dependency.project_id)
+                .map((dependency) => dependency.project_id as string);
+
+            if (!primaryFile) {
+                return null;
+            }
 
             console.log(`[Mods] Resolved ${projectId} (MC ${mcVersion}): ${primaryFile.filename}`);
             return {
                 url: primaryFile.url,
-                filename: primaryFile.filename
+                filename: primaryFile.filename,
+                requiredDependencies,
             };
         }
     } catch (error) {
@@ -80,23 +125,57 @@ async function resolveModVersion(projectId: string, mcVersion: string): Promise<
     return null;
 }
 
+async function resolveControllerDependencies(
+    dependencies: string[],
+    resolvedModsByProject: Map<string, ResolvedMod>,
+    mcVersion: string
+): Promise<void> {
+    const queue = [...dependencies];
+    const visited = new Set<string>();
+
+    while (queue.length > 0) {
+        const dependencyProjectId = queue.shift();
+        if (!dependencyProjectId || visited.has(dependencyProjectId)) {
+            continue;
+        }
+
+        visited.add(dependencyProjectId);
+        const dependencyResult = await resolveModVersion(dependencyProjectId, mcVersion);
+        if (!dependencyResult) {
+            throw new Error(`Mode manette activé mais dépendance requise introuvable: ${dependencyProjectId} (${mcVersion}).`);
+        }
+
+        if (!resolvedModsByProject.has(dependencyProjectId)) {
+            resolvedModsByProject.set(dependencyProjectId, {
+                name: `Dependency ${dependencyProjectId}`,
+                projectId: dependencyProjectId,
+                filename: dependencyResult.filename,
+                url: dependencyResult.url,
+            });
+        }
+
+        for (const childDependency of dependencyResult.requiredDependencies) {
+            if (!visited.has(childDependency)) {
+                queue.push(childDependency);
+            }
+        }
+    }
+}
+
 
 /**
  * Enforces the mods folder to strictly contain only the required optimization mods.
  */
-export async function updateMods(rootPath: string, onProgress?: ProgressCallback): Promise<void> {
+export async function updateMods(rootPath: string, onProgress?: ProgressCallback, options: UpdateModsOptions = {}): Promise<void> {
     const modsPath = join(rootPath, 'mods');
+    const { controllerModeEnabled = false } = options;
 
     if (!existsSync(modsPath)) {
         mkdirSync(modsPath, { recursive: true });
     }
 
     // 1. Resolve all mods first to get target filenames
-    const resolvedMods: { name: string, filename: string, url: string }[] = [];
-
-    // Total steps: Resolving (1 step) + Downloading (N steps)
-    const totalSteps = 1 + REQUIRED_MODS.length;
-    let currentStep = 0;
+    const resolvedModsByProject = new Map<string, ResolvedMod>();
 
     console.log('[Mods] Resolving mod versions for 1.21.11...');
     onProgress?.("Recherche des versions de mods...", 50);
@@ -104,13 +183,28 @@ export async function updateMods(rootPath: string, onProgress?: ProgressCallback
     for (const mod of REQUIRED_MODS) {
         const result = await resolveModVersion(mod.projectId, TARGET_MC_VERSION);
         if (result) {
-            resolvedMods.push({ name: mod.name, ...result });
+            resolvedModsByProject.set(mod.projectId, { name: mod.name, projectId: mod.projectId, ...result });
         } else {
             console.warn(`[Mods] Could not find ${mod.name} for ${TARGET_MC_VERSION}. Skipping.`);
             // In strict mode we might want to throw, but for now we skip to avoid breaking launch
         }
     }
-    currentStep++;
+
+    if (controllerModeEnabled) {
+        console.log('[Mods] Controller mode enabled. Resolving MidnightControls and dependencies...');
+
+        for (const mod of CONTROLLER_MODE_MODS) {
+            const result = await resolveModVersion(mod.projectId, TARGET_MC_VERSION);
+            if (!result) {
+                throw new Error(`Mode manette activé mais ${mod.name} est introuvable pour Minecraft ${TARGET_MC_VERSION}.`);
+            }
+
+            resolvedModsByProject.set(mod.projectId, { name: mod.name, projectId: mod.projectId, ...result });
+            await resolveControllerDependencies(result.requiredDependencies, resolvedModsByProject, TARGET_MC_VERSION);
+        }
+    }
+
+    const resolvedMods = [...resolvedModsByProject.values()];
 
     // 2. Cleanup old files
     const currentFiles = readdirSync(modsPath);
@@ -133,7 +227,7 @@ export async function updateMods(rootPath: string, onProgress?: ProgressCallback
 
         // Progress mapping: 50 -> 90
         // We have resolvedMods.length items to process
-        const stepProgress = 40 / resolvedMods.length;
+        const stepProgress = resolvedMods.length > 0 ? (40 / resolvedMods.length) : 40;
         const globalProgress = 50 + (index * stepProgress);
 
         if (!existsSync(filePath)) {

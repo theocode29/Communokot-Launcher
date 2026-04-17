@@ -7,6 +7,7 @@ export interface ConfigSchema {
     minecraftPath: string;
     performancePreset: 'low-end' | 'balanced' | 'high-end' | 'auto';
     manageOwnConfigs: boolean;
+    controllerModeEnabled: boolean;
 }
 
 const defaults: ConfigSchema = {
@@ -16,6 +17,7 @@ const defaults: ConfigSchema = {
     minecraftPath: '',
     performancePreset: 'auto',
     manageOwnConfigs: false,
+    controllerModeEnabled: false,
 };
 
 const store = new Store<ConfigSchema>({
@@ -40,6 +42,7 @@ export function getAllConfig(): ConfigSchema {
         minecraftPath: store.get('minecraftPath'),
         performancePreset: store.get('performancePreset'),
         manageOwnConfigs: store.get('manageOwnConfigs'),
+        controllerModeEnabled: store.get('controllerModeEnabled'),
     };
 }
 

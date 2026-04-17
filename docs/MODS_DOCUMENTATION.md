@@ -25,6 +25,10 @@ Pour garantir une expérience fluide même sur des configurations modestes, le l
 15. **Sound Controller** : Permet de contrôler individuellement le volume de chaque son du jeu via une interface dédiée, pour un mixage audio personnalisé.
 16. **Item Landing Sound** : Ajoute un effet sonore subtil lorsqu'un item jeté touche le sol, améliorant le feedback physique du monde.
 17. **Presence Footsteps** : Remplace les bruits de pas par défaut par un moteur acoustique riche et varié, simulant différentes surfaces et types de chaussures pour une immersion maximale.
+18. **MidnightControls** *(optionnel)* : activé via le paramètre **Mode manette** dans le launcher. Ajoute le support manette complet (DualSense, Xbox, Switch Pro, etc.).
+
+> ℹ️ Quand le **Mode manette** est activé, le launcher installe/met à jour automatiquement **MidnightControls** ainsi que ses dépendances requises (ex: **MidnightLib**).  
+> Quand l'option est désactivée, ces mods sont retirés au prochain lancement du jeu.
 
 ---
 

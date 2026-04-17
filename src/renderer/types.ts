@@ -39,6 +39,7 @@ export interface UserConfig {
     minecraftPath: string;
     performancePreset: 'low-end' | 'balanced' | 'high-end' | 'auto';
     manageOwnConfigs: boolean;
+    controllerModeEnabled: boolean;
 }
 
 // Launch result
